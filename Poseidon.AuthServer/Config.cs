@@ -17,10 +17,22 @@ namespace Poseidon.AuthServer
 
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
-                { };
+                { new ApiResource("poseidon_api", "Poseidon API"), };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
-                { };
+                { new Client
+                {
+                    ClientId = "poseidon_client",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes =
+                    {
+                        "poseidon_api"
+                    }
+                }, };
     }
 }
