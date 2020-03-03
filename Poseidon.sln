@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API", "Poseidon.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.Client", "Poseidon.Client\Poseidon.Client.csproj", "{A32AAC4C-B518-4259-985C-C3DAE1BB951F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.AuthServer", "Poseidon.AuthServer\Poseidon.AuthServer.csproj", "{1C237344-7462-4BC1-8254-081D54047264}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{A32AAC4C-B518-4259-985C-C3DAE1BB951F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A32AAC4C-B518-4259-985C-C3DAE1BB951F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A32AAC4C-B518-4259-985C-C3DAE1BB951F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C237344-7462-4BC1-8254-081D54047264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C237344-7462-4BC1-8254-081D54047264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C237344-7462-4BC1-8254-081D54047264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C237344-7462-4BC1-8254-081D54047264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
