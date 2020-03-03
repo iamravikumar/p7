@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon", "Poseidon\Poseidon.csproj", "{1B3912DD-5D4E-43D1-B7CD-864E2DC0093A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API", "Poseidon.API\Poseidon.API.csproj", "{1B3912DD-5D4E-43D1-B7CD-864E2DC0093A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
