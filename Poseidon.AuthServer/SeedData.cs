@@ -11,6 +11,7 @@ using Poseidon.AuthServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Poseidon.AuthServer.Areas.Identity.Data;
 using Serilog;
 
 namespace Poseidon.AuthServer
@@ -21,25 +22,28 @@ namespace Poseidon.AuthServer
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(connectionString));
+//            services.AddDbContext<ApplicationDbContext>(options =>
+//                options.UseSqlite(connectionString));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddDbContext<PoseidonAuthServerContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddIdentity<PoseidonAuthServerUser, IdentityRole>()
+                .AddEntityFrameworkStores<PoseidonAuthServerContext>()
                 .AddDefaultTokenProviders();
 
             using (var serviceProvider = services.BuildServiceProvider())
             {
                 using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    var context = scope.ServiceProvider.GetService<PoseidonAuthServerContext>();
                     context.Database.Migrate();
 
-                    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<PoseidonAuthServerUser>>();
                     var alice = userMgr.FindByNameAsync("alice").Result;
                     if (alice == null)
                     {
-                        alice = new ApplicationUser
+                        alice = new PoseidonAuthServerUser
                         {
                             UserName = "alice"
                         };
@@ -76,7 +80,7 @@ namespace Poseidon.AuthServer
                     var bob = userMgr.FindByNameAsync("bob").Result;
                     if (bob == null)
                     {
-                        bob = new ApplicationUser
+                        bob = new PoseidonAuthServerUser
                         {
                             UserName = "bob"
                         };

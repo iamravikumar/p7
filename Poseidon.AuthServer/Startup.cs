@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Poseidon.AuthServer.Areas.Identity.Data;
 
 namespace Poseidon.AuthServer
 {
@@ -42,13 +43,22 @@ namespace Poseidon.AuthServer
                 iis.AuthenticationDisplayName = "Windows";
                 iis.AutomaticAuthentication = false;
             });
+            
+            services.AddDbContext<PoseidonAuthServerContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("PoseidonAuthServerContextConnection")));
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddDefaultIdentity<PoseidonAuthServerUser>(
+                    options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<PoseidonAuthServerContext>()
                 .AddDefaultTokenProviders();
+
+//            services.AddDbContext<ApplicationDbContext>(options =>
+//                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+//
+//            services.AddIdentity<PoseidonAuthServerUser, IdentityRole>()
+//                .AddEntityFrameworkStores<PoseidonAuthServerContext>()
+//                .AddDefaultTokenProviders();
 
             var builder = services.AddIdentityServer(options =>
                 {
@@ -60,7 +70,7 @@ namespace Poseidon.AuthServer
                 .AddInMemoryIdentityResources(Config.Ids)
                 .AddInMemoryApiResources(Config.Apis)
                 .AddInMemoryClients(Config.Clients)
-                .AddAspNetIdentity<ApplicationUser>();
+                .AddAspNetIdentity<PoseidonAuthServerUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
