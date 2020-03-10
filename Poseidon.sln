@@ -1,10 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API", "Poseidon.API\Poseidon.API.csproj", "{1B3912DD-5D4E-43D1-B7CD-864E2DC0093A}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.API", "Poseidon.API\Poseidon.API.csproj", "{1B3912DD-5D4E-43D1-B7CD-864E2DC0093A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.Client", "Poseidon.Client\Poseidon.Client.csproj", "{A32AAC4C-B518-4259-985C-C3DAE1BB951F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.Client", "Poseidon.Client\Poseidon.Client.csproj", "{A32AAC4C-B518-4259-985C-C3DAE1BB951F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.AuthServer", "Poseidon.AuthServer\Poseidon.AuthServer.csproj", "{1C237344-7462-4BC1-8254-081D54047264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.AuthServer", "Poseidon.AuthServer\Poseidon.AuthServer.csproj", "{5ADBC2E5-863A-4803-981F-A64DB968A64D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +23,15 @@ Global
 		{A32AAC4C-B518-4259-985C-C3DAE1BB951F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A32AAC4C-B518-4259-985C-C3DAE1BB951F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A32AAC4C-B518-4259-985C-C3DAE1BB951F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C237344-7462-4BC1-8254-081D54047264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C237344-7462-4BC1-8254-081D54047264}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C237344-7462-4BC1-8254-081D54047264}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C237344-7462-4BC1-8254-081D54047264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F1D3229-56FE-4DC6-8729-2008FF6C2E54}
 	EndGlobalSection
 EndGlobal
