@@ -2,6 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using System.Linq;
+using System.Reflection;
+using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
 using Poseidon.AuthServer.Data;
 using Poseidon.AuthServer.Models;
 using Microsoft.AspNetCore.Builder;
@@ -26,10 +30,47 @@ namespace Poseidon.AuthServer
             Configuration = configuration;
         }
 
+        private void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                context.Database.Migrate();
+                if (!context.Clients.Any())
+                {
+                    foreach (var client in Config.Clients)
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.IdentityResources.Any())
+                {
+                    foreach (var resource in Config.Ids)
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.ApiResources.Any())
+                {
+                    foreach (var resource in Config.Apis)
+                    {
+                        context.ApiResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+            }
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
             services.Configure<IISOptions>(iis =>
             {
@@ -43,13 +84,13 @@ namespace Poseidon.AuthServer
                 iis.AuthenticationDisplayName = "Windows";
                 iis.AutomaticAuthentication = false;
             });
-            
+
             services.AddDbContext<PoseidonAuthServerContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("PoseidonAuthServerContextConnection")));
 
             services.AddDefaultIdentity<PoseidonAuthServerUser>(
-                    options => options.SignIn.RequireConfirmedAccount = true)
+                    options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<PoseidonAuthServerContext>()
                 .AddDefaultTokenProviders();
 
@@ -60,16 +101,32 @@ namespace Poseidon.AuthServer
 //                .AddEntityFrameworkStores<PoseidonAuthServerContext>()
 //                .AddDefaultTokenProviders();
 
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
             var builder = services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                })
-                .AddInMemoryIdentityResources(Config.Ids)
-                .AddInMemoryApiResources(Config.Apis)
-                .AddInMemoryClients(Config.Clients)
+                    {
+                        options.Events.RaiseErrorEvents = true;
+                        options.Events.RaiseInformationEvents = true;
+                        options.Events.RaiseFailureEvents = true;
+                        options.Events.RaiseSuccessEvents = true;
+                    })
+//                .AddInMemoryIdentityResources(Config.Ids)
+//                .AddInMemoryApiResources(Config.Apis)
+//                .AddInMemoryClients(Config.Clients)
+                    .AddConfigurationStore(options =>
+                    {
+                        options.ConfigureDbContext = b =>
+                            b.UseSqlServer(
+                                Configuration.GetConnectionString("PoseidonAuthServerIdentityConfigurationConnection"),
+                                sql => sql.MigrationsAssembly(migrationsAssembly));
+                    })
+                    .AddOperationalStore(options =>
+                    {
+                        options.ConfigureDbContext = b =>
+                            b.UseSqlServer(
+                                Configuration.GetConnectionString("PoseidonAuthServerIdentityOperationalConnection"),
+                                sql => sql.MigrationsAssembly(migrationsAssembly));
+                    })
                 .AddAspNetIdentity<PoseidonAuthServerUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
@@ -93,6 +150,8 @@ namespace Poseidon.AuthServer
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
+            
+            InitializeDatabase(app);
 
             app.UseStaticFiles();
 
