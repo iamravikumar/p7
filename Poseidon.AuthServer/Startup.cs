@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Poseidon.AuthServer.Data;
@@ -16,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Poseidon.AuthServer.Areas.Identity.Data;
+using Serilog;
 
 namespace Poseidon.AuthServer
 {
@@ -44,6 +47,7 @@ namespace Poseidon.AuthServer
                     {
                         context.Clients.Add(client.ToEntity());
                     }
+
                     context.SaveChanges();
                 }
 
@@ -53,6 +57,7 @@ namespace Poseidon.AuthServer
                     {
                         context.IdentityResources.Add(resource.ToEntity());
                     }
+
                     context.SaveChanges();
                 }
 
@@ -62,15 +67,71 @@ namespace Poseidon.AuthServer
                     {
                         context.ApiResources.Add(resource.ToEntity());
                     }
+
                     context.SaveChanges();
                 }
             }
         }
-        
+
+        private async Task CreateIdentityRoles(IApplicationBuilder app, string[] roles)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                foreach (var role in roles)
+                {
+                    var roleCheck = await roleManager.RoleExistsAsync("Admin");
+
+                    if (!roleCheck)
+                    {
+                        await roleManager.CreateAsync(new IdentityRole("Admin"));
+                    }
+                }
+            }
+        }
+
+        private async Task CreateTestUsers(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager =
+                    serviceScope.ServiceProvider.GetRequiredService<UserManager<PoseidonAuthServerUser>>();
+
+                var user = await userManager.FindByEmailAsync("admin@poseidon.test");
+
+                if (user == null)
+                {
+                    var newUser = new PoseidonAuthServerUser
+                    {
+                        Email = "admin@poseidon.test",
+                        UserName = "Admin"
+                    };
+
+                    var result = await userManager.CreateAsync(newUser, "Pass123$");
+
+                    await userManager.AddToRoleAsync(newUser, "Admin");
+
+                    if (result.Succeeded)
+                    {
+                        Log.Debug("User created");
+                    }
+                    else
+                    {
+                        Log.Debug("There was a problem creating the user");
+                    }
+                }
+            }
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            
+            services.AddMvc();
+
+            services.AddLogging();
+
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
             services.Configure<IISOptions>(iis =>
             {
@@ -91,42 +152,33 @@ namespace Poseidon.AuthServer
 
             services.AddDefaultIdentity<PoseidonAuthServerUser>(
                     options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<PoseidonAuthServerContext>()
                 .AddDefaultTokenProviders();
-
-//            services.AddDbContext<ApplicationDbContext>(options =>
-//                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-//
-//            services.AddIdentity<PoseidonAuthServerUser, IdentityRole>()
-//                .AddEntityFrameworkStores<PoseidonAuthServerContext>()
-//                .AddDefaultTokenProviders();
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             var builder = services.AddIdentityServer(options =>
-                    {
-                        options.Events.RaiseErrorEvents = true;
-                        options.Events.RaiseInformationEvents = true;
-                        options.Events.RaiseFailureEvents = true;
-                        options.Events.RaiseSuccessEvents = true;
-                    })
-//                .AddInMemoryIdentityResources(Config.Ids)
-//                .AddInMemoryApiResources(Config.Apis)
-//                .AddInMemoryClients(Config.Clients)
-                    .AddConfigurationStore(options =>
-                    {
-                        options.ConfigureDbContext = b =>
-                            b.UseSqlServer(
-                                Configuration.GetConnectionString("PoseidonAuthServerIdentityConfigurationConnection"),
-                                sql => sql.MigrationsAssembly(migrationsAssembly));
-                    })
-                    .AddOperationalStore(options =>
-                    {
-                        options.ConfigureDbContext = b =>
-                            b.UseSqlServer(
-                                Configuration.GetConnectionString("PoseidonAuthServerIdentityOperationalConnection"),
-                                sql => sql.MigrationsAssembly(migrationsAssembly));
-                    })
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+                })
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = b =>
+                        b.UseSqlServer(
+                            Configuration.GetConnectionString("PoseidonAuthServerIdentityConfigurationConnection"),
+                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = b =>
+                        b.UseSqlServer(
+                            Configuration.GetConnectionString("PoseidonAuthServerIdentityOperationalConnection"),
+                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
                 .AddAspNetIdentity<PoseidonAuthServerUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
@@ -145,20 +197,29 @@ namespace Poseidon.AuthServer
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseRouting();
+
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
-            
+
             InitializeDatabase(app);
+            CreateIdentityRoles(app, new[] {"Admin", "User"}).Wait();
+            CreateTestUsers(app).Wait();
 
             app.UseStaticFiles();
 
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

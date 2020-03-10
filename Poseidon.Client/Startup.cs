@@ -41,7 +41,7 @@ namespace Poseidon.Client
 
                     options.RequireHttpsMetadata = false;
 
-                    options.ClientId = "poseidon_client";
+                    options.ClientId = "poseidon_razor";
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
 
