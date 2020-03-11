@@ -4,6 +4,7 @@
 
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 
 namespace Poseidon.AuthServer
 {
@@ -23,7 +24,7 @@ namespace Poseidon.AuthServer
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // Interactive ASP.NET Core Razor Pages client
+                // M2M client
                 new Client
                 {
                     ClientId = "poseidon_client",
@@ -44,6 +45,31 @@ namespace Poseidon.AuthServer
 //                    PostLogoutRedirectUris = {"http://localhost:5002/signout-callback-oidc"},
 //                    AllowOfflineAccess = true
                 },
+                // interactive ASP.NET Razor Pages client
+                new Client
+                {
+                    ClientId = "poseidon_razor",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireConsent = false,
+                    RequirePkce = true,
+
+                    // where to redirect to after login
+                    RedirectUris = { "http://localhost:5002/signin-oidc" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "poseidon_api"
+                    },
+                    
+                    AllowOfflineAccess = true
+                }
             };
     }
 }
