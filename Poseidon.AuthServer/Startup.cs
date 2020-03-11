@@ -73,6 +73,14 @@ namespace Poseidon.AuthServer
             }
         }
 
+        private class UserSeed
+        {
+            public string Email { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string Role { get; set; }
+        }
+
         private async Task CreateIdentityRoles(IApplicationBuilder app, string[] roles)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -81,45 +89,63 @@ namespace Poseidon.AuthServer
 
                 foreach (var role in roles)
                 {
-                    var roleCheck = await roleManager.RoleExistsAsync("Admin");
+                    var roleCheck = await roleManager.RoleExistsAsync(role);
 
                     if (!roleCheck)
                     {
-                        await roleManager.CreateAsync(new IdentityRole("Admin"));
+                        var result = await roleManager.CreateAsync(new IdentityRole(role));
+
+                        if (result.Succeeded)
+                        {
+                            Log.Debug($"Role [{role}] successfully created");
+                        }
+                        else
+                        {
+                            Log.Debug($"There was a problem creating role [{role}]");
+                        }
                     }
                 }
             }
         }
 
-        private async Task CreateTestUsers(IApplicationBuilder app)
+        private async Task CreateTestUsers(IApplicationBuilder app, UserSeed[] users)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager =
                     serviceScope.ServiceProvider.GetRequiredService<UserManager<PoseidonAuthServerUser>>();
 
-                var user = await userManager.FindByEmailAsync("admin@poseidon.test");
-
-                if (user == null)
+                foreach (var userSeed in users)
                 {
-                    var newUser = new PoseidonAuthServerUser
-                    {
-                        Email = "admin@poseidon.test",
-                        UserName = "Admin"
-                    };
+                    var user = await userManager.FindByEmailAsync(userSeed.Email);
 
-                    var result = await userManager.CreateAsync(newUser, "Pass123$");
-
-                    await userManager.AddToRoleAsync(newUser, "Admin");
-
-                    if (result.Succeeded)
+                    if (user == null)
                     {
-                        Log.Debug("User created");
-                    }
-                    else
-                    {
-                        Log.Debug("There was a problem creating the user");
+                        var newUser = new PoseidonAuthServerUser
+                        {
+                            Email = userSeed.Email,
+                            UserName = userSeed.Username,
+                            EmailConfirmed = true,
+                            PhoneNumberConfirmed = true
+                        };
+
+                        var password = new PasswordHasher<PoseidonAuthServerUser>();
+                        var hashed = password.HashPassword(newUser, userSeed.Password);
+                        newUser.PasswordHash = hashed;
+                        
+                        var result = await userManager.CreateAsync(newUser, userSeed.Password);
+
+                        await userManager.AddToRoleAsync(newUser, userSeed.Role);
+
+                        if (result.Succeeded)
+                        {
+                            Log.Debug($"User [{userSeed.Username}] with role [{userSeed.Role}] successfully created");
+                        }
+                        else
+                        {
+                            Log.Debug(
+                                $"There was a problem creating the user [{userSeed.Username}] with role [{userSeed.Role}]");
+                        }
                     }
                 }
             }
@@ -206,8 +232,26 @@ namespace Poseidon.AuthServer
             }
 
             InitializeDatabase(app);
+            
             CreateIdentityRoles(app, new[] {"Admin", "User"}).Wait();
-            CreateTestUsers(app).Wait();
+            
+            CreateTestUsers(app, new[]
+            {
+                new UserSeed
+                {
+                    Email = "admin@poseidon.test",
+                    Username = "admin@poseidon.test",
+                    Password = "Pass123$",
+                    Role = "Admin"
+                },
+                new UserSeed
+                {
+                    Email = "user@poseidon.test",
+                    Username = "user@poseidon.test",
+                    Password = "Pass123$",
+                    Role = "User"
+                }
+            }).Wait();
 
             app.UseStaticFiles();
 
