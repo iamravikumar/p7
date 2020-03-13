@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Poseidon.AuthServer.Areas.Identity.Data;
 
-namespace Poseidon.AuthServer.Data
+namespace Poseidon.AuthServer.Areas.Identity.Data
 {
     public class PoseidonAuthServerContext : IdentityDbContext<PoseidonAuthServerUser>
     {

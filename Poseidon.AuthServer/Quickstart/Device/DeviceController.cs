@@ -15,8 +15,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Poseidon.AuthServer.Quickstart.Consent;
 
-namespace IdentityServer4.Quickstart.UI.Device
+namespace Poseidon.AuthServer.Quickstart.Device
 {
     [Authorize]
     [SecurityHeaders]

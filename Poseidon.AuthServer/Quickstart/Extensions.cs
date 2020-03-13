@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
+using Poseidon.AuthServer.Quickstart.Account;
 
-namespace IdentityServer4.Quickstart.UI
+namespace Poseidon.AuthServer.Quickstart
 {
     public static class Extensions
     {

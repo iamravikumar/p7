@@ -1,8 +1,9 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace Poseidon.AuthServer
             Configuration = configuration;
         }
 
-        private void InitializeDatabase(IApplicationBuilder app)
+        private static void InitializeDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -81,7 +82,7 @@ namespace Poseidon.AuthServer
             public string Role { get; set; }
         }
 
-        private async Task CreateIdentityRoles(IApplicationBuilder app, string[] roles)
+        private static async Task CreateIdentityRoles(IApplicationBuilder app, IEnumerable<string> roles)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -108,7 +109,7 @@ namespace Poseidon.AuthServer
             }
         }
 
-        private async Task CreateTestUsers(IApplicationBuilder app, UserSeed[] users)
+        private static async Task CreateTestUsers(IApplicationBuilder app, IEnumerable<UserSeed> users)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
