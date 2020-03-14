@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Poseidon.API.Models
 {
-    public partial class Users
+    public partial class User
     {
         public short Id { get; set; }
         public string Username { get; set; }

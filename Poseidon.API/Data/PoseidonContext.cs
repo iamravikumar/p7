@@ -21,7 +21,7 @@ namespace Poseidon.API.Data
         public virtual DbSet<Rating> Rating { get; set; }
         public virtual DbSet<RuleName> RuleName { get; set; }
         public virtual DbSet<Trade> Trade { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -234,7 +234,7 @@ namespace Poseidon.API.Data
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .HasName("Users_pk")
