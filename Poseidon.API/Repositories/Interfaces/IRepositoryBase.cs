@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace Poseidon.API.Repositories
 {
     /// <summary>
-    /// Provides base repository functionality.
+    /// Provides generic base repository functionality.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IRepositoryBase<T>
