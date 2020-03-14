@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Poseidon.API.Repositories;
 
 namespace Poseidon.API
 {
@@ -21,24 +22,11 @@ namespace Poseidon.API
         {
             services.AddControllers();
 
-            // TODO: cleanup
-//            services
-//                .AddAuthentication("Bearer")
-//                .AddJwtBearer("Bearer", options =>
-//                {
-//                    options.Authority = "http://localhost:5000";
-//                    options.RequireHttpsMetadata = false;
-//                    options.Audience = "poseidon_api";
-//                });
-
             services.ConfigureAuthorization();
             
             services.ConfigureSwagger();
-            // Register the Swagger generator, defining 1 or more Swagger documents
-//            services.AddSwaggerGen(c =>
-//            {
-//                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Poseidon API", Version = "v1" });
-//            });
+
+            services.ConfigureRepositoryWrapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
