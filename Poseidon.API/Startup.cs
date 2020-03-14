@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Poseidon.API.Data;
 using Poseidon.API.Repositories;
 
 namespace Poseidon.API
@@ -20,6 +22,8 @@ namespace Poseidon.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureDbContext(Configuration);
+            
             services.AddControllers();
 
             services.ConfigureAuthorization();
@@ -39,7 +43,7 @@ namespace Poseidon.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Poseidon API 1.0");
                 c.RoutePrefix = string.Empty;
             });
             

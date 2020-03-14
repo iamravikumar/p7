@@ -1,6 +1,9 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Poseidon.API.Data;
 using Poseidon.API.Repositories;
 
 namespace Poseidon.API
@@ -41,6 +44,14 @@ namespace Poseidon.API
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+        }
+
+        public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<PoseidonContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("ApplicationDbContext"));
+            });
         }
     }
 }
