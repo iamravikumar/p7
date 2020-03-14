@@ -7,10 +7,10 @@ using Poseidon.API.Data;
 namespace Poseidon.API.Repositories
 {
     /// <summary>
-    /// Provides base repository functionality.
+    /// Provides generic base repository functionality.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         private readonly PoseidonContext _context;
 
