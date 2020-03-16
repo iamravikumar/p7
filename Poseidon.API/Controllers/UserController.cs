@@ -23,6 +23,12 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/User
+        /// <summary>
+        /// Gets a list of all User entities.
+        /// </summary>
+        /// <returns>A list of all User entities.</returns>
+        /// <response code="200">Returns the list of all User entities.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -32,6 +38,14 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/User/5
+        /// <summary>
+        /// Gets a single User entity.
+        /// </summary>
+        /// <param name="id">The Id of the User entity to get.</param>
+        /// <returns>The specified User entity.</returns>
+        /// <response code="200">Returns the User entity.</response>
+        /// <response code="404">The specified entity was not found.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -48,8 +62,15 @@ namespace Poseidon.API.Controllers
         }
 
         // PUT: api/User/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Updates a User eneity.
+        /// </summary>
+        /// <param name="id">The Id of the User entity to update.</param>
+        /// <param name="user">Updated data.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The resource was successfully updated.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,8 +103,13 @@ namespace Poseidon.API.Controllers
         }
 
         // POST: api/User
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Creates a new User entity. 
+        /// </summary>
+        /// <param name="user">Data for the new entity.</param>
+        /// <returns>The created entity.</returns>
+        /// <response code="201">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -96,6 +122,13 @@ namespace Poseidon.API.Controllers
         }
 
         // DELETE: api/User/5
+        /// <summary>
+        /// Deletes a specified User entity.
+        /// </summary>
+        /// <param name="id">The Id the User entity to delete.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -110,7 +143,7 @@ namespace Poseidon.API.Controllers
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return NoContent();
         }
 
         private bool UserExists(short id)

@@ -23,6 +23,12 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/RuleName
+        /// <summary>
+        /// Gets a list of all RuleName entities.
+        /// </summary>
+        /// <returns>A list of all RuleName entities.</returns>
+        /// <response code="200">Returns the list of all RuleName entities.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -32,6 +38,14 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/RuleName/5
+        /// <summary>
+        /// Gets a single RuleName entity.
+        /// </summary>
+        /// <param name="id">The Id of the RuleName entity to get.</param>
+        /// <returns>The specified RuleName entity.</returns>
+        /// <response code="200">Returns the RuleName entity.</response>
+        /// <response code="404">The specified entity was not found.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -48,8 +62,15 @@ namespace Poseidon.API.Controllers
         }
 
         // PUT: api/RuleName/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Updates a RuleName eneity.
+        /// </summary>
+        /// <param name="id">The Id of the RuleName entity to update.</param>
+        /// <param name="ruleName">Updated data.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The resource was successfully updated.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,8 +103,13 @@ namespace Poseidon.API.Controllers
         }
 
         // POST: api/RuleName
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Creates a new RuleName entity. 
+        /// </summary>
+        /// <param name="ruleName">Data for the new entity.</param>
+        /// <returns>The created entity.</returns>
+        /// <response code="201">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -96,6 +122,13 @@ namespace Poseidon.API.Controllers
         }
 
         // DELETE: api/RuleName/5
+        /// <summary>
+        /// Deletes a specified RuleName entity.
+        /// </summary>
+        /// <param name="id">The Id the RuleName entity to delete.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -110,7 +143,7 @@ namespace Poseidon.API.Controllers
             _context.RuleName.Remove(ruleName);
             await _context.SaveChangesAsync();
 
-            return ruleName;
+            return NoContent();
         }
 
         private bool RuleNameExists(short id)

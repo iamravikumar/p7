@@ -23,6 +23,12 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/CurvePoints
+        /// <summary>
+        /// Gets a list of all CurvePoint entities.
+        /// </summary>
+        /// <returns>A list of all CurvePoint entities.</returns>
+        /// <response code="200">Returns the list of all CurvePoint entities.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -32,6 +38,14 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/CurvePoints/5
+        /// <summary>
+        /// Gets a single CurvePoint entity.
+        /// </summary>
+        /// <param name="id">The Id of the CurvePoint entity to get.</param>
+        /// <returns>The specified CurvePoint entity.</returns>
+        /// <response code="200">Returns the CurvePoint entity.</response>
+        /// <response code="404">The specified entity was not found.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -48,8 +62,15 @@ namespace Poseidon.API.Controllers
         }
 
         // PUT: api/CurvePoints/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Updates a CurvePoint eneity.
+        /// </summary>
+        /// <param name="id">The Id of the CurvePoint entity to update.</param>
+        /// <param name="curvePoint">Updated data.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The resource was successfully updated.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,8 +103,13 @@ namespace Poseidon.API.Controllers
         }
 
         // POST: api/CurvePoints
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Creates a new CurvePoint entity. 
+        /// </summary>
+        /// <param name="curvePoint">Data for the new entity.</param>
+        /// <returns>The created entity.</returns>
+        /// <response code="201">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -96,6 +122,13 @@ namespace Poseidon.API.Controllers
         }
 
         // DELETE: api/CurvePoints/5
+        /// <summary>
+        /// Deletes a specified CurvePoint entity.
+        /// </summary>
+        /// <param name="id">The Id the CurvePoint entity to delete.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -110,7 +143,7 @@ namespace Poseidon.API.Controllers
             _context.CurvePoint.Remove(curvePoint);
             await _context.SaveChangesAsync();
 
-            return curvePoint;
+            return NoContent();
         }
 
         private bool CurvePointExists(short id)
