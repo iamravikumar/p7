@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
@@ -22,15 +24,23 @@ namespace Poseidon.API.Controllers
         }
 
         // GET: api/Rating
+        /// <summary>
+        /// Gets a list of all Ratings.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rating>>> GetRating()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<IEnumerable<Rating>>> Get()
         {
             return await _context.Rating.ToListAsync();
         }
 
         // GET: api/Rating/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rating>> GetRating(short id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Rating>> Get(short id)
         {
             var rating = await _context.Rating.FindAsync(id);
 
@@ -46,7 +56,9 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRating(short id, Rating rating)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Put(short id, Rating rating)
         {
             if (id != rating.Id)
             {
@@ -78,17 +90,21 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Rating>> PostRating(Rating rating)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Rating>> Post(Rating rating)
         {
             _context.Rating.Add(rating);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRating", new { id = rating.Id }, rating);
+            return CreatedAtAction("Get", new { id = rating.Id }, rating);
         }
 
         // DELETE: api/Rating/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Rating>> DeleteRating(short id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Rating>> Delete(short id)
         {
             var rating = await _context.Rating.FindAsync(id);
             if (rating == null)

@@ -5,7 +5,12 @@
         <AssemblyName>Poseidon.API</AssemblyName>
         <RootNamespace>Poseidon.API</RootNamespace>
     </PropertyGroup>
-
+    
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+    
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="9.0.0" />
       <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />

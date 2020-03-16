@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
@@ -23,14 +24,18 @@ namespace Poseidon.API.Controllers
 
         // GET: api/BidLists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BidList>>> GetBidList()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<IEnumerable<BidList>>> Get()
         {
             return await _context.BidList.ToListAsync();
         }
 
         // GET: api/BidLists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BidList>> GetBidList(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<BidList>> Get(int id)
         {
             var bidList = await _context.BidList.FindAsync(id);
 
@@ -46,7 +51,9 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBidList(int id, BidList bidList)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Put(int id, BidList bidList)
         {
             if (id != bidList.Id)
             {
@@ -78,17 +85,21 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<BidList>> PostBidList(BidList bidList)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<BidList>> Post(BidList bidList)
         {
             _context.BidList.Add(bidList);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBidList", new { id = bidList.Id }, bidList);
+            return CreatedAtAction("Get", new { id = bidList.Id }, bidList);
         }
 
         // DELETE: api/BidLists/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BidList>> DeleteBidList(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<BidList>> Delete(int id)
         {
             var bidList = await _context.BidList.FindAsync(id);
             if (bidList == null)

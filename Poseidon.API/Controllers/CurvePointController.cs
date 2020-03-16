@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
@@ -23,14 +24,18 @@ namespace Poseidon.API.Controllers
 
         // GET: api/CurvePoints
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CurvePoint>>> GetCurvePoint()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<IEnumerable<CurvePoint>>> Get()
         {
             return await _context.CurvePoint.ToListAsync();
         }
 
         // GET: api/CurvePoints/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CurvePoint>> GetCurvePoint(short id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<CurvePoint>> Get(short id)
         {
             var curvePoint = await _context.CurvePoint.FindAsync(id);
 
@@ -46,7 +51,9 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCurvePoint(short id, CurvePoint curvePoint)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Put(short id, CurvePoint curvePoint)
         {
             if (id != curvePoint.Id)
             {
@@ -78,17 +85,21 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<CurvePoint>> PostCurvePoint(CurvePoint curvePoint)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<CurvePoint>> Post(CurvePoint curvePoint)
         {
             _context.CurvePoint.Add(curvePoint);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCurvePoint", new { id = curvePoint.Id }, curvePoint);
+            return CreatedAtAction("Get", new { id = curvePoint.Id }, curvePoint);
         }
 
         // DELETE: api/CurvePoints/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<CurvePoint>> DeleteCurvePoint(short id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<CurvePoint>> Delete(short id)
         {
             var curvePoint = await _context.CurvePoint.FindAsync(id);
             if (curvePoint == null)

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
@@ -23,14 +24,18 @@ namespace Poseidon.API.Controllers
 
         // GET: api/RuleName
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RuleName>>> GetRuleName()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<IEnumerable<RuleName>>> Get()
         {
             return await _context.RuleName.ToListAsync();
         }
 
         // GET: api/RuleName/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RuleName>> GetRuleName(short id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<RuleName>> Get(short id)
         {
             var ruleName = await _context.RuleName.FindAsync(id);
 
@@ -46,7 +51,9 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRuleName(short id, RuleName ruleName)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Put(short id, RuleName ruleName)
         {
             if (id != ruleName.Id)
             {
@@ -78,17 +85,21 @@ namespace Poseidon.API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<RuleName>> PostRuleName(RuleName ruleName)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<RuleName>> Post(RuleName ruleName)
         {
             _context.RuleName.Add(ruleName);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRuleName", new { id = ruleName.Id }, ruleName);
+            return CreatedAtAction("Get", new { id = ruleName.Id }, ruleName);
         }
 
         // DELETE: api/RuleName/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<RuleName>> DeleteRuleName(short id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<RuleName>> Delete(short id)
         {
             var ruleName = await _context.RuleName.FindAsync(id);
             if (ruleName == null)

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,14 +18,15 @@ namespace Poseidon.API
         /// Adds authentication to the service collection.
         /// </summary>
         /// <param name="services"></param>
-        public static void ConfigureAuthorization(this IServiceCollection services)
+        public static void ConfigureAuthentication(this IServiceCollection services)
         {
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+            services
+                .AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
-                    options.Audience = "poseidon_api";
+                    options.ApiName = "poseidon_api";
                 });
         }
 
@@ -34,9 +38,28 @@ namespace Poseidon.API
         {
             services.AddSwaggerGen(config =>
             {
-                config.SwaggerDoc("v1", new OpenApiInfo {Title = "Poseidon API", Version = "v1"});
+                config.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Poseidon API",
+                    Version = "v1",
+                    Description = "Poseidon API/core engine",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Jon Karlsen",
+                        Email = "karlsen.jonarild@gmail.com",
+                        Url = new Uri("https://github.com/jakarlse88")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "MIT",
+                        Url = new Uri("https://opensource.org/licenses/MIT")
+                    }
+                });
 
-                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                config.IncludeXmlComments(xmlPath);
+                
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

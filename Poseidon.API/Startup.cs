@@ -22,20 +22,11 @@ namespace Poseidon.API
             
             services.AddControllers();
 
-//            services.ConfigureAuthorization();
+            services.ConfigureAuthentication();
             
             services.ConfigureSwagger();
 
             services.ConfigureRepositoryWrapper();
-
-            services
-                .AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "http://localhost:5000";
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "poseidon_api";
-                });
         }
  
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +46,6 @@ namespace Poseidon.API
                 c.OAuthAppName("Swagger UI");
                 c.OAuthClientSecret("secret");
                 c.OAuth2RedirectUrl("http://localhost:5001/oauth2-redirect.html");
-//                c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
             });
             
             if (env.IsDevelopment())
