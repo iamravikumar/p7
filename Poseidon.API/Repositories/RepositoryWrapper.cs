@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Rewrite;
-using Poseidon.API.Data;
+﻿using Poseidon.API.Data;
 
 namespace Poseidon.API.Repositories
 {

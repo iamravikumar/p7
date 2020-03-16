@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
@@ -14,11 +12,11 @@ namespace Poseidon.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CurvePointsController : ControllerBase
+    public class CurvePointController : ControllerBase
     {
         private readonly PoseidonContext _context;
 
-        public CurvePointsController(PoseidonContext context)
+        public CurvePointController(PoseidonContext context)
         {
             _context = context;
         }

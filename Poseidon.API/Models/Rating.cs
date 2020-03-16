@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Poseidon.API.Models
+﻿namespace Poseidon.API.Models
 {
     public partial class Rating
     {

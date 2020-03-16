@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,43 @@ namespace Poseidon.API
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new OpenApiInfo {Title = "Poseidon API", Version = "v1"});
+
+                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
+                config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Place to add JWT with Bearer",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri("http://localhost:5000/connect/authorize", UriKind.Absolute),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                {"poseidon_api", "Poseidon API"},
+                            },
+                            TokenUrl = new Uri("http://localhost:5000/connect/token")
+                        }
+                    }
+                });
+
+                config.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Name = "Bearer",
+                        },
+                        new List<string>()
+                    }
+                });
             });
         }
 

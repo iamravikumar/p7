@@ -1,12 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Poseidon.API.Data;
-using Poseidon.API.Repositories;
 
 namespace Poseidon.API
 {
@@ -26,13 +22,22 @@ namespace Poseidon.API
             
             services.AddControllers();
 
-            services.ConfigureAuthorization();
+//            services.ConfigureAuthorization();
             
             services.ConfigureSwagger();
 
             services.ConfigureRepositoryWrapper();
-        }
 
+            services
+                .AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:5000";
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "poseidon_api";
+                });
+        }
+ 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -45,6 +50,12 @@ namespace Poseidon.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Poseidon API 1.0");
                 c.RoutePrefix = string.Empty;
+              
+                c.OAuthClientId("swagger_ui");
+                c.OAuthAppName("Swagger UI");
+                c.OAuthClientSecret("secret");
+                c.OAuth2RedirectUrl("http://localhost:5001/oauth2-redirect.html");
+//                c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
             });
             
             if (env.IsDevelopment())
