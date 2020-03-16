@@ -32,21 +32,9 @@ namespace Poseidon.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Poseidon API 1.0");
-                c.RoutePrefix = string.Empty;
-              
-                c.OAuthClientId("swagger_ui");
-                c.OAuthAppName("Swagger UI");
-                c.OAuthClientSecret("secret");
-                c.OAuth2RedirectUrl("http://localhost:5001/oauth2-redirect.html");
-            });
+            app.UseSwaggerUI();
             
             if (env.IsDevelopment())
             {
