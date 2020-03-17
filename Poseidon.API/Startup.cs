@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Poseidon.API.Services;
+using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API
 {
@@ -27,6 +29,8 @@ namespace Poseidon.API
             services.ConfigureSwagger();
 
             services.ConfigureRepositoryWrapper();
+
+            services.AddTransient<IBidListService, BidListService>();
         }
  
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

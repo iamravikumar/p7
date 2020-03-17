@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
 
@@ -19,19 +21,21 @@ namespace Poseidon.API.Repositories
             _context = context;
         }
 
-        public IQueryable<T> FindAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _context
+            return await _context
                 .Set<T>()
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        public async Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression)
         {
-            return _context
+            return await _context
                 .Set<T>()
                 .Where(expression)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public void Create(T entity)
