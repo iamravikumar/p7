@@ -1,5 +1,7 @@
+using System.Configuration;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -10,11 +12,11 @@ namespace Poseidon.API
     {
         public static void Main(string[] args)
         {
-            var logFileDir = Directory.GetCurrentDirectory() +
-                             Path.DirectorySeparatorChar +
-                             "Logs" +
-                             Path.DirectorySeparatorChar;
-
+            var appSettings = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console(
@@ -23,6 +25,10 @@ namespace Poseidon.API
                 .WriteTo.File("Logs/",
                     rollingInterval: RollingInterval.Day, 
                     retainedFileCountLimit: 14)
+                .WriteTo.MSSqlServer(
+                    connectionString: appSettings.GetConnectionString("ApplicationDbContext"),
+                    tableName: "Log",
+                    autoCreateSqlTable: true)
                 .Enrich.FromLogContext()
                 .CreateLogger();
 

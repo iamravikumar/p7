@@ -22,3 +22,4 @@
 2020-03-18 12:26:38.220 +01:00 [INF] User: [490734a4-206c-4626-b703-38e019e5c970] GET / Controller: [Poseidon.API.Controllers.BidListController] Action: [Poseidon.API.Controllers.BidListController.Get (Poseidon.API)]
 2020-03-18 12:28:42.674 +01:00 [INF] User: [490734a4-206c-4626-b703-38e019e5c970] GET [Microsoft.AspNetCore.Mvc.Routing.AttributeRouteInfo]
 2020-03-18 12:32:14.637 +01:00 [INF] User: [490734a4-206c-4626-b703-38e019e5c970] GET [Poseidon.API.Controllers.BidListController.Get]
+2020-03-18 12:44:03.989 +01:00 [INF] User: [490734a4-206c-4626-b703-38e019e5c970] GET [Poseidon.API.Controllers.BidListController.Get]
