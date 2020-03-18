@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Poseidon.API.Data;
 using Poseidon.API.Repositories;
 
-namespace Poseidon.API
+namespace Poseidon.API.Extensions
 {
     public static class ServiceExtensions
     {

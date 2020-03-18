@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace Poseidon.API
+namespace Poseidon.API.Extensions
 {
     public static class MiddlewareExtensions
     {
-        public static void UseSwaggerUI(this IApplicationBuilder app)
+        public static void UseSwaggerUi(this IApplicationBuilder app)
         {
             app.UseSwaggerUI(c =>
             {

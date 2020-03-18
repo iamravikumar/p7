@@ -1,8 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Poseidon.API.ActionFilters;
+using Poseidon.API.Extensions;
 using Poseidon.API.Services;
 using Poseidon.API.Services.Interfaces;
 
@@ -22,7 +25,7 @@ namespace Poseidon.API
         {
             services.ConfigureDbContext(Configuration);
             
-            services.AddControllers();
+            services.AddControllers(config => { config.Filters.Add(new ActionLogFilter()); });
 
             services.ConfigureAuthentication();
             
@@ -38,7 +41,7 @@ namespace Poseidon.API
         {
             app.UseSwagger();
 
-            app.UseSwaggerUI();
+            app.UseSwaggerUi();
             
             if (env.IsDevelopment())
             {
@@ -48,6 +51,8 @@ namespace Poseidon.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             app.UseAuthentication();
             app.UseAuthorization();

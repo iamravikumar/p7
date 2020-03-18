@@ -38,7 +38,7 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<BidList>>> Get()
         {
-            var result =  await _bidListService.GetAllBidListsAsync();
+            var result = await _bidListService.GetAllBidListsAsync();
 
             if (result.ToList().Count > 0)
             {
@@ -69,7 +69,7 @@ namespace Poseidon.API.Controllers
             {
                 return BadRequest();
             }
-            
+
             var bidList = await _bidListService.GetBidListByIdAsync(id);
 
             if (bidList == null)
