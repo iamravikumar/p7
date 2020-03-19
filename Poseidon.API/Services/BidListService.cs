@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Poseidon.API.Models;
 using Poseidon.API.Repositories;
 using Poseidon.API.Services.Interfaces;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Poseidon.API.Services
 {
@@ -20,25 +20,26 @@ namespace Poseidon.API.Services
         /// Asynchronously gets all BidList entities.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<BidList>> GetAllBidListsAsync()
-        {
-            var result = await _repositoryWrapper.BidListRepository.GetAllAsync();
-
-            return result;
-        }
+        public async Task<IEnumerable<BidList>> GetAllBidListsAsync() =>
+            await _repositoryWrapper.BidListRepository.GetAllAsync();
 
         /// <summary>
         /// Asynchronously gets a BidList entity by Id.
         /// </summary>
         /// <returns></returns>
-        public async Task<BidList> GetBidListByIdAsync(int id)
-        {
-            var result =
-                 _repositoryWrapper
-                    .BidListRepository
-                    .FindByCondition(bl => bl.Id == id);
+        public async Task<BidList> GetBidListByIdAsync(int id) =>
+            await _repositoryWrapper
+                .BidListRepository
+                .FindByCondition(bl => bl.Id == id)
+                .FirstOrDefaultAsync();
 
-            return result.FirstOrDefault();
+        public async Task CreateBidList(BidList entity)
+        {
+            _repositoryWrapper
+                .BidListRepository
+                .Create(entity);
+            
+            await _repositoryWrapper.SaveAsync();
         }
     }
 }

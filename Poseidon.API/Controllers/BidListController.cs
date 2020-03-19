@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
 using Poseidon.API.Models.ViewModels;
@@ -92,19 +92,28 @@ namespace Poseidon.API.Controllers
         /// <summary>
         /// Creates a new BidList entity. 
         /// </summary>
-        /// <param name="bidList">Data for the new entity.</param>
+        /// <param name="inputModel">Data for the new entity.</param>
         /// <returns>The created entity.</returns>
         /// <response code="201">The entity was successfully created.</response>
+        /// <response code="400">Bad request.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpPost]
+        [ValidateModel]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<BidList>> Post(BidList bidList)
+        public async Task<ActionResult<BidList>> Post(BidListInputModel inputModel)
         {
-            _context.BidList.Add(bidList);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                var entity = _mapper.Map<BidList>(inputModel);
 
-            return CreatedAtAction("Get", new {id = bidList.Id}, bidList);
+                await _bidListService.CreateBidList(entity);
+                
+                return CreatedAtAction("Get", new {id = entity.Id}, inputModel);
+            }
+
+            return BadRequest(ModelState);
         }
 
         // PUT: api/BidLists/5

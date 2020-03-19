@@ -6,7 +6,7 @@ using Serilog;
 
 namespace Poseidon.API.ActionFilters
 {
-    public class ActionLogFilter : IAsyncActionFilter
+    public class LogAttribute : IAsyncActionFilter
     {
         /// <summary>
         /// On every action invocation, log the user's Id, the controller name,

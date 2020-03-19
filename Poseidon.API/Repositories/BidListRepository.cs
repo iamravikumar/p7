@@ -26,5 +26,11 @@ namespace Poseidon.API.Repositories
                 .OrderBy(bl => bl.Id)
                 .ToListAsync();
 
+        public async Task<BidList> GetByIdAsync(int id) =>
+            await base.FindByCondition(x => x.Id == id)
+                .FirstOrDefaultAsync();
+
+        public void CreateBidList(BidList entity) =>
+            base.Create(entity);
     }
 }

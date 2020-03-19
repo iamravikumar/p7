@@ -8,5 +8,6 @@ namespace Poseidon.API.Services.Interfaces
     {
         Task<IEnumerable<BidList>> GetAllBidListsAsync();
         Task<BidList> GetBidListByIdAsync(int id);
+        Task CreateBidList(BidList entity);
     }
 }

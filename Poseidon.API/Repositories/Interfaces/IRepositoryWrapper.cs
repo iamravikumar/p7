@@ -1,4 +1,6 @@
-﻿namespace Poseidon.API.Repositories
+﻿using System.Threading.Tasks;
+
+namespace Poseidon.API.Repositories
 {
     /// <summary>
     /// 
@@ -12,6 +14,6 @@
         ITradeRepository TradeRepository { get; }
         IUserRepository UserRepository { get; }
 
-        void Save();
+        Task SaveAsync();
     }
 }

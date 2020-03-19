@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using FluentValidation;
-using FluentValidation.Validators;
+﻿using FluentValidation;
 using Poseidon.API.Models;
 
 namespace Poseidon.API.Validators

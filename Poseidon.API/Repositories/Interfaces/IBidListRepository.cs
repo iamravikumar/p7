@@ -10,5 +10,7 @@ namespace Poseidon.API.Repositories
     public interface IBidListRepository : IRepositoryBase<BidList>
     {
         Task<IEnumerable<BidList>> GetAllAsync();
+        Task<BidList> GetByIdAsync(int id);
+        void CreateBidList(BidList entity);
     }
 }

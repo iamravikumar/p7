@@ -26,8 +26,10 @@ namespace Poseidon.API
         {
             services.ConfigureDbContext(Configuration);
             
-            services.AddControllers(config => { config.Filters.Add(new ActionLogFilter()); });
+            services.AddControllers(config => { config.Filters.Add(new LogAttribute()); });
 
+            services.ConfigureActionFilterAttributes();
+            
             services.ConfigureAuthentication();
             
             services.ConfigureSwagger();

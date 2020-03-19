@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Repositories;
 
@@ -28,6 +29,11 @@ namespace Poseidon.API.Extensions
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "poseidon_api";
                 });
+        }
+
+        public static void ConfigureActionFilterAttributes(this IServiceCollection services)
+        {
+            services.AddScoped<ValidateModelAttribute>();
         }
 
         /// <summary>

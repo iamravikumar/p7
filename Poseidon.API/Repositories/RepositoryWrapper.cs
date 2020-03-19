@@ -1,4 +1,5 @@
-﻿using Poseidon.API.Data;
+﻿using System.Threading.Tasks;
+using Poseidon.API.Data;
 
 namespace Poseidon.API.Repositories
 {
@@ -41,9 +42,9 @@ namespace Poseidon.API.Repositories
         /// <summary>
         /// Saves all changes made to the context to the database.
         /// </summary>
-        public void Save()
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
