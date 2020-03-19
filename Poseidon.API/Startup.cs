@@ -47,7 +47,13 @@ namespace Poseidon.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+            app.ConfigureExceptionHandler();
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();

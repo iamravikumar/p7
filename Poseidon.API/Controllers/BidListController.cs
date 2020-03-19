@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -80,6 +81,26 @@ namespace Poseidon.API.Controllers
             return Ok(bidList);
         }
 
+
+        // POST: api/BidLists
+        /// <summary>
+        /// Creates a new BidList entity. 
+        /// </summary>
+        /// <param name="bidList">Data for the new entity.</param>
+        /// <returns>The created entity.</returns>
+        /// <response code="201">The entity was successfully created.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<BidList>> Post(BidList bidList)
+        {
+            _context.BidList.Add(bidList);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("Get", new {id = bidList.Id}, bidList);
+        }
+
         // PUT: api/BidLists/5
         /// <summary>
         /// Updates a BidList entity.
@@ -120,25 +141,6 @@ namespace Poseidon.API.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/BidLists
-        /// <summary>
-        /// Creates a new BidList entity. 
-        /// </summary>
-        /// <param name="bidList">Data for the new entity.</param>
-        /// <returns>The created entity.</returns>
-        /// <response code="201">The entity was successfully created.</response>
-        /// <response code="401">The user is not authorized to access this resource.</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<BidList>> Post(BidList bidList)
-        {
-            _context.BidList.Add(bidList);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("Get", new {id = bidList.Id}, bidList);
         }
 
         // DELETE: api/BidLists/5

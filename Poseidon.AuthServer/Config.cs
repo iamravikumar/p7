@@ -24,31 +24,26 @@ namespace Poseidon.AuthServer
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // M2M client
+                // Postman M2M client
                 new Client
                 {
-                    ClientId = "poseidon_client",
+                    ClientId = "postman_test_client",
                     ClientSecrets =
                     {
                         new Secret("7c3c1e25-f013-4651-901c-443927a6a90e".Sha256())
                     },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-//                    RequireConsent = false,
+                    RedirectUris = {"http://getpostman.com/oauth2/callback"},
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
                     AllowedScopes =
                     {
-//                        IdentityServerConstants.StandardScopes.OpenId,
-//                        IdentityServerConstants.StandardScopes.Profile,
                         "poseidon_api"
                     },
-//                    RequirePkce = true,
-//                    RedirectUris = { "http://localhost:5002/signin-oidc"},
-//                    PostLogoutRedirectUris = {"http://localhost:5002/signout-callback-oidc"},
-//                    AllowOfflineAccess = true
                 },
                 // interactive ASP.NET Razor Pages client
                 new Client
                 {
-                    ClientId = "poseidon_razor",
+                    ClientId = "poseidon_razor", 
                     ClientSecrets = {new Secret("secret".Sha256())},
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,

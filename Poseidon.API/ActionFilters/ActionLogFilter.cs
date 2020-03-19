@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Poseidon.API.Extensions;
 using Serilog;
@@ -16,6 +17,11 @@ namespace Poseidon.API.ActionFilters
         /// <returns></returns>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            {
+                await context.HttpContext.AuthenticateAsync("Bearer");
+            }
+            
             var userId = context.HttpContext.User.SubjectId();
             
             var actionName = context.ActionDescriptor.DisplayName;
