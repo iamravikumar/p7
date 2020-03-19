@@ -1,4 +1,6 @@
-﻿using Poseidon.API.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Poseidon.API.Models;
 
 namespace Poseidon.API.Repositories
 {
@@ -7,5 +9,6 @@ namespace Poseidon.API.Repositories
     /// </summary>
     public interface IBidListRepository : IRepositoryBase<BidList>
     {
+        Task<IEnumerable<BidList>> GetAllAsync();
     }
 }

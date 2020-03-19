@@ -34,10 +34,10 @@ namespace Poseidon.API.Services
         public async Task<BidList> GetBidListByIdAsync(int id)
         {
             var result =
-                await _repositoryWrapper
+                 _repositoryWrapper
                     .BidListRepository
-                    .GetByConditionAsync(bl => bl.Id == id);
-                    
+                    .FindByCondition(bl => bl.Id == id);
+
             return result.FirstOrDefault();
         }
     }

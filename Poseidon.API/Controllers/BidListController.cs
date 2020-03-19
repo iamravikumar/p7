@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
+using Poseidon.API.Models.ViewModels;
 using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
@@ -19,11 +21,13 @@ namespace Poseidon.API.Controllers
     {
         private readonly PoseidonContext _context;
         private readonly IBidListService _bidListService;
+        private readonly IMapper _mapper;
 
-        public BidListController(IBidListService bidListService, PoseidonContext context)
+        public BidListController(IBidListService bidListService, PoseidonContext context, IMapper mapper)
         {
             _bidListService = bidListService;
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/BidLists
@@ -43,7 +47,9 @@ namespace Poseidon.API.Controllers
 
             if (result.ToList().Count > 0)
             {
-                return Ok(result);
+                var returnResults = _mapper.Map<BidListViewModel>(result);
+                
+                return Ok(returnResults);
             }
 
             return NotFound();

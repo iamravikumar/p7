@@ -9,5 +9,10 @@
       <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Identity\Login.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Identity\Logout.cshtml" />
+    </ItemGroup>
+
 
 </Project>
