@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
+using Poseidon.API.Services;
 using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
@@ -19,13 +20,11 @@ namespace Poseidon.API.Controllers
     {
         private readonly PoseidonContext _context;
         private readonly IBidListService _bidListService;
-        private readonly IMapper _mapper;
 
-        public BidListController(IBidListService bidListService, PoseidonContext context, IMapper mapper)
+        public BidListController(IBidListService bidListService, PoseidonContext context)
         {
             _bidListService = bidListService;
             _context = context;
-            _mapper = mapper;
         }
 
         // GET: api/BidLists
@@ -39,20 +38,16 @@ namespace Poseidon.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<BidList>>> Get()
+        public async Task<ActionResult<IEnumerable<BidListViewModel>>> Get()
         {
-            var result = await _bidListService.GetAllBidListsAsync();
+            var results = await _bidListService.GetAllBidListsAsViewModelsAsync();
 
-            var bidLists = result as BidList[] ?? result.ToArray();
-            
-            if (bidLists.ToList().Count > 0)
-            {
-                var returnResults = _mapper.Map<IEnumerable<BidList>, IEnumerable<BidListViewModel>>(bidLists);
+            var entityList = results as BidListViewModel[] ?? results.ToArray();
 
-                return Ok(returnResults);
-            }
+            if (!entityList.Any())
+                return NotFound();
 
-            return NotFound();
+            return Ok(results);
         }
 
         // GET: api/BidLists/5
@@ -70,21 +65,17 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<BidList>> Get(int id)
+        public async Task<ActionResult<BidListViewModel>> Get(int id)
         {
             if (id <= 0)
-            {
                 return BadRequest();
-            }
 
-            var bidList = await _bidListService.GetBidListByIdAsync(id);
-
-            if (bidList == null)
-            {
+            if (!_bidListService.BidListExists(id))
                 return NotFound();
-            }
 
-            return Ok(bidList);
+            var result = await _bidListService.GetBidListByIdAsViewModelASync(id);
+
+            return Ok(result);
         }
 
 
@@ -106,11 +97,9 @@ namespace Poseidon.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<BidList>(inputModel);
+                var resultId = await _bidListService.CreateBidList(inputModel);
 
-                await _bidListService.CreateBidList(entity);
-
-                return CreatedAtAction("Get", new {id = entity.Id}, inputModel);
+                return CreatedAtAction("Get", new { id = resultId }, inputModel);
             }
 
             return BadRequest(ModelState);
@@ -133,21 +122,13 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put(int id, BidListInputModel inputModel)
         {
-            if (id <= 0)
-            {
-                return BadRequest("The 'Id' argument must be >= 1.");
-            }
+            if (id != inputModel.Id)
+                return BadRequest("Id mismatch");
 
-            var entity = await _bidListService.GetBidListByIdAsync(id);
+            if (!_bidListService.BidListExists(id))
+                return NotFound($"No {typeof(BidList)} entity matching the id [{id}] was found.");
 
-            if (entity == null)
-            {
-                return NotFound("No entity matching the supplied id was found.");
-            }
-
-            _mapper.Map(inputModel, entity);
-
-            await _bidListService.UpdateBidList(entity);
+            await _bidListService.UpdateBidList(id, inputModel);
 
             return NoContent();
         }
@@ -168,25 +149,15 @@ namespace Poseidon.API.Controllers
         public async Task<ActionResult<BidList>> Delete(int id)
         {
             if (id <= 0)
-            {
-                return BadRequest("The 'Id' argument must be >= 1.");
-            }
+                return BadRequest(
+                    $"The '{nameof(id)}' argument must a non-zero, positive integer value. The passed-in value was {id}");
 
-            var bidList = await _bidListService.GetBidListByIdAsync(id);
-            
-            if (bidList == null)
-            {
-                return NotFound("No entity matching the supplied id was found.");
-            }
+            if (!_bidListService.BidListExists(id))
+                return NotFound($"No {typeof(BidList)} entity matching the id [{id}] was found.");
 
-            await _bidListService.DeleteBidList(bidList);
+            await _bidListService.DeleteBidList(id);
 
             return NoContent();
-        }
-
-        private bool BidListExists(int id)
-        {
-            return _context.BidList.Any(e => e.Id == id);
         }
     }
 }

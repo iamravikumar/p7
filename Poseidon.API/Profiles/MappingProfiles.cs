@@ -7,7 +7,8 @@ namespace Poseidon.API.Profiles
     {
         public MappingProfiles()
         {
-            CreateMap<BidListInputModel, BidList>();
+            CreateMap<BidListInputModel, BidList>()
+                .ForMember(x => x.Id, act => act.Ignore());
             CreateMap<BidList, BidListViewModel>();
         }
     }

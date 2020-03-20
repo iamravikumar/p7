@@ -7,9 +7,12 @@ namespace Poseidon.API.Services.Interfaces
     public interface IBidListService
     {
         Task<IEnumerable<BidList>> GetAllBidListsAsync();
+        Task<IEnumerable<BidListViewModel>> GetAllBidListsAsViewModelsAsync();
         Task<BidList> GetBidListByIdAsync(int id);
-        Task CreateBidList(BidList entity);
-        Task UpdateBidList(BidList entity);
-        Task DeleteBidList(BidList entity);
+        Task<BidListViewModel> GetBidListByIdAsViewModelASync(int id);
+        Task<int> CreateBidList(BidListInputModel inputModel);
+        Task UpdateBidList(int id, BidListInputModel inputModel);
+        Task DeleteBidList(int id);
+        bool BidListExists(int id);
     }
 }

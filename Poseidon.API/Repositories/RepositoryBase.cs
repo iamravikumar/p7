@@ -44,5 +44,11 @@ namespace Poseidon.API.Repositories
             _context
                 .Set<T>()
                 .Remove(entity);
+
+        public bool Exists(Expression<Func<T, bool>> expression) =>
+            _context
+                .Set<T>()
+                .Where(expression)
+                .Any();
     }
 }

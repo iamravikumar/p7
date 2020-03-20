@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Poseidon.API.Models;
 
@@ -12,5 +14,6 @@ namespace Poseidon.API.Repositories
         Task<IEnumerable<BidList>> GetAllAsync();
         Task<BidList> GetByIdAsync(int id);
         void CreateBidList(BidList entity);
+        bool Exists(int id);
     }
 }

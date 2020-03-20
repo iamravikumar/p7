@@ -11,19 +11,9 @@ using Xunit;
 
 namespace Poseidon.Test
 {
+    [Collection("BidList")]
     public class BidListRepositoryTests
     {
-        private static void SeedTestDb(PoseidonContext context)
-        {
-            context.AddRange(
-                new BidList { Id = 1, Account = "one account" },
-                new BidList { Id = 2, Account = "two account" },
-                new BidList { Id = 3, Account = "three account" }
-            );
-
-            context.SaveChanges();
-        }
-
         [Fact]
         public async Task TestGetAllAsync()
         {
@@ -34,7 +24,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                SeedTestDb(context);
+                TestUtilities.SeedTestDbBidList(context);
 
                 var repositoryWrapper = new RepositoryWrapper(context);
 
@@ -61,7 +51,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                SeedTestDb(context);
+                TestUtilities.SeedTestDbBidList(context);
 
                 var repositoryWrapper = new RepositoryWrapper(context);
 
@@ -87,7 +77,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                SeedTestDb(context);
+                TestUtilities.SeedTestDbBidList(context);
 
                 var repositoryWrapper = new RepositoryWrapper(context);
 
