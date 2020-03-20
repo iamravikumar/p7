@@ -24,7 +24,6 @@ namespace Poseidon.API.Repositories
                 .Set<T>()
                 .AsNoTracking();
 
-
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) =>
             _context
                 .Set<T>()
@@ -35,7 +34,7 @@ namespace Poseidon.API.Repositories
             _context
                 .Set<T>()
                 .Add(entity);
-        
+
         public void Update(T entity) =>
             _context
                 .Set<T>()

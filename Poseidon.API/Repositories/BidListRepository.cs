@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
+
 // ReSharper disable RedundantBaseQualifier
 
 namespace Poseidon.API.Repositories
@@ -30,7 +32,12 @@ namespace Poseidon.API.Repositories
             await base.FindByCondition(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
-        public void CreateBidList(BidList entity) =>
+        public void CreateBidList(BidList entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException();
+
             base.Create(entity);
+        }
     }
 }

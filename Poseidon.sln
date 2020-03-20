@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.Client", "Poseidon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.AuthServer", "Poseidon.AuthServer\Poseidon.AuthServer.csproj", "{5ADBC2E5-863A-4803-981F-A64DB968A64D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.Test", "Poseidon.Test\Poseidon.Test.csproj", "{534F0055-7D0F-408D-B4A2-FB92BEB488C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API.Test", "Poseidon.API.Test\Poseidon.API.Test.csproj", "{534F0055-7D0F-408D-B4A2-FB92BEB488C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
