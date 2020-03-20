@@ -15,6 +15,11 @@ namespace Poseidon.API.Repositories
         private IRuleNameRepository _ruleNameRepository;
         private ITradeRepository _tradeRepository;
         private IUserRepository _userRepository;
+        
+        public RepositoryWrapper(PoseidonContext context)
+        {
+            _context = context;
+        }
 
         public IBidListRepository BidListRepository =>
             _bidListRepository ??= new BidListRepository(_context);
@@ -33,11 +38,6 @@ namespace Poseidon.API.Repositories
 
         public IUserRepository UserRepository =>
             _userRepository ??= new UserRepository(_context);
-
-        public RepositoryWrapper(PoseidonContext context)
-        {
-            _context = context;
-        }
 
         /// <summary>
         /// Saves all changes made to the context to the database.
