@@ -42,9 +42,7 @@ namespace Poseidon.API.Repositories
         /// <summary>
         /// Saves all changes made to the context to the database.
         /// </summary>
-        public async Task SaveAsync()
-        {
+        public async Task SaveAsync() =>
             await _context.SaveChangesAsync();
-        }
     }
 }

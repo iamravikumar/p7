@@ -41,5 +41,23 @@ namespace Poseidon.API.Services
             
             await _repositoryWrapper.SaveAsync();
         }
+
+        public async Task UpdateBidList(BidList entity)
+        {
+            _repositoryWrapper
+                .BidListRepository
+                .Update(entity);
+
+            await _repositoryWrapper.SaveAsync();
+        }
+
+        public async Task DeleteBidList(BidList entity)
+        {
+            _repositoryWrapper
+                .BidListRepository
+                .Delete(entity);
+
+            await _repositoryWrapper.SaveAsync();
+        }
     }
 }

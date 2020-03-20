@@ -5,11 +5,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
-using Poseidon.API.Models.ViewModels;
 using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
@@ -45,10 +43,12 @@ namespace Poseidon.API.Controllers
         {
             var result = await _bidListService.GetAllBidListsAsync();
 
-            if (result.ToList().Count > 0)
+            var bidLists = result as BidList[] ?? result.ToArray();
+            
+            if (bidLists.ToList().Count > 0)
             {
-                var returnResults = _mapper.Map<BidListViewModel>(result);
-                
+                var returnResults = _mapper.Map<IEnumerable<BidList>, IEnumerable<BidListViewModel>>(bidLists);
+
                 return Ok(returnResults);
             }
 
@@ -109,7 +109,7 @@ namespace Poseidon.API.Controllers
                 var entity = _mapper.Map<BidList>(inputModel);
 
                 await _bidListService.CreateBidList(entity);
-                
+
                 return CreatedAtAction("Get", new {id = entity.Id}, inputModel);
             }
 
@@ -121,39 +121,33 @@ namespace Poseidon.API.Controllers
         /// Updates a BidList entity.
         /// </summary>
         /// <param name="id">The Id of the BidList entity to update.</param>
-        /// <param name="bidList">Updated data.</param>
+        /// <param name="inputModel">Updated data.</param>
         /// <returns>Null.</returns>
         /// <response code="204">The resource was successfully updated.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         /// <response code="404">The specified entity was not found.</response>
         [HttpPut("{id}")]
+        [ValidateModel]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(int id, BidList bidList)
+        public async Task<IActionResult> Put(int id, BidListInputModel inputModel)
         {
-            if (id != bidList.Id)
+            if (id <= 0)
             {
-                return BadRequest();
+                return BadRequest("The 'Id' argument must be >= 1.");
             }
 
-            _context.Entry(bidList).State = EntityState.Modified;
+            var entity = await _bidListService.GetBidListByIdAsync(id);
 
-            try
+            if (entity == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound("No entity matching the supplied id was found.");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BidListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            _mapper.Map(inputModel, entity);
+
+            await _bidListService.UpdateBidList(entity);
 
             return NoContent();
         }
@@ -171,14 +165,19 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<BidList>> Delete(int id)
         {
-            var bidList = await _context.BidList.FindAsync(id);
-            if (bidList == null)
+            if (id <= 0)
             {
-                return NotFound();
+                return BadRequest("The 'Id' argument must be >= 1.");
             }
 
-            _context.BidList.Remove(bidList);
-            await _context.SaveChangesAsync();
+            var bidList = await _bidListService.GetBidListByIdAsync(id);
+            
+            if (bidList == null)
+            {
+                return NotFound("No entity matching the supplied id was found.");
+            }
+
+            await _bidListService.DeleteBidList(bidList);
 
             return NoContent();
         }

@@ -35,8 +35,7 @@ namespace Poseidon.API.Repositories
             _context
                 .Set<T>()
                 .Add(entity);
-
-
+        
         public void Update(T entity) =>
             _context
                 .Set<T>()
