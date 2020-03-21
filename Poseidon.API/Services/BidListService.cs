@@ -48,7 +48,11 @@ namespace Poseidon.API.Services
 
         public async Task<BidListViewModel> GetBidListByIdAsViewModelASync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _repositoryWrapper.BidListRepository.GetByIdAsync(id);
+
+            var viewModel = _mapper.Map<BidListViewModel>(entity);
+
+            return viewModel;
         }
 
         public async Task<int> CreateBidList(BidListInputModel inputModel)

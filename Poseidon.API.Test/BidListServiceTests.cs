@@ -22,15 +22,11 @@ namespace Poseidon.Test
 
         public BidListServiceTests()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new MappingProfiles());
-            });
-            
-            _mapper = config.CreateMapper();
+            var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
 
+            _mapper = config.CreateMapper();
         }
-        
+
         [Fact]
         public async Task TestGetAllBidListsAsync()
         {
@@ -56,6 +52,33 @@ namespace Poseidon.Test
             // Assert
             Assert.Equal(3, result.Count());
             Assert.IsAssignableFrom<BidList>(result.First());
+        }
+
+        [Fact]
+        public async Task TestGetAllBidListsAsViewModelsAsync()
+        {
+            // Arrange
+            IEnumerable<BidListViewModel> result;
+
+            var options = TestUtilities.BuildTestDbOptions();
+
+            await using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                var service = new BidListService(repositoryWrapper, _mapper);
+
+                // Act
+                result = await service.GetAllBidListsAsViewModelsAsync();
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.Equal(3, result.Count());
+            Assert.IsAssignableFrom<BidListViewModel>(result.First());
         }
 
         [Fact]
@@ -85,6 +108,33 @@ namespace Poseidon.Test
         }
 
         [Fact]
+        public async Task TestGetBidListByIdAsViewModelAsyncIdValid()
+        {
+            // Arrange
+            var options = TestUtilities.BuildTestDbOptions();
+
+            await using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                var service = new BidListService(repositoryWrapper, _mapper);
+
+                // Act
+                var result = await service.GetBidListByIdAsViewModelASync(1);
+
+                // Assert
+                Assert.NotNull(result);
+                Assert.IsAssignableFrom<BidListViewModel>(result);
+                Assert.Equal("one account", result.Account);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
+
+        [Fact]
         public async Task TestGetBidListByIdAsyncIdInvalid()
         {
             // Arrange
@@ -107,6 +157,31 @@ namespace Poseidon.Test
                 context.Database.EnsureDeleted();
             }
         }
+
+        [Fact]
+        public async Task TestGetBidListByIdAsViewModelAsyncIdInvalid()
+        {
+            // Arrange
+            var options = TestUtilities.BuildTestDbOptions();
+
+            await using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                var service = new BidListService(repositoryWrapper, _mapper);
+
+                // Act
+                var result = await service.GetBidListByIdAsViewModelASync(100);
+
+                // Assert
+                Assert.Null(result);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
 
         [Fact]
         public async Task TestCreateBidListEntityNotNull()
@@ -160,11 +235,11 @@ namespace Poseidon.Test
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new RepositoryWrapper(context);
-                
+
                 var service = new BidListService(repositoryWrapper, _mapper);
 
                 var inputModel = new BidListInputModel { Id = 10 };
-            
+
                 // Act
                 async Task TestAction() => await service.UpdateBidList(100, inputModel);
 
@@ -182,11 +257,11 @@ namespace Poseidon.Test
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new RepositoryWrapper(context);
-                
+
                 var service = new BidListService(repositoryWrapper, _mapper);
 
                 var inputModel = new BidListInputModel { Id = 100 };
-            
+
                 // Act
                 async Task TestAction() => await service.UpdateBidList(100, inputModel);
 
