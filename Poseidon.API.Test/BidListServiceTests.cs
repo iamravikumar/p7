@@ -324,5 +324,58 @@ namespace Poseidon.Test
                 context.Database.EnsureDeleted();
             }
         }
+
+        [Fact]
+        public void TestBidListExistsIdValid()
+        {
+            // Arrange
+            bool exists;
+
+            var options = TestUtilities.BuildTestDbOptions();
+
+            using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+                
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                var service = new BidListService(repositoryWrapper, null);
+
+                // Act
+                exists = service.BidListExists(1);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.True(exists);
+        }
+
+        [Fact]
+        public void TestBidListExistsIdInvalid()
+        {
+            // Arrange
+            bool exists;
+
+            var options = TestUtilities.BuildTestDbOptions();
+
+            using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+                
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                var service = new BidListService(repositoryWrapper, null);
+
+                // Act
+                exists = service.BidListExists(100);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.False(exists);
+        }
+
     }
 }

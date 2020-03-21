@@ -574,3 +574,5 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/rider,dotnetcore,aspnetcore,visualstudio,visualstudiocode
 
 Poseidon.API/Logs/
+
+.DS_Store

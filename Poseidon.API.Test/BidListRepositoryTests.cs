@@ -133,5 +133,54 @@ namespace Poseidon.Test
                 context.Database.EnsureDeleted();
             }
         }
+
+        [Fact]
+        public void TestExistsIdValid()
+        {
+            // Arrange
+            bool exists;
+            
+            var options = TestUtilities.BuildTestDbOptions();
+            
+            using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+                
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                // Act
+                exists = repositoryWrapper.BidListRepository.Exists(1);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.True(exists);
+        }
+
+        [Fact]
+        public void TestExistsIdInvalid()
+        {
+            // Arrange
+            bool exists;
+            
+            var options = TestUtilities.BuildTestDbOptions();
+            
+            using (var context = new PoseidonContext(options))
+            {
+                TestUtilities.SeedTestDbBidList(context);
+                
+                var repositoryWrapper = new RepositoryWrapper(context);
+
+                // Act
+                exists = repositoryWrapper.BidListRepository.Exists(100);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.False(exists);
+        }
+
     }
 }

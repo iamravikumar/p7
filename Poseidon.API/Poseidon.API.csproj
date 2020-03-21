@@ -33,10 +33,4 @@
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.1.0" />
     </ItemGroup>
     
-    <ItemGroup>
-      <ProjectReference Include="..\Poseidon.Contracts\Poseidon.Contracts.csproj" />
-      <ProjectReference Include="..\Poseidon.LoggerService\Poseidon.LoggerService.csproj" />
-    </ItemGroup>
-
-
 </Project>
