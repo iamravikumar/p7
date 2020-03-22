@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
 
-namespace Poseidon.Test
+namespace Poseidon.API.Test.Shared
 {
-    internal static class TestUtilities
+    public static class TestUtilities
     {
-        internal static DbContextOptions<PoseidonContext> BuildTestDbOptions() =>
+        public static DbContextOptions<PoseidonContext> BuildTestDbOptions() =>
             new DbContextOptionsBuilder<PoseidonContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-        internal static void SeedTestDbBidList(PoseidonContext context)
+        public static void SeedTestDbBidList(PoseidonContext context)
         {
             context.AddRange(
                 new BidList { Id = 1, Account = "one account" },

@@ -3,9 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poseidon.AuthServer.Areas.Identity.Data;
-using Poseidon.AuthServer.Data;
 
 namespace Poseidon.AuthServer.Migrations
 {

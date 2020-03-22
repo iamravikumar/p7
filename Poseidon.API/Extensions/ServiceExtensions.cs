@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +32,34 @@ namespace Poseidon.API.Extensions
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "poseidon_api";
                 });
+        }
+
+        /// <summary>
+        /// Adds controllers to the service collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="environment"></param>
+        public static void ConfigureControllers(this IServiceCollection services, IWebHostEnvironment environment)
+        {
+            if (environment.IsTest())
+            {
+                services.AddControllers(config =>
+                    {
+                        config.Filters.Add(new LogAttribute());
+                        config.Filters.Add(new AllowAnonymousFilter());
+                    })
+                    .AddFluentValidation(fv =>
+                        fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            }
+            else
+            {
+                services.AddControllers(config =>
+                    {
+                        config.Filters.Add(new LogAttribute());
+                    })
+                    .AddFluentValidation(fv =>
+                        fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            }
         }
 
         public static void ConfigureActionFilterAttributes(this IServiceCollection services)

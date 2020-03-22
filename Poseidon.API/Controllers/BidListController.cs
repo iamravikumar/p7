@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Poseidon.API.ActionFilters;
-using Poseidon.API.Data;
 using Poseidon.API.Models;
-using Poseidon.API.Services;
 using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
@@ -18,13 +15,11 @@ namespace Poseidon.API.Controllers
     [Authorize]
     public class BidListController : ControllerBase
     {
-        private readonly PoseidonContext _context;
         private readonly IBidListService _bidListService;
 
-        public BidListController(IBidListService bidListService, PoseidonContext context)
+        public BidListController(IBidListService bidListService)
         {
             _bidListService = bidListService;
-            _context = context;
         }
 
         // GET: api/BidLists
@@ -38,11 +33,14 @@ namespace Poseidon.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<BidListViewModel>>> Get()
         {
-            var results = await _bidListService.GetAllBidListsAsViewModelsAsync();
+            var results = 
+                await _bidListService.GetAllBidListsAsViewModelsAsync();
 
-            var entityList = results as BidListViewModel[] ?? results.ToArray();
+            var entityList = 
+                results as BidListViewModel[] ?? results.ToArray();
 
             if (!entityList.Any())
                 return NotFound();

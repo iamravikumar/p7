@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
 using Poseidon.API.Repositories;
+using Poseidon.API.Test.Shared;
 using Xunit;
 
 // ReSharper disable ConvertToUsingDeclaration

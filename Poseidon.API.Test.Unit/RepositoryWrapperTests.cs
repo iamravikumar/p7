@@ -1,5 +1,4 @@
-﻿using System;
-using Poseidon.API.Repositories;
+﻿using Poseidon.API.Repositories;
 using Xunit;
 
 namespace Poseidon.Test
