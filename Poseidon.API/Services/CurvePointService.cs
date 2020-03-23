@@ -102,11 +102,6 @@ namespace Poseidon.API.Services
         /// <exception cref="Exception"></exception>
         public async Task UpdateCurvePoint(int id, CurvePointInputModel inputModel)
         {
-            if (id != inputModel.Id)
-            {
-                throw new ArgumentException("Id mismatch.");
-            }
-
             var entity = await _unitOfWork.CurvePointRepository.GetByIdAsync(id);
 
             if (entity == null)

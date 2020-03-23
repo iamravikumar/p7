@@ -235,47 +235,12 @@ namespace Poseidon.API.Test.Integration
 
 
         [Fact]
-        public async Task TestPutIdMismatch()
-        {
-            // Arrange
-            var options = TestUtilities.BuildTestDbOptions();
-
-            var testModel = new CurvePointInputModel
-            {
-                Id = 1
-            };
-
-            await using (var context = new PoseidonContext(options))
-            {
-                TestUtilities.SeedTestDbCurvePoint(context);
-
-                var repositoryWrapper = new UnitOfWork(context);
-
-                var service = new CurvePointService(repositoryWrapper, _mapper);
-
-                var controller = new CurvePointController(service);
-
-                // Act
-                var result = await controller.Put(2, testModel);
-
-                // Assert
-                var objectResult = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
-                Assert.Equal("Id mismatch", objectResult.Value);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        [Fact]
         public async Task TestPutCurvePointDoesNotExist()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            var testModel = new CurvePointInputModel
-            {
-                Id = 10
-            };
+            var testModel = new CurvePointInputModel();
 
             await using (var context = new PoseidonContext(options))
             {
@@ -306,7 +271,6 @@ namespace Poseidon.API.Test.Integration
 
             var testModel = new CurvePointInputModel
             {
-                Id = 1,
                 Value = 100D
             };
 

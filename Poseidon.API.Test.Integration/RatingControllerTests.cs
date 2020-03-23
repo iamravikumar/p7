@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,15 +11,13 @@ using Poseidon.API.Services;
 using Poseidon.API.Test.Shared;
 using Xunit;
 
-// ReSharper disable ConvertToUsingDeclaration
-
 namespace Poseidon.API.Test.Integration
 {
-    public class BidListControllerTests
+    public class RatingControllerTests
     {
         private readonly IMapper _mapper;
 
-        public BidListControllerTests()
+        public RatingControllerTests()
         {
             var config =
                 new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
@@ -28,22 +26,22 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestGetAllBidListPopulated()
+        public async Task TestGetAllRatingPopulated()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<BidListViewModel>> result;
+            ActionResult<IEnumerable<RatingViewModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Get();
@@ -53,25 +51,25 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<IEnumerable<BidListViewModel>>(actionResult.Value);
+            var objectResult = Assert.IsAssignableFrom<IEnumerable<RatingViewModel>>(actionResult.Value);
             Assert.Equal(3, objectResult.Count());
         }
 
         [Fact]
-        public async Task TestGetAllBidListNotPopulated()
+        public async Task TestGetAllRatingNotPopulated()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<BidListViewModel>> result;
+            ActionResult<IEnumerable<RatingViewModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Get();
@@ -89,15 +87,15 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListViewModel> result;
+            ActionResult<RatingViewModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Get(0);
@@ -110,22 +108,22 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestGetBidListNotPopulated()
+        public async Task TestGetRatingNotPopulated()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListViewModel> result;
+            ActionResult<RatingViewModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Get(100);
@@ -143,17 +141,17 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListViewModel> result;
+            ActionResult<RatingViewModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Get(1);
@@ -163,8 +161,8 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<BidListViewModel>(actionResult.Value);
-            Assert.Equal("one account", objectResult.Account);
+            var objectResult = Assert.IsAssignableFrom<RatingViewModel>(actionResult.Value);
+            Assert.Equal("one rating", objectResult.FitchRating);
         }
 
         [Fact]
@@ -173,22 +171,22 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListInputModel> result;
+            ActionResult<RatingInputModel> result;
 
-            var testEntity = new BidListInputModel
+            var testEntity = new RatingInputModel
             {
-                Account = "test account"
+                FitchRating = "test rating"
             };
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
-                Assert.Empty(context.BidList);
+                Assert.Empty(context.Rating);
 
                 // Act
                 result = await controller.Post(testEntity);
@@ -197,11 +195,11 @@ namespace Poseidon.API.Test.Integration
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.Single(context.BidList);
+                Assert.Single(context.Rating);
 
                 var actionResult = Assert.IsAssignableFrom<CreatedAtActionResult>(result.Result);
-                var objectResult = Assert.IsAssignableFrom<BidListInputModel>(actionResult.Value);
-                Assert.Equal("test account", objectResult.Account);
+                var objectResult = Assert.IsAssignableFrom<RatingInputModel>(actionResult.Value);
+                Assert.Equal("test rating", objectResult.FitchRating);
 
                 context.Database.EnsureDeleted();
             }
@@ -213,17 +211,17 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListInputModel> result;
+            ActionResult<RatingInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Post(null);
@@ -237,29 +235,32 @@ namespace Poseidon.API.Test.Integration
 
 
         [Fact]
-        public async Task TestPutBidListDoesNotExist()
+        public async Task TestPutRatingDoesNotExist()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            var testModel = new BidListInputModel();
+            var testModel = new RatingInputModel
+            {
+                FitchRating = "test rating"
+            };
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 var result = await controller.Put(10, testModel);
 
                 // Assert
                 var objectResult = Assert.IsAssignableFrom<NotFoundObjectResult>(result);
-                Assert.Equal("No BidList entity matching the id [10] was found.", objectResult.Value);
+                Assert.Equal("No Rating entity matching the id [10] was found.", objectResult.Value);
 
                 context.Database.EnsureDeleted();
             }
@@ -271,25 +272,25 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            var testModel = new BidListInputModel
+            var testModel = new RatingInputModel
             {
-                Account = "updated account"
+                FitchRating = "updated rating"
             };
 
             ActionResult result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 result = await controller.Put(1, testModel);
@@ -300,7 +301,7 @@ namespace Poseidon.API.Test.Integration
                 // Assert
                 Assert.IsAssignableFrom<NoContentResult>(result);
 
-                Assert.Equal("updated account", context.BidList.First(x => x.Id == 1).Account);
+                Assert.Equal("updated rating", context.Rating.First(x => x.Id == 1).FitchRating);
 
                 context.Database.EnsureDeleted();
             }
@@ -316,9 +317,9 @@ namespace Poseidon.API.Test.Integration
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 var result = await controller.Delete(0);
@@ -331,20 +332,20 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestDeleteBidListDoesNotExist()
+        public async Task TestDeleteRatingDoesNotExist()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 var result = await controller.Delete(10);
@@ -357,31 +358,31 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestDeleteBidListExists()
+        public async Task TestDeleteRatingExists()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbRating(context);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new BidListService(repositoryWrapper, _mapper);
+                var service = new RatingService(repositoryWrapper, _mapper);
 
-                var controller = new BidListController(service);
+                var controller = new RatingController(service);
 
                 // Act
                 var result = await controller.Delete(1);
 
                 // Assert
                 Assert.IsAssignableFrom<NoContentResult>(result.Result);
-                Assert.Equal(2, context.BidList.Count());
-                Assert.DoesNotContain(context.BidList, x => x.Id == 1);
+                Assert.Equal(2, context.Rating.Count());
+                Assert.DoesNotContain(context.Rating, x => x.Id == 1);
 
                 context.Database.EnsureDeleted();
             }

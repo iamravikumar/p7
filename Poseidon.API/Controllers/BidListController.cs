@@ -130,20 +130,20 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Put(int id, BidListInputModel inputModel)
         {
-            if (id != inputModel.Id)
+            if (ModelState.IsValid)
             {
-                return BadRequest("Id mismatch");
+                if (!_bidListService.BidListExists(id))
+                {
+                    return NotFound($"No BidList enti" +
+                                    $"ty matching the id [{id}] was found.");
+                }
+
+                await _bidListService.UpdateBidList(id, inputModel);
+
+                return NoContent();
             }
 
-            if (!_bidListService.BidListExists(id))
-            {
-                return NotFound($"No BidList enti" +
-                                $"ty matching the id [{id}] was found.");
-            }
-
-            await _bidListService.UpdateBidList(id, inputModel);
-
-            return NoContent();
+            return BadRequest(ModelState);
         }
 
         // DELETE: api/BidLists/5

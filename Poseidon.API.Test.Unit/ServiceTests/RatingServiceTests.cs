@@ -12,11 +12,11 @@ using Xunit;
 
 namespace Poseidon.Test
 {
-    public class CurvePointServiceTests
+    public class RatingServiceTests
     {
         private readonly IMapper _mapper;
 
-        public CurvePointServiceTests()
+        public RatingServiceTests()
         {
             var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
 
@@ -24,106 +24,106 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllCurvePointsAsync()
+        public async Task TestGetAllRatingsAsync()
         {
             // Arrange
-            IEnumerable<CurvePoint> result;
+            IEnumerable<Rating> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, null);
+                var service = new RatingService(unitOfWork, null);
 
                 // Act
-                result = await service.GetAllCurvePointsAsync();
+                result = await service.GetAllRatingsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<CurvePoint>(result.First());
+            Assert.IsAssignableFrom<Rating>(result.First());
         }
 
         [Fact]
-        public async Task TestGetAllCurvePointsAsViewModelsAsync()
+        public async Task TestGetAllRatingsAsViewModelsAsync()
         {
             // Arrange
-            IEnumerable<CurvePointViewModel> result;
+            IEnumerable<RatingViewModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                result = await service.GetAllCurvePointsAsViewModelsAsync();
+                result = await service.GetAllRatingsAsViewModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<CurvePointViewModel>(result.First());
+            Assert.IsAssignableFrom<RatingViewModel>(result.First());
         }
 
         [Fact]
-        public async Task TestGetCurvePointByIdAsyncIdValid()
+        public async Task TestGetRatingByIdAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, null);
+                var service = new RatingService(unitOfWork, null);
 
                 // Act
-                var result = await service.GetCurvePointByIdAsync(1);
+                var result = await service.GetRatingByIdAsync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<CurvePoint>(result);
-                Assert.Equal(10D, result.Value);
+                Assert.IsAssignableFrom<Rating>(result);
+                Assert.Equal("one rating", result.FitchRating);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestGetCurvePointByIdAsViewModelAsyncIdValid()
+        public async Task TestGetRatingByIdAsViewModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                var result = await service.GetCurvePointByIdAsViewModelASync(1);
+                var result = await service.GetRatingByIdAsViewModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<CurvePointViewModel>(result);
-                Assert.Equal(10D, result.Value);
+                Assert.IsAssignableFrom<RatingViewModel>(result);
+                Assert.Equal("one rating", result.FitchRating);
 
                 context.Database.EnsureDeleted();
             }
@@ -131,21 +131,21 @@ namespace Poseidon.Test
 
 
         [Fact]
-        public async Task TestGetCurvePointByIdAsyncIdInvalid()
+        public async Task TestGetRatingByIdAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, null);
+                var service = new RatingService(unitOfWork, null);
 
                 // Act
-                var result = await service.GetCurvePointByIdAsync(100);
+                var result = await service.GetRatingByIdAsync(100);
 
                 // Assert
                 Assert.Null(result);
@@ -155,21 +155,21 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetCurvePointByIdAsViewModelAsyncIdInvalid()
+        public async Task TestGetRatingByIdAsViewModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                var result = await service.GetCurvePointByIdAsViewModelASync(100);
+                var result = await service.GetRatingByIdAsViewModelASync(100);
 
                 // Assert
                 Assert.Null(result);
@@ -180,10 +180,10 @@ namespace Poseidon.Test
 
 
         [Fact]
-        public async Task TestCreateCurvePointEntityNotNull()
+        public async Task TestCreateRatingEntityNotNull()
         {
             // Arrange
-            var testEntity = new CurvePointInputModel { Value = 100D };
+            var testEntity = new RatingInputModel { FitchRating = "test rating" };
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -191,32 +191,32 @@ namespace Poseidon.Test
             {
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
-                Assert.Empty(context.CurvePoint);
+                Assert.Empty(context.Rating);
 
                 // Act
-                await service.CreateCurvePoint(testEntity);
+                await service.CreateRating(testEntity);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.Single(context.CurvePoint);
-                Assert.Equal(100D, context.CurvePoint.First().Value);
+                Assert.Single(context.Rating);
+                Assert.Equal("test rating", context.Rating.First().FitchRating);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestCreateCurvePointEntityNull()
+        public async Task TestCreateRatingEntityNull()
         {
             // Arrange
-            var service = new CurvePointService(null, null);
+            var service = new RatingService(null, null);
 
             // Act
-            async Task TestAction() => await service.CreateCurvePoint(null);
+            async Task TestAction() => await service.CreateRating(null);
 
             // Assert
             await Assert.ThrowsAsync<ArgumentNullException>(TestAction);
@@ -224,7 +224,7 @@ namespace Poseidon.Test
 
 
         [Fact]
-        public async Task TestUpdateCurvePointEntityNull()
+        public async Task TestUpdateRatingEntityNull()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -233,12 +233,12 @@ namespace Poseidon.Test
             {
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
-                var inputModel = new CurvePointInputModel();
+                var inputModel = new RatingInputModel();
 
                 // Act
-                async Task TestAction() => await service.UpdateCurvePoint(100, inputModel);
+                async Task TestAction() => await service.UpdateRating(100, inputModel);
 
                 // Assert
                 await Assert.ThrowsAsync<Exception>(TestAction);
@@ -246,52 +246,52 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestDeleteCurvePointEntityNotNull()
+        public async Task TestDeleteRatingEntityNotNull()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                await service.DeleteCurvePoint(1);
+                await service.DeleteRating(1);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.Equal(2, context.CurvePoint.Count());
-                Assert.DoesNotContain(context.CurvePoint, bl => bl.Id == 1);
+                Assert.Equal(2, context.Rating.Count());
+                Assert.DoesNotContain(context.Rating, bl => bl.Id == 1);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestDeleteCurvePointEntityNull()
+        public async Task TestDeleteRatingEntityNull()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
+                TestUtilities.SeedTestDbRating(context);
 
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, _mapper);
+                var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                async Task TestAction() => await service.DeleteCurvePoint(100);
+                async Task TestAction() => await service.DeleteRating(100);
 
                 // Assert
                 await Assert.ThrowsAsync<Exception>(TestAction);
@@ -301,7 +301,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public void TestCurvePointExistsIdValid()
+        public void TestRatingExistsIdValid()
         {
             // Arrange
             bool exists;
@@ -310,14 +310,14 @@ namespace Poseidon.Test
 
             using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
-                
+                TestUtilities.SeedTestDbRating(context);
+
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, null);
+                var service = new RatingService(unitOfWork, null);
 
                 // Act
-                exists = service.CurvePointExists(1);
+                exists = service.RatingExists(1);
 
                 context.Database.EnsureDeleted();
             }
@@ -327,7 +327,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public void TestCurvePointExistsIdInvalid()
+        public void TestRatingExistsIdInvalid()
         {
             // Arrange
             bool exists;
@@ -336,14 +336,14 @@ namespace Poseidon.Test
 
             using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbCurvePoint(context);
-                
+                TestUtilities.SeedTestDbRating(context);
+
                 var unitOfWork = new UnitOfWork(context);
 
-                var service = new CurvePointService(unitOfWork, null);
+                var service = new RatingService(unitOfWork, null);
 
                 // Act
-                exists = service.CurvePointExists(100);
+                exists = service.RatingExists(100);
 
                 context.Database.EnsureDeleted();
             }

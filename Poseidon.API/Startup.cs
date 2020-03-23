@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Poseidon.API.Extensions;
-using Poseidon.API.Services;
-using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API
 {

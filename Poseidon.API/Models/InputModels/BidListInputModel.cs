@@ -4,7 +4,6 @@ namespace Poseidon.API.Models
 {
     public class BidListInputModel : IInputModel
     {
-        public int Id { get; set; } 
         public string Account { get; set; }
         public string Type { get; set; }
         public double? BidQuantity { get; set; }

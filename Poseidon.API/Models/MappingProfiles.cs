@@ -17,6 +17,12 @@ namespace Poseidon.API.Models
                 .ForMember(x => x.Id, act => act.Ignore());
 
             CreateMap<CurvePoint, CurvePointViewModel>();
+            
+            // Rating
+            CreateMap<RatingInputModel, Rating>()
+                .ForMember(x => x.Id, act => act.Ignore());
+
+            CreateMap<Rating, RatingViewModel>();
         }
     }
 }

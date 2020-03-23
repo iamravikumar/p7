@@ -2,83 +2,83 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Models;
 using Poseidon.API.Repositories;
 using Poseidon.API.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Poseidon.API.Services
 {
-    public class BidListService : IBidListService
+    public class RatingService : IRatingService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BidListService(IUnitOfWork unitOfWork, IMapper mapper)
+        public RatingService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         /// <summary>
-        /// Asynchronously gets all BidList entities.
+        /// Asynchronously gets all Rating entities.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<BidList>> GetAllBidListsAsync() =>
-            await _unitOfWork.BidListRepository.GetAllAsync();
+        public async Task<IEnumerable<Rating>> GetAllRatingsAsync() =>
+            await _unitOfWork.RatingRepository.GetAllAsync();
 
-        public async Task<IEnumerable<BidListViewModel>> GetAllBidListsAsViewModelsAsync()
+        public async Task<IEnumerable<RatingViewModel>> GetAllRatingsAsViewModelsAsync()
         {
-            var entities = await _unitOfWork.BidListRepository.GetAllAsync();
+            var entities = await _unitOfWork.RatingRepository.GetAllAsync();
 
-            var viewModels = _mapper.Map<IEnumerable<BidList>, IEnumerable<BidListViewModel>>(entities);
+            var viewModels = _mapper.Map<IEnumerable<Rating>, IEnumerable<RatingViewModel>>(entities);
 
             return viewModels;
         }
 
         /// <summary>
-        /// Asynchronously gets a BidList entity by Id.
+        /// Asynchronously gets a Rating entity by Id.
         /// </summary>
         /// <returns></returns>
-        public async Task<BidList> GetBidListByIdAsync(int id) =>
+        public async Task<Rating> GetRatingByIdAsync(int id) =>
             await _unitOfWork
-                .BidListRepository
+                .RatingRepository
                 .FindByCondition(bl => bl.Id == id)
                 .FirstOrDefaultAsync();
 
         /// <summary>
-        /// Asynchronously finds a BidList entity by id, and returns it as a BidListViewModel.
+        /// Asynchronously finds a Rating entity by id, and returns it as a RatingViewModel.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<BidListViewModel> GetBidListByIdAsViewModelASync(int id)
+        public async Task<RatingViewModel> GetRatingByIdAsViewModelASync(int id)
         {
-            var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.RatingRepository.GetByIdAsync(id);
 
-            var viewModel = _mapper.Map<BidListViewModel>(entity);
+            var viewModel = _mapper.Map<RatingViewModel>(entity);
 
             return viewModel;
         }
 
         /// <summary>
-        /// Asynchronously creates a new BidList entity and persists it to the database. 
+        /// Asynchronously creates a new Rating entity and persists it to the database. 
         /// </summary>
         /// <param name="inputModel"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task<int> CreateBidList(BidListInputModel inputModel)
+        public async Task<int> CreateRating(RatingInputModel inputModel)
         {
             if (inputModel == null)
             {
                 throw new ArgumentNullException();
             }
 
-            var entity = _mapper.Map<BidList>(inputModel);
+            var entity = _mapper.Map<Rating>(inputModel);
 
             try
             {
                 _unitOfWork
-                    .BidListRepository
+                    .RatingRepository
                     .Insert(entity);
 
                 await _unitOfWork.CommitAsync();
@@ -92,7 +92,7 @@ namespace Poseidon.API.Services
         }
 
         /// <summary>
-        /// Asynchronously updates an existing BidList entity and persists any
+        /// Asynchronously updates an existing Rating entity and persists any
         /// changes made to the database.
         /// </summary>
         /// <param name="id"></param>
@@ -100,13 +100,13 @@ namespace Poseidon.API.Services
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task UpdateBidList(int id, BidListInputModel inputModel)
+        public async Task UpdateRating(int id, RatingInputModel inputModel)
         {
-            var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.RatingRepository.GetByIdAsync(id);
 
             if (entity == null)
             {
-                throw new Exception($"No {typeof(BidList)} entity matching the id [{id}] was found.");
+                throw new Exception($"No {typeof(Rating)} entity matching the id [{id}] was found.");
             }
 
             _mapper.Map(inputModel, entity);
@@ -114,7 +114,7 @@ namespace Poseidon.API.Services
             try
             {
                 _unitOfWork
-                    .BidListRepository
+                    .RatingRepository
                     .Update(entity);
 
                 await _unitOfWork.CommitAsync();
@@ -127,24 +127,24 @@ namespace Poseidon.API.Services
         }
 
         /// <summary>
-        /// Removes an existing BidList entity and persists the change to the database.
+        /// Removes an existing Rating entity and persists the change to the database.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task DeleteBidList(int id)
+        public async Task DeleteRating(int id)
         {
-            var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.RatingRepository.GetByIdAsync(id);
 
             if (entity == null)
             {
-                throw new Exception($"No {typeof(BidList)} entity matching the id '{id}' were found.");
+                throw new Exception($"No {typeof(Rating)} entity matching the id '{id}' were found.");
             }
 
             try
             {
                 _unitOfWork
-                    .BidListRepository
+                    .RatingRepository
                     .Delete(entity);
 
                 await _unitOfWork.CommitAsync();
@@ -157,11 +157,11 @@ namespace Poseidon.API.Services
         }
 
         /// <summary>
-        /// Confirms whether or not a given BidList entity exists.
+        /// Confirms whether or not a given Rating entity exists.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool BidListExists(int id) =>
-            _unitOfWork.BidListRepository.Exists(id);
+        public bool RatingExists(int id) =>
+            _unitOfWork.RatingRepository.Exists(id);
     }
 }

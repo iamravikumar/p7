@@ -44,5 +44,27 @@ namespace Poseidon.API.Test.Shared
 
             context.SaveChanges();
         }
+
+        public static void SeedTestDbRating(PoseidonContext context)
+        {
+            context.AddRange(
+                new Rating
+                {
+                    Id = 1,
+                    FitchRating = "one rating"
+                },
+                new Rating
+                {
+                    Id = 2,
+                    FitchRating = "two rating"
+                },
+                new Rating
+                {
+                    Id = 3,
+                    FitchRating = "three rating"
+                });
+
+            context.SaveChanges();
+        }
     }
 }

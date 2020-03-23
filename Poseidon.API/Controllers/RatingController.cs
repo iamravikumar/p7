@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Poseidon.API.Data;
+using Poseidon.API.ActionFilters;
 using Poseidon.API.Models;
+using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
 {
@@ -15,113 +15,138 @@ namespace Poseidon.API.Controllers
     [Authorize]
     public class RatingController : ControllerBase
     {
-        private readonly PoseidonContext _context;
+        private readonly IRatingService _ratingService;
 
-        public RatingController(PoseidonContext context)
+        public RatingController(IRatingService ratingService)
         {
-            _context = context;
+            _ratingService = ratingService;
         }
 
-        // GET: api/Rating
+        // GET: api/Ratings
         /// <summary>
         /// Gets a list of all Rating entities.
         /// </summary>
         /// <returns>A list of all Rating entities.</returns>
         /// <response code="200">Returns the list of all Rating entities.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">No Rating entities were found.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<Rating>>> Get()
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<RatingViewModel>>> Get()
         {
-            return await _context.Rating.ToListAsync();
+            var results = 
+                await _ratingService.GetAllRatingsAsViewModelsAsync();
+
+            var entityList = 
+                results as RatingViewModel[] ?? results.ToArray();
+
+            if (!entityList.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
         }
 
-        // GET: api/Rating/5
+        // GET: api/Ratings/5
         /// <summary>
         /// Gets a single Rating entity.
         /// </summary>
         /// <param name="id">The Id of the Rating entity to get.</param>
         /// <returns>The specified Rating entity.</returns>
         /// <response code="200">Returns the Rating entity.</response>
+        /// <response code="400">Bad Id.</response>
         /// <response code="404">The specified entity was not found.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Rating>> Get(short id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<RatingViewModel>> Get(int id)
         {
-            var rating = await _context.Rating.FindAsync(id);
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
 
-            if (rating == null)
+            if (!_ratingService.RatingExists(id))
             {
                 return NotFound();
             }
 
-            return rating;
+            var result = await _ratingService.GetRatingByIdAsViewModelASync(id);
+
+            return Ok(result);
         }
 
-        // PUT: api/Rating/5
+        // POST: api/Ratings
         /// <summary>
-        /// Updates a Rating eneity.
+        /// Creates a new Rating entity. 
+        /// </summary>
+        /// <param name="inputModel">Data for the new entity.</param>
+        /// <returns>The created entity.</returns>
+        /// <response code="201">The entity was successfully created.</response>
+        /// <response code="400">Bad request.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        [HttpPost]
+        [ValidateModel]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<RatingInputModel>> Post(RatingInputModel inputModel)
+        {
+            if (inputModel == null)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var resultId = await _ratingService.CreateRating(inputModel);
+
+                return CreatedAtAction("Get", new { id = resultId }, inputModel);
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        // PUT: api/Ratings/5
+        /// <summary>
+        /// Updates a Rating entity.
         /// </summary>
         /// <param name="id">The Id of the Rating entity to update.</param>
-        /// <param name="rating">Updated data.</param>
+        /// <param name="inputModel">Updated data.</param>
         /// <returns>Null.</returns>
         /// <response code="204">The resource was successfully updated.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         /// <response code="404">The specified entity was not found.</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ValidateModel]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Put(short id, Rating rating)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Put(int id, RatingInputModel inputModel)
         {
-            if (id != rating.Id)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
-            }
-
-            _context.Entry(rating).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RatingExists(id))
+                if (!_ratingService.RatingExists(id))
                 {
-                    return NotFound();
+                    return NotFound($"No Rating enti" +
+                                    $"ty matching the id [{id}] was found.");
                 }
-                else
-                {
-                    throw;
-                }
+
+                await _ratingService.UpdateRating(id, inputModel);
+
+                return NoContent();
             }
 
-            return NoContent();
+            return BadRequest(ModelState);
         }
 
-        // POST: api/Rating
-        /// <summary>
-        /// Creates a new Rating entity. 
-        /// </summary>
-        /// <param name="rating">Data for the new entity.</param>
-        /// <returns>The created entity.</returns>
-        /// <response code="201">The entity was successfully created.</response>
-        /// <response code="401">The user is not authorized to access this resource.</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Rating>> Post(Rating rating)
-        {
-            _context.Rating.Add(rating);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("Get", new { id = rating.Id }, rating);
-        }
-
-        // DELETE: api/Rating/5
+        // DELETE: api/Ratings/5
         /// <summary>
         /// Deletes a specified Rating entity.
         /// </summary>
@@ -129,26 +154,27 @@ namespace Poseidon.API.Controllers
         /// <returns>Null.</returns>
         /// <response code="204">The entity was successfully created.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Rating>> Delete(short id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Rating>> Delete(int id)
         {
-            var rating = await _context.Rating.FindAsync(id);
-            if (rating == null)
+            if (id <= 0)
             {
-                return NotFound();
+                return BadRequest(
+                    $"The '{nameof(id)}' argument must a non-zero, positive integer value. The passed-in value was {id}");
             }
 
-            _context.Rating.Remove(rating);
-            await _context.SaveChangesAsync();
+            if (!_ratingService.RatingExists(id))
+            {
+                return NotFound($"No {typeof(Rating)} entity matching the id [{id}] was found.");
+            }
 
-            return rating;
-        }
+            await _ratingService.DeleteRating(id);
 
-        private bool RatingExists(short id)
-        {
-            return _context.Rating.Any(e => e.Id == id);
+            return NoContent();
         }
     }
 }

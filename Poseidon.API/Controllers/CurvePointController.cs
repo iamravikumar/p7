@@ -130,20 +130,20 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Put(int id, CurvePointInputModel inputModel)
         {
-            if (id != inputModel.Id)
+            if (ModelState.IsValid)
             {
-                return BadRequest("Id mismatch");
+                if (!_curvePointService.CurvePointExists(id))
+                {
+                    return NotFound($"No CurvePoint enti" +
+                                    $"ty matching the id [{id}] was found.");
+                }
+
+                await _curvePointService.UpdateCurvePoint(id, inputModel);
+
+                return NoContent();
             }
 
-            if (!_curvePointService.CurvePointExists(id))
-            {
-                return NotFound($"No CurvePoint enti" +
-                                $"ty matching the id [{id}] was found.");
-            }
-
-            await _curvePointService.UpdateCurvePoint(id, inputModel);
-
-            return NoContent();
+            return BadRequest(ModelState);
         }
 
         // DELETE: api/CurvePoints/5

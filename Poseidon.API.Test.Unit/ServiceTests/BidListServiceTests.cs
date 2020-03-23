@@ -225,27 +225,6 @@ namespace Poseidon.Test
             await Assert.ThrowsAsync<ArgumentNullException>(TestAction);
         }
 
-        [Fact]
-        public async Task TestUpdateBidListIdMismatch()
-        {
-            // Arrange
-            var options = TestUtilities.BuildTestDbOptions();
-
-            await using (var context = new PoseidonContext(options))
-            {
-                var repositoryWrapper = new UnitOfWork(context);
-
-                var service = new BidListService(repositoryWrapper, _mapper);
-
-                var inputModel = new BidListInputModel { Id = 10 };
-
-                // Act
-                async Task TestAction() => await service.UpdateBidList(100, inputModel);
-
-                // Assert
-                await Assert.ThrowsAsync<ArgumentException>(TestAction);
-            }
-        }
 
         [Fact]
         public async Task TestUpdateBidListEntityNull()
@@ -259,7 +238,7 @@ namespace Poseidon.Test
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
-                var inputModel = new BidListInputModel { Id = 100 };
+                var inputModel = new BidListInputModel();
 
                 // Act
                 async Task TestAction() => await service.UpdateBidList(100, inputModel);
@@ -335,7 +314,7 @@ namespace Poseidon.Test
             using (var context = new PoseidonContext(options))
             {
                 TestUtilities.SeedTestDbBidList(context);
-                
+
                 var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
@@ -361,7 +340,7 @@ namespace Poseidon.Test
             using (var context = new PoseidonContext(options))
             {
                 TestUtilities.SeedTestDbBidList(context);
-                
+
                 var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
@@ -375,6 +354,5 @@ namespace Poseidon.Test
             // Assert
             Assert.False(exists);
         }
-
     }
 }
