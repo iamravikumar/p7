@@ -49,6 +49,7 @@ namespace Poseidon.API.Repositories
             _context
                 .Set<T>()
                 .Where(expression)
+                .AsNoTracking()
                 .Any();
     }
 }

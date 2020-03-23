@@ -9,6 +9,7 @@ using Poseidon.API.Models;
 using Poseidon.API.Profiles;
 using Poseidon.API.Repositories;
 using Poseidon.API.Services;
+using Poseidon.API.Test.Shared;
 using Xunit;
 
 namespace Poseidon.Test

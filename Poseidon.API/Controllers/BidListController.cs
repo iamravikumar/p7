@@ -76,7 +76,6 @@ namespace Poseidon.API.Controllers
             return Ok(result);
         }
 
-
         // POST: api/BidLists
         /// <summary>
         /// Creates a new BidList entity. 
@@ -91,8 +90,11 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<BidList>> Post(BidListInputModel inputModel)
+        public async Task<ActionResult<BidListInputModel>> Post(BidListInputModel inputModel)
         {
+            if (inputModel == null)
+                return BadRequest();
+                
             if (ModelState.IsValid)
             {
                 var resultId = await _bidListService.CreateBidList(inputModel);
@@ -118,13 +120,14 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(int id, BidListInputModel inputModel)
+        public async Task<ActionResult> Put(int id, BidListInputModel inputModel)
         {
             if (id != inputModel.Id)
                 return BadRequest("Id mismatch");
 
             if (!_bidListService.BidListExists(id))
-                return NotFound($"No {typeof(BidList)} entity matching the id [{id}] was found.");
+                return NotFound($"No BidList enti" +
+                                $"ty matching the id [{id}] was found.");
 
             await _bidListService.UpdateBidList(id, inputModel);
 

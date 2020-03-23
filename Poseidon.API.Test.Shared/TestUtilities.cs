@@ -10,6 +10,7 @@ namespace Poseidon.API.Test.Shared
         public static DbContextOptions<PoseidonContext> BuildTestDbOptions() =>
             new DbContextOptionsBuilder<PoseidonContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .EnableSensitiveDataLogging()
                 .Options;
 
         public static void SeedTestDbBidList(PoseidonContext context)
