@@ -29,6 +29,12 @@ namespace Poseidon.API.Models
                 .ForMember(entity => entity.Id, action => action.Ignore());
 
             CreateMap<RuleName, RuleNameViewModel>();
+            
+            // Trade
+            CreateMap<TradeInputModel, Trade>()
+                .ForMember(entity => entity.Id, action => action.Ignore());
+
+            CreateMap<Trade, TradeViewModel>();
         }
     }
 }

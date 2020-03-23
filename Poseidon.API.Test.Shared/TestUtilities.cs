@@ -87,5 +87,15 @@ namespace Poseidon.API.Test.Shared
 
             context.SaveChanges();
         }
+
+        public static void SeedTestDbTrade(PoseidonContext context)
+        {
+            context.AddRange(
+                new Trade { Id = 1, Account = "one account" },
+                new Trade { Id = 2, Account = "two account" },
+                new Trade { Id = 3, Account = "three account" });
+
+            context.SaveChanges();
+        }
     }
 }

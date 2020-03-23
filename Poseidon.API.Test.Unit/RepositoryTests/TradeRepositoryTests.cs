@@ -8,29 +8,27 @@ using Poseidon.API.Repositories;
 using Poseidon.API.Test.Shared;
 using Xunit;
 
-// ReSharper disable ConvertToUsingDeclaration
-
 namespace Poseidon.Test
 {
-    public class BidListRepositoryTests
+    public class TradeRepositoryTests
     {
         [Fact]
         public async Task TestGetAllAsync()
         {
             // Arrange
-            IEnumerable<BidList> result;
+            IEnumerable<Trade> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbTrade(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 result =
-                    await repositoryWrapper.BidListRepository.GetAllAsync();
+                    await repositoryWrapper.TradeRepository.GetAllAsync();
 
                 context.Database.EnsureDeleted();
             }
@@ -38,26 +36,26 @@ namespace Poseidon.Test
             // Assert
             Assert.NotEmpty(result);
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<BidList>(result.First());
+            Assert.IsAssignableFrom<Trade>(result.First());
         }
 
         [Fact]
         public async Task TestGetByIdValidArgument()
         {
             // Arrange
-            BidList result;
+            Trade result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbTrade(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 result = 
-                    await repositoryWrapper.BidListRepository.GetByIdAsync(1);
+                    await repositoryWrapper.TradeRepository.GetByIdAsync(1);
 
                 context.Database.EnsureDeleted();
             }
@@ -71,18 +69,18 @@ namespace Poseidon.Test
         public async Task TestGetByIdInvalidArgument()
         {
             // Arrange
-            BidList result;
+            Trade result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbTrade(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
-                result = await repositoryWrapper.BidListRepository.GetByIdAsync(100);
+                result = await repositoryWrapper.TradeRepository.GetByIdAsync(100);
 
                 context.Database.EnsureDeleted();
             }
@@ -92,26 +90,26 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public void TestCreateBidListArgumentNull()
+        public void TestCreateTradeArgumentNull()
         {
             // Arrange
-            BidList testEntity = null;
+            Trade testEntity = null;
 
             var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             void TestAction() =>
-                repositoryWrapper.BidListRepository.CreateBidList(testEntity);
+                repositoryWrapper.TradeRepository.CreateTrade(testEntity);
 
             // Assert
             Assert.Throws<ArgumentNullException>(TestAction);
         }
 
         [Fact]
-        public async Task TestCreateBidListArgumentNonNull()
+        public async Task TestCreateTradeArgumentNonNull()
         {
             // Arrange
-            var testEntity = new BidList { Account = "test account" };
+            var testEntity = new Trade { Account = "test account" };
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -120,7 +118,7 @@ namespace Poseidon.Test
                 var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
-                repositoryWrapper.BidListRepository.CreateBidList(testEntity);
+                repositoryWrapper.TradeRepository.CreateTrade(testEntity);
 
                 await repositoryWrapper.CommitAsync();
             }
@@ -128,7 +126,7 @@ namespace Poseidon.Test
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.NotEmpty(context.BidList);
+                Assert.NotEmpty(context.Trade);
 
                 context.Database.EnsureDeleted();
             }
@@ -144,12 +142,12 @@ namespace Poseidon.Test
             
             using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbTrade(context);
                 
                 var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
-                exists = repositoryWrapper.BidListRepository.Exists(1);
+                exists = repositoryWrapper.TradeRepository.Exists(1);
 
                 context.Database.EnsureDeleted();
             }
@@ -168,12 +166,12 @@ namespace Poseidon.Test
             
             using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbBidList(context);
+                TestUtilities.SeedTestDbTrade(context);
                 
                 var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
-                exists = repositoryWrapper.BidListRepository.Exists(100);
+                exists = repositoryWrapper.TradeRepository.Exists(100);
 
                 context.Database.EnsureDeleted();
             }
