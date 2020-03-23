@@ -12,7 +12,6 @@ using Xunit;
 
 namespace Poseidon.Test
 {
-    [Collection("BidList")]
     public class BidListRepositoryTests
     {
         [Fact]

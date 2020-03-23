@@ -23,5 +23,26 @@ namespace Poseidon.API.Test.Shared
 
             context.SaveChanges();
         }
+
+        public static void SeedTestDbCurvePoint(PoseidonContext context)
+        {
+            context.AddRange(new CurvePoint
+                {
+                    Id = 1,
+                    Value = 10D
+                },
+                new CurvePoint
+                {
+                    Id = 2,
+                    Value = 20D
+                },
+                new CurvePoint
+                {
+                    Id = 3,
+                    Value = 30D
+                });
+
+            context.SaveChanges();
+        }
     }
 }

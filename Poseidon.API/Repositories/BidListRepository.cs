@@ -44,6 +44,5 @@ namespace Poseidon.API.Repositories
 
         public bool Exists(int id) =>
             base.Exists(x => x.Id == id);
-
     }
 }

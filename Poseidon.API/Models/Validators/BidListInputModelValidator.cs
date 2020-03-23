@@ -1,64 +1,63 @@
 ﻿using FluentValidation;
-using Poseidon.API.Models;
 
-namespace Poseidon.API.Validators
+namespace Poseidon.API.Models.Validators
 {
     public class BidListInputModelValidator : AbstractValidator<BidListInputModel>
     {
         public BidListInputModelValidator()
         {
-            RuleFor(dto => dto.Account)
+            RuleFor(model => model.Account)
                 .MaximumLength(100);
 
-            RuleFor(dto => dto.Type)
+            RuleFor(model => model.Type)
                 .MaximumLength(100);
 
-            RuleFor(dto => dto.BidQuantity)
+            RuleFor(model => model.BidQuantity)
                 .InclusiveBetween(0, double.MaxValue);
 
-            RuleFor(dto => dto.AskQuantity)
+            RuleFor(model => model.AskQuantity)
                 .InclusiveBetween(0, double.MaxValue);
 
-            RuleFor(dto => dto.Bid)
+            RuleFor(model => model.Bid)
                 .InclusiveBetween(0, double.MaxValue);
 
-            RuleFor(dto => dto.Ask)
+            RuleFor(model => model.Ask)
                 .InclusiveBetween(0, double.MaxValue);
 
-            RuleFor(dto => dto.Benchmark)
+            RuleFor(model => model.Benchmark)
                 .MaximumLength(100);
 
-            RuleFor(dto => dto.Commentary)
+            RuleFor(model => model.Commentary)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.Security)
+            RuleFor(model => model.Security)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.Status)
+            RuleFor(model => model.Status)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.Trader)
+            RuleFor(model => model.Trader)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.Book)
+            RuleFor(model => model.Book)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.CreationName)
+            RuleFor(model => model.CreationName)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.RevisionName)
+            RuleFor(model => model.RevisionName)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.DealName)
+            RuleFor(model => model.DealName)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.DealType)
+            RuleFor(model => model.DealType)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.SourceListId)
+            RuleFor(model => model.SourceListId)
                 .MaximumLength(100);
             
-            RuleFor(dto => dto.Side)
+            RuleFor(model => model.Side)
                 .MaximumLength(100);
         }
     }

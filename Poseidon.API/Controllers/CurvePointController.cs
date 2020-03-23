@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Poseidon.API.Data;
+using Poseidon.API.ActionFilters;
 using Poseidon.API.Models;
+using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
 {
@@ -15,11 +15,11 @@ namespace Poseidon.API.Controllers
     [Authorize]
     public class CurvePointController : ControllerBase
     {
-        private readonly PoseidonContext _context;
+        private readonly ICurvePointService _curvePointService;
 
-        public CurvePointController(PoseidonContext context)
+        public CurvePointController(ICurvePointService curvePointService)
         {
-            _context = context;
+            _curvePointService = curvePointService;
         }
 
         // GET: api/CurvePoints
@@ -29,12 +29,25 @@ namespace Poseidon.API.Controllers
         /// <returns>A list of all CurvePoint entities.</returns>
         /// <response code="200">Returns the list of all CurvePoint entities.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">No CurvePoint entities were found.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<CurvePoint>>> Get()
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<CurvePointViewModel>>> Get()
         {
-            return await _context.CurvePoint.ToListAsync();
+            var results = 
+                await _curvePointService.GetAllCurvePointsAsViewModelsAsync();
+
+            var entityList = 
+                results as CurvePointViewModel[] ?? results.ToArray();
+
+            if (!entityList.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
         }
 
         // GET: api/CurvePoints/5
@@ -44,81 +57,93 @@ namespace Poseidon.API.Controllers
         /// <param name="id">The Id of the CurvePoint entity to get.</param>
         /// <returns>The specified CurvePoint entity.</returns>
         /// <response code="200">Returns the CurvePoint entity.</response>
+        /// <response code="400">Bad Id.</response>
         /// <response code="404">The specified entity was not found.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CurvePoint>> Get(short id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CurvePointViewModel>> Get(int id)
         {
-            var curvePoint = await _context.CurvePoint.FindAsync(id);
-
-            if (curvePoint == null)
-            {
-                return NotFound();
-            }
-
-            return curvePoint;
-        }
-
-        // PUT: api/CurvePoints/5
-        /// <summary>
-        /// Updates a CurvePoint eneity.
-        /// </summary>
-        /// <param name="id">The Id of the CurvePoint entity to update.</param>
-        /// <param name="curvePoint">Updated data.</param>
-        /// <returns>Null.</returns>
-        /// <response code="204">The resource was successfully updated.</response>
-        /// <response code="401">The user is not authorized to access this resource.</response>
-        /// <response code="404">The specified entity was not found.</response>
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Put(short id, CurvePoint curvePoint)
-        {
-            if (id != curvePoint.Id)
+            if (id <= 0)
             {
                 return BadRequest();
             }
 
-            _context.Entry(curvePoint).State = EntityState.Modified;
-
-            try
+            if (!_curvePointService.CurvePointExists(id))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CurvePointExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
+            var result = await _curvePointService.GetCurvePointByIdAsViewModelASync(id);
+
+            return Ok(result);
         }
 
         // POST: api/CurvePoints
         /// <summary>
         /// Creates a new CurvePoint entity. 
         /// </summary>
-        /// <param name="curvePoint">Data for the new entity.</param>
+        /// <param name="inputModel">Data for the new entity.</param>
         /// <returns>The created entity.</returns>
         /// <response code="201">The entity was successfully created.</response>
+        /// <response code="400">Bad request.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ValidateModel]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CurvePoint>> Post(CurvePoint curvePoint)
+        public async Task<ActionResult<CurvePointInputModel>> Post(CurvePointInputModel inputModel)
         {
-            _context.CurvePoint.Add(curvePoint);
-            await _context.SaveChangesAsync();
+            if (inputModel == null)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("Get", new { id = curvePoint.Id }, curvePoint);
+            if (ModelState.IsValid)
+            {
+                var resultId = await _curvePointService.CreateCurvePoint(inputModel);
+
+                return CreatedAtAction("Get", new { id = resultId }, inputModel);
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        // PUT: api/CurvePoints/5
+        /// <summary>
+        /// Updates a CurvePoint entity.
+        /// </summary>
+        /// <param name="id">The Id of the CurvePoint entity to update.</param>
+        /// <param name="inputModel">Updated data.</param>
+        /// <returns>Null.</returns>
+        /// <response code="204">The resource was successfully updated.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
+        [HttpPut("{id}")]
+        [ValidateModel]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Put(int id, CurvePointInputModel inputModel)
+        {
+            if (id != inputModel.Id)
+            {
+                return BadRequest("Id mismatch");
+            }
+
+            if (!_curvePointService.CurvePointExists(id))
+            {
+                return NotFound($"No CurvePoint enti" +
+                                $"ty matching the id [{id}] was found.");
+            }
+
+            await _curvePointService.UpdateCurvePoint(id, inputModel);
+
+            return NoContent();
         }
 
         // DELETE: api/CurvePoints/5
@@ -129,26 +154,27 @@ namespace Poseidon.API.Controllers
         /// <returns>Null.</returns>
         /// <response code="204">The entity was successfully created.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CurvePoint>> Delete(short id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CurvePoint>> Delete(int id)
         {
-            var curvePoint = await _context.CurvePoint.FindAsync(id);
-            if (curvePoint == null)
+            if (id <= 0)
             {
-                return NotFound();
+                return BadRequest(
+                    $"The '{nameof(id)}' argument must a non-zero, positive integer value. The passed-in value was {id}");
             }
 
-            _context.CurvePoint.Remove(curvePoint);
-            await _context.SaveChangesAsync();
+            if (!_curvePointService.CurvePointExists(id))
+            {
+                return NotFound($"No {typeof(CurvePoint)} entity matching the id [{id}] was found.");
+            }
+
+            await _curvePointService.DeleteCurvePoint(id);
 
             return NoContent();
-        }
-
-        private bool CurvePointExists(short id)
-        {
-            return _context.CurvePoint.Any(e => e.Id == id);
         }
     }
 }

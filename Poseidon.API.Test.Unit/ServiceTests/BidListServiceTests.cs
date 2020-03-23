@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
-using Poseidon.API.Profiles;
 using Poseidon.API.Repositories;
 using Poseidon.API.Services;
 using Poseidon.API.Test.Shared;
@@ -16,7 +15,6 @@ namespace Poseidon.Test
 {
     [SuppressMessage("ReSharper", "ConvertToUsingDeclaration")]
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    [Collection("BidList")]
     public class BidListServiceTests
     {
         private readonly IMapper _mapper;

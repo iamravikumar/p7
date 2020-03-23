@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -13,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Repositories;
+using Poseidon.API.Services;
+using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Extensions
 {
