@@ -36,10 +36,10 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<BidListViewModel>>> Get()
         {
-            var results = 
+            var results =
                 await _bidListService.GetAllBidListsAsViewModelsAsync();
 
-            var entityList = 
+            var entityList =
                 results as BidListViewModel[] ?? results.ToArray();
 
             if (!entityList.Any())
@@ -103,14 +103,9 @@ namespace Poseidon.API.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
-            {
-                var resultId = await _bidListService.CreateBidList(inputModel);
+            var resultId = await _bidListService.CreateBidList(inputModel);
 
-                return CreatedAtAction("Get", new { id = resultId }, inputModel);
-            }
-
-            return BadRequest(ModelState);
+            return CreatedAtAction("Get", new { id = resultId }, inputModel);
         }
 
         // PUT: api/BidLists/5
@@ -130,20 +125,15 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Put(int id, BidListInputModel inputModel)
         {
-            if (ModelState.IsValid)
+            if (!_bidListService.BidListExists(id))
             {
-                if (!_bidListService.BidListExists(id))
-                {
-                    return NotFound($"No BidList enti" +
-                                    $"ty matching the id [{id}] was found.");
-                }
-
-                await _bidListService.UpdateBidList(id, inputModel);
-
-                return NoContent();
+                return NotFound($"No BidList enti" +
+                                $"ty matching the id [{id}] was found.");
             }
 
-            return BadRequest(ModelState);
+            await _bidListService.UpdateBidList(id, inputModel);
+
+            return NoContent();
         }
 
         // DELETE: api/BidLists/5

@@ -36,10 +36,10 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<CurvePointViewModel>>> Get()
         {
-            var results = 
+            var results =
                 await _curvePointService.GetAllCurvePointsAsViewModelsAsync();
 
-            var entityList = 
+            var entityList =
                 results as CurvePointViewModel[] ?? results.ToArray();
 
             if (!entityList.Any())
@@ -103,14 +103,9 @@ namespace Poseidon.API.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
-            {
-                var resultId = await _curvePointService.CreateCurvePoint(inputModel);
+            var resultId = await _curvePointService.CreateCurvePoint(inputModel);
 
-                return CreatedAtAction("Get", new { id = resultId }, inputModel);
-            }
-
-            return BadRequest(ModelState);
+            return CreatedAtAction("Get", new { id = resultId }, inputModel);
         }
 
         // PUT: api/CurvePoints/5
@@ -130,20 +125,15 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Put(int id, CurvePointInputModel inputModel)
         {
-            if (ModelState.IsValid)
+            if (!_curvePointService.CurvePointExists(id))
             {
-                if (!_curvePointService.CurvePointExists(id))
-                {
-                    return NotFound($"No CurvePoint enti" +
-                                    $"ty matching the id [{id}] was found.");
-                }
-
-                await _curvePointService.UpdateCurvePoint(id, inputModel);
-
-                return NoContent();
+                return NotFound($"No CurvePoint enti" +
+                                $"ty matching the id [{id}] was found.");
             }
 
-            return BadRequest(ModelState);
+            await _curvePointService.UpdateCurvePoint(id, inputModel);
+
+            return NoContent();
         }
 
         // DELETE: api/CurvePoints/5

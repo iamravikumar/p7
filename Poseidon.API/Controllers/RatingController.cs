@@ -36,10 +36,10 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<RatingViewModel>>> Get()
         {
-            var results = 
+            var results =
                 await _ratingService.GetAllRatingsAsViewModelsAsync();
 
-            var entityList = 
+            var entityList =
                 results as RatingViewModel[] ?? results.ToArray();
 
             if (!entityList.Any())
@@ -103,14 +103,9 @@ namespace Poseidon.API.Controllers
                 return BadRequest();
             }
 
-            if (ModelState.IsValid)
-            {
-                var resultId = await _ratingService.CreateRating(inputModel);
+            var resultId = await _ratingService.CreateRating(inputModel);
 
-                return CreatedAtAction("Get", new { id = resultId }, inputModel);
-            }
-
-            return BadRequest(ModelState);
+            return CreatedAtAction("Get", new { id = resultId }, inputModel);
         }
 
         // PUT: api/Ratings/5
@@ -130,20 +125,15 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Put(int id, RatingInputModel inputModel)
         {
-            if (ModelState.IsValid)
+            if (!_ratingService.RatingExists(id))
             {
-                if (!_ratingService.RatingExists(id))
-                {
-                    return NotFound($"No Rating enti" +
-                                    $"ty matching the id [{id}] was found.");
-                }
-
-                await _ratingService.UpdateRating(id, inputModel);
-
-                return NoContent();
+                return NotFound($"No Rating enti" +
+                                $"ty matching the id [{id}] was found.");
             }
 
-            return BadRequest(ModelState);
+            await _ratingService.UpdateRating(id, inputModel);
+
+            return NoContent();
         }
 
         // DELETE: api/Ratings/5

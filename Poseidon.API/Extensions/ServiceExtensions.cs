@@ -164,6 +164,7 @@ namespace Poseidon.API.Extensions
             services.AddTransient<IBidListService, BidListService>();
             services.AddTransient<ICurvePointService, CurvePointService>();
             services.AddTransient<IRatingService, RatingService>();
+            services.AddTransient<IRuleNameService, RuleNameService>();
         }
     }
 }

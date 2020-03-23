@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
+using Poseidon.API.Services.Interfaces;
 
 namespace Poseidon.API.Controllers
 {
@@ -15,113 +17,128 @@ namespace Poseidon.API.Controllers
     [Authorize]
     public class RuleNameController : ControllerBase
     {
-        private readonly PoseidonContext _context;
+        private readonly IRuleNameService _RuleNameService;
 
-        public RuleNameController(PoseidonContext context)
+        public RuleNameController(IRuleNameService RuleNameService)
         {
-            _context = context;
+            _RuleNameService = RuleNameService;
         }
 
-        // GET: api/RuleName
+        // GET: api/RuleNames
         /// <summary>
         /// Gets a list of all RuleName entities.
         /// </summary>
         /// <returns>A list of all RuleName entities.</returns>
         /// <response code="200">Returns the list of all RuleName entities.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">No RuleName entities were found.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<RuleName>>> Get()
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<RuleNameViewModel>>> Get()
         {
-            return await _context.RuleName.ToListAsync();
+            var results =
+                await _RuleNameService.GetAllRuleNamesAsViewModelsAsync();
+
+            var entityList =
+                results as RuleNameViewModel[] ?? results.ToArray();
+
+            if (!entityList.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
         }
 
-        // GET: api/RuleName/5
+        // GET: api/RuleNames/5
         /// <summary>
         /// Gets a single RuleName entity.
         /// </summary>
         /// <param name="id">The Id of the RuleName entity to get.</param>
         /// <returns>The specified RuleName entity.</returns>
         /// <response code="200">Returns the RuleName entity.</response>
+        /// <response code="400">Bad Id.</response>
         /// <response code="404">The specified entity was not found.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<RuleName>> Get(short id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<RuleNameViewModel>> Get(int id)
         {
-            var ruleName = await _context.RuleName.FindAsync(id);
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
 
-            if (ruleName == null)
+            if (!_RuleNameService.RuleNameExists(id))
             {
                 return NotFound();
             }
 
-            return ruleName;
+            var result = await _RuleNameService.GetRuleNameByIdAsViewModelASync(id);
+
+            return Ok(result);
         }
 
-        // PUT: api/RuleName/5
+        // POST: api/RuleNames
         /// <summary>
-        /// Updates a RuleName eneity.
+        /// Creates a new RuleName entity. 
+        /// </summary>
+        /// <param name="inputModel">Data for the new entity.</param>
+        /// <returns>The created entity.</returns>
+        /// <response code="201">The entity was successfully created.</response>
+        /// <response code="400">Bad request.</response>
+        /// <response code="401">The user is not authorized to access this resource.</response>
+        [HttpPost]
+        [ValidateModel]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<RuleNameInputModel>> Post(RuleNameInputModel inputModel)
+        {
+            if (inputModel == null)
+            {
+                return BadRequest();
+            }
+
+            var resultId = await _RuleNameService.CreateRuleName(inputModel);
+
+            return CreatedAtAction("Get", new { id = resultId }, inputModel);
+        }
+
+        // PUT: api/RuleNames/5
+        /// <summary>
+        /// Updates a RuleName entity.
         /// </summary>
         /// <param name="id">The Id of the RuleName entity to update.</param>
-        /// <param name="ruleName">Updated data.</param>
+        /// <param name="inputModel">Updated data.</param>
         /// <returns>Null.</returns>
         /// <response code="204">The resource was successfully updated.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
         /// <response code="404">The specified entity was not found.</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ValidateModel]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Put(short id, RuleName ruleName)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Put(int id, RuleNameInputModel inputModel)
         {
-            if (id != ruleName.Id)
+            if (!_RuleNameService.RuleNameExists(id))
             {
-                return BadRequest();
+                return NotFound($"No RuleName enti" +
+                                $"ty matching the id [{id}] was found.");
             }
 
-            _context.Entry(ruleName).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RuleNameExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _RuleNameService.UpdateRuleName(id, inputModel);
 
             return NoContent();
         }
 
-        // POST: api/RuleName
-        /// <summary>
-        /// Creates a new RuleName entity. 
-        /// </summary>
-        /// <param name="ruleName">Data for the new entity.</param>
-        /// <returns>The created entity.</returns>
-        /// <response code="201">The entity was successfully created.</response>
-        /// <response code="401">The user is not authorized to access this resource.</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<RuleName>> Post(RuleName ruleName)
-        {
-            _context.RuleName.Add(ruleName);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("Get", new { id = ruleName.Id }, ruleName);
-        }
-
-        // DELETE: api/RuleName/5
+        // DELETE: api/RuleNames/5
         /// <summary>
         /// Deletes a specified RuleName entity.
         /// </summary>
@@ -129,26 +146,27 @@ namespace Poseidon.API.Controllers
         /// <returns>Null.</returns>
         /// <response code="204">The entity was successfully created.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="404">The specified entity was not found.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<RuleName>> Delete(short id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<RuleName>> Delete(int id)
         {
-            var ruleName = await _context.RuleName.FindAsync(id);
-            if (ruleName == null)
+            if (id <= 0)
             {
-                return NotFound();
+                return BadRequest(
+                    $"The '{nameof(id)}' argument must a non-zero, positive integer value. The passed-in value was {id}");
             }
 
-            _context.RuleName.Remove(ruleName);
-            await _context.SaveChangesAsync();
+            if (!_RuleNameService.RuleNameExists(id))
+            {
+                return NotFound($"No {typeof(RuleName)} entity matching the id [{id}] was found.");
+            }
+
+            await _RuleNameService.DeleteRuleName(id);
 
             return NoContent();
-        }
-
-        private bool RuleNameExists(short id)
-        {
-            return _context.RuleName.Any(e => e.Id == id);
         }
     }
 }

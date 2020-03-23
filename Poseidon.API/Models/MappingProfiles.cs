@@ -8,21 +8,27 @@ namespace Poseidon.API.Models
         {
             // BidList
             CreateMap<BidListInputModel, BidList>()
-                .ForMember(x => x.Id, act => act.Ignore());
+                .ForMember(entity => entity.Id, action => action.Ignore());
             
             CreateMap<BidList, BidListViewModel>();
             
             // CurvePoint
             CreateMap<CurvePointInputModel, CurvePoint>()
-                .ForMember(x => x.Id, act => act.Ignore());
+                .ForMember(entity => entity.Id, action => action.Ignore());
 
             CreateMap<CurvePoint, CurvePointViewModel>();
             
             // Rating
             CreateMap<RatingInputModel, Rating>()
-                .ForMember(x => x.Id, act => act.Ignore());
+                .ForMember(entity => entity.Id, action => action.Ignore());
 
             CreateMap<Rating, RatingViewModel>();
+            
+            // RuleName
+            CreateMap<RuleNameInputModel, RuleName>()
+                .ForMember(entity => entity.Id, action => action.Ignore());
+
+            CreateMap<RuleName, RuleNameViewModel>();
         }
     }
 }

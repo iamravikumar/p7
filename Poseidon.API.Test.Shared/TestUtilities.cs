@@ -66,5 +66,26 @@ namespace Poseidon.API.Test.Shared
 
             context.SaveChanges();
         }
+
+        public static void SeedTestDbRuleName(PoseidonContext context)
+        {
+            context.AddRange(new RuleName
+                {
+                    Id = 1,
+                    Description = "one description"
+                },
+                new RuleName
+                {
+                    Id = 2,
+                    Description = "two description"
+                },
+                new RuleName
+                {
+                    Id = 3,
+                    Description = "three description"
+                });
+
+            context.SaveChanges();
+        }
     }
 }
