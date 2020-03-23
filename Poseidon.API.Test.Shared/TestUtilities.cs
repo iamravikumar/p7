@@ -97,5 +97,27 @@ namespace Poseidon.API.Test.Shared
 
             context.SaveChanges();
         }
+
+        public static void SeedTestDbUser(PoseidonContext context)
+        {
+            context.AddRange(
+                new User
+                {
+                    Id = 1,
+                    Username = "one username"
+                },
+                new User
+                {
+                    Id = 2,
+                    Username = "two username"
+                },
+                new User
+                {
+                    Id = 3,
+                    Username = "three username"
+                });
+
+            context.SaveChanges();
+        }
     }
 }
