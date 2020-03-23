@@ -12,7 +12,7 @@ namespace Poseidon.API.Repositories
     {
         IQueryable<T> FindAll();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
-        void Create(T entity);
+        void Insert(T entity);
         void Update(T entity);
         void Delete(T entity);
         bool Exists(Expression<Func<T, bool>> expression);

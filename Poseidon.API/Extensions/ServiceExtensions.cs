@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -139,17 +139,28 @@ namespace Poseidon.API.Extensions
         /// Adds the repository wrapper to the service collection.
         /// </summary>
         /// <param name="services"></param>
-        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        public static void ConfigureUnitOfWork(this IServiceCollection services)
         {
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
+        /// <summary>
+        /// Configures the database context.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<PoseidonContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("ApplicationDbContext"));
             });
+        }
+
+        public static void ConfigureLocalServices(this IServiceCollection services)
+        {
+            services.AddTransient<IBidListService, BidListService>();
+            services.AddTransient<ICurvePointService, CurvePointService>();
         }
     }
 }

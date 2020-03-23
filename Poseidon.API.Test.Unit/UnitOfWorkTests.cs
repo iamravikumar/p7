@@ -3,13 +3,13 @@ using Xunit;
 
 namespace Poseidon.Test
 {
-    public class RepositoryWrapperTests
+    public class UnitOfWorkTests
     {
         [Fact]
         public void TestBidListRepository()
         {
             // Arrange
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             var result = repositoryWrapper.BidListRepository;
@@ -23,7 +23,7 @@ namespace Poseidon.Test
         public void TestCurvePointRepository()
         {
             // Arrange
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             var result = repositoryWrapper.CurvePointRepository;
@@ -37,7 +37,7 @@ namespace Poseidon.Test
         public void TestRatingRepository()
         {
             // Arrange
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             var result = repositoryWrapper.RatingRepository;
@@ -51,7 +51,7 @@ namespace Poseidon.Test
         public void TestRuleNameRepository()
         {
             // Arrange
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             var result = repositoryWrapper.RuleNameRepository;
@@ -65,7 +65,7 @@ namespace Poseidon.Test
         public void TestTradeRepository()
         {
             // Arrange
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             var result = repositoryWrapper.TradeRepository;
@@ -79,7 +79,7 @@ namespace Poseidon.Test
         public void TestUserRepository()
         {
             // Arrange
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             var result = repositoryWrapper.UserRepository;

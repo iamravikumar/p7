@@ -35,9 +35,11 @@ namespace Poseidon.API.Repositories
         public void CreateBidList(BidList entity)
         {
             if (entity == null)
+            {
                 throw new ArgumentNullException();
+            }
 
-            base.Create(entity);
+            base.Insert(entity);
         }
 
         public bool Exists(int id) =>

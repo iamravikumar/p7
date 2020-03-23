@@ -1,13 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Poseidon.API.ActionFilters;
 using Poseidon.API.Extensions;
 using Poseidon.API.Services;
 using Poseidon.API.Services.Interfaces;
@@ -31,26 +28,6 @@ namespace Poseidon.API
         {
             services.ConfigureDbContext(Configuration);
 
-            // if (Environment.IsTest())
-            // {
-            //     services.AddControllers(config =>
-            //         {
-            //             config.Filters.Add(new LogAttribute());
-            //             config.Filters.Add(new AllowAnonymousFilter());
-            //         })
-            //         .AddFluentValidation(fv =>
-            //             fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-            // }
-            // else
-            // {
-            //     services.AddControllers(config =>
-            //         {
-            //             config.Filters.Add(new LogAttribute());
-            //         })
-            //         .AddFluentValidation(fv =>
-            //             fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-            // }
-                
             services.ConfigureControllers(Environment);
 
             services.ConfigureActionFilterAttributes();
@@ -59,9 +36,9 @@ namespace Poseidon.API
 
             services.ConfigureSwagger();
 
-            services.ConfigureRepositoryWrapper();
+            services.ConfigureUnitOfWork();
 
-            services.AddTransient<IBidListService, BidListService>();
+            services.ConfigureLocalServices();
 
             services.AddAutoMapper(typeof(Startup));
         }

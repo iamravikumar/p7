@@ -40,7 +40,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
 
@@ -67,7 +67,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -92,7 +92,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
 
@@ -118,7 +118,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -145,7 +145,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
 
@@ -169,7 +169,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -194,7 +194,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -235,7 +235,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -257,7 +257,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -284,7 +284,7 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -312,7 +312,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -338,7 +338,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
                 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
 
@@ -364,7 +364,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
                 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, null);
 

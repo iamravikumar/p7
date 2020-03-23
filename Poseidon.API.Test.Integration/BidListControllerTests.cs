@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Poseidon.API.Controllers;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
-using Poseidon.API.Profiles;
 using Poseidon.API.Repositories;
 using Poseidon.API.Services;
 using Poseidon.API.Test.Shared;
@@ -40,7 +39,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -68,7 +67,7 @@ namespace Poseidon.API.Test.Integration
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -94,7 +93,7 @@ namespace Poseidon.API.Test.Integration
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -122,7 +121,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -150,7 +149,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -183,7 +182,7 @@ namespace Poseidon.API.Test.Integration
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -220,7 +219,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -252,7 +251,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -284,7 +283,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -322,7 +321,7 @@ namespace Poseidon.API.Test.Integration
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -351,7 +350,7 @@ namespace Poseidon.API.Test.Integration
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -377,7 +376,7 @@ namespace Poseidon.API.Test.Integration
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 
@@ -406,7 +405,7 @@ namespace Poseidon.API.Test.Integration
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 var service = new BidListService(repositoryWrapper, _mapper);
 

@@ -6,7 +6,7 @@ namespace Poseidon.API.Repositories
     /// <summary>
     /// Wrapper class providing access to concrete entity repository classes.
     /// </summary>
-    public class RepositoryWrapper : IRepositoryWrapper
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly PoseidonContext _context;
         private IBidListRepository _bidListRepository;
@@ -15,8 +15,8 @@ namespace Poseidon.API.Repositories
         private IRuleNameRepository _ruleNameRepository;
         private ITradeRepository _tradeRepository;
         private IUserRepository _userRepository;
-        
-        public RepositoryWrapper(PoseidonContext context)
+
+        public UnitOfWork(PoseidonContext context)
         {
             _context = context;
         }
@@ -40,9 +40,16 @@ namespace Poseidon.API.Repositories
             _userRepository ??= new UserRepository(_context);
 
         /// <summary>
-        /// Saves all changes made to the context to the database.
+        /// Persists all local changes tracked by the context.
         /// </summary>
-        public async Task SaveAsync() =>
+        public async Task CommitAsync() =>
             await _context.SaveChangesAsync();
+
+        /// <summary>
+        /// Rolls back any local changes tracked by the context.
+        /// </summary>
+        /// <returns></returns>
+        public async Task RollbackAsync() =>
+            await _context.DisposeAsync();
     }
 }

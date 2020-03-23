@@ -5,7 +5,7 @@ namespace Poseidon.API.Repositories
     /// <summary>
     /// 
     /// </summary>
-    public interface IRepositoryWrapper
+    public interface IUnitOfWork
     {
         IBidListRepository BidListRepository { get; }
         ICurvePointRepository CurvePointRepository { get; }
@@ -14,6 +14,7 @@ namespace Poseidon.API.Repositories
         ITradeRepository TradeRepository { get; }
         IUserRepository UserRepository { get; }
 
-        Task SaveAsync();
+        Task CommitAsync();
+        Task RollbackAsync();
     }
 }

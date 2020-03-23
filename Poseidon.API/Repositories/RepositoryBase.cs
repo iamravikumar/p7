@@ -14,7 +14,7 @@ namespace Poseidon.API.Repositories
     {
         private readonly PoseidonContext _context;
 
-        public RepositoryBase(PoseidonContext context)
+        protected RepositoryBase(PoseidonContext context)
         {
             _context = context;
         }
@@ -30,7 +30,7 @@ namespace Poseidon.API.Repositories
                 .Where(expression)
                 .AsNoTracking();
 
-        public void Create(T entity) =>
+        public void Insert(T entity) =>
             _context
                 .Set<T>()
                 .Add(entity);

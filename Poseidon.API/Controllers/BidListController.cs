@@ -43,7 +43,9 @@ namespace Poseidon.API.Controllers
                 results as BidListViewModel[] ?? results.ToArray();
 
             if (!entityList.Any())
+            {
                 return NotFound();
+            }
 
             return Ok(results);
         }
@@ -66,10 +68,14 @@ namespace Poseidon.API.Controllers
         public async Task<ActionResult<BidListViewModel>> Get(int id)
         {
             if (id <= 0)
+            {
                 return BadRequest();
+            }
 
             if (!_bidListService.BidListExists(id))
+            {
                 return NotFound();
+            }
 
             var result = await _bidListService.GetBidListByIdAsViewModelASync(id);
 
@@ -93,8 +99,10 @@ namespace Poseidon.API.Controllers
         public async Task<ActionResult<BidListInputModel>> Post(BidListInputModel inputModel)
         {
             if (inputModel == null)
+            {
                 return BadRequest();
-                
+            }
+
             if (ModelState.IsValid)
             {
                 var resultId = await _bidListService.CreateBidList(inputModel);
@@ -123,11 +131,15 @@ namespace Poseidon.API.Controllers
         public async Task<ActionResult> Put(int id, BidListInputModel inputModel)
         {
             if (id != inputModel.Id)
+            {
                 return BadRequest("Id mismatch");
+            }
 
             if (!_bidListService.BidListExists(id))
+            {
                 return NotFound($"No BidList enti" +
                                 $"ty matching the id [{id}] was found.");
+            }
 
             await _bidListService.UpdateBidList(id, inputModel);
 
@@ -150,11 +162,15 @@ namespace Poseidon.API.Controllers
         public async Task<ActionResult<BidList>> Delete(int id)
         {
             if (id <= 0)
+            {
                 return BadRequest(
                     $"The '{nameof(id)}' argument must a non-zero, positive integer value. The passed-in value was {id}");
+            }
 
             if (!_bidListService.BidListExists(id))
+            {
                 return NotFound($"No {typeof(BidList)} entity matching the id [{id}] was found.");
+            }
 
             await _bidListService.DeleteBidList(id);
 

@@ -11,12 +11,12 @@ namespace Poseidon.API.Services
 {
     public class BidListService : IBidListService
     {
-        private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public BidListService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public BidListService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repositoryWrapper = repositoryWrapper;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -25,11 +25,11 @@ namespace Poseidon.API.Services
         /// </summary>
         /// <returns></returns>
         public async Task<IEnumerable<BidList>> GetAllBidListsAsync() =>
-            await _repositoryWrapper.BidListRepository.GetAllAsync();
+            await _unitOfWork.BidListRepository.GetAllAsync();
 
         public async Task<IEnumerable<BidListViewModel>> GetAllBidListsAsViewModelsAsync()
         {
-            var entities = await _repositoryWrapper.BidListRepository.GetAllAsync();
+            var entities = await _unitOfWork.BidListRepository.GetAllAsync();
 
             var viewModels = _mapper.Map<IEnumerable<BidList>, IEnumerable<BidListViewModel>>(entities);
 
@@ -41,72 +41,132 @@ namespace Poseidon.API.Services
         /// </summary>
         /// <returns></returns>
         public async Task<BidList> GetBidListByIdAsync(int id) =>
-            await _repositoryWrapper
+            await _unitOfWork
                 .BidListRepository
                 .FindByCondition(bl => bl.Id == id)
                 .FirstOrDefaultAsync();
 
+        /// <summary>
+        /// Asynchronously finds a BidList entity by id, and returns it as a BidListViewModel.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<BidListViewModel> GetBidListByIdAsViewModelASync(int id)
         {
-            var entity = await _repositoryWrapper.BidListRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
 
             var viewModel = _mapper.Map<BidListViewModel>(entity);
 
             return viewModel;
         }
 
+        /// <summary>
+        /// Asynchronously creates a new BidList entity and persists it to the database. 
+        /// </summary>
+        /// <param name="inputModel"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<int> CreateBidList(BidListInputModel inputModel)
         {
             if (inputModel == null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var entity = _mapper.Map<BidList>(inputModel);
-            
-            _repositoryWrapper
-                .BidListRepository
-                .Create(entity);
 
-            await _repositoryWrapper.SaveAsync();
+            try
+            {
+                _unitOfWork
+                    .BidListRepository
+                    .Insert(entity);
 
-            return entity.Id;
+                await _unitOfWork.CommitAsync();
+                return entity.Id;
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Asynchronously updates an existing BidList entity and persists any
+        /// changes made to the database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="inputModel"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task UpdateBidList(int id, BidListInputModel inputModel)
         {
             if (id != inputModel.Id)
+            {
                 throw new ArgumentException("Id mismatch.");
-            
-            var entity = await _repositoryWrapper.BidListRepository.GetByIdAsync(id);
+            }
+
+            var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
 
             if (entity == null)
+            {
                 throw new Exception($"No {typeof(BidList)} entity matching the id [{id}] was found.");
+            }
 
             _mapper.Map(inputModel, entity);
 
-            _repositoryWrapper
-                .BidListRepository
-                .Update(entity);
+            try
+            {
+                _unitOfWork
+                    .BidListRepository
+                    .Update(entity);
 
-            await _repositoryWrapper.SaveAsync();
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Removes an existing BidList entity and persists the change to the database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task DeleteBidList(int id)
         {
-            var entity = await _repositoryWrapper.BidListRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
 
             if (entity == null)
             {
                 throw new Exception($"No {typeof(BidList)} entity matching the id '{id}' were found.");
             }
 
-            _repositoryWrapper
-                .BidListRepository
-                .Delete(entity);
+            try
+            {
+                _unitOfWork
+                    .BidListRepository
+                    .Delete(entity);
 
-            await _repositoryWrapper.SaveAsync();
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Confirms whether or not a given BidList entity exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool BidListExists(int id) =>
-            _repositoryWrapper.BidListRepository.Exists(id);
+            _unitOfWork.BidListRepository.Exists(id);
     }
 }

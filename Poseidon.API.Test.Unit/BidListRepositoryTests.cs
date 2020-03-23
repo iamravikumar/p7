@@ -27,7 +27,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 result =
@@ -54,7 +54,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 result = 
@@ -80,7 +80,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 result = await repositoryWrapper.BidListRepository.GetByIdAsync(100);
@@ -98,7 +98,7 @@ namespace Poseidon.Test
             // Arrange
             BidList testEntity = null;
 
-            var repositoryWrapper = new RepositoryWrapper(null);
+            var repositoryWrapper = new UnitOfWork(null);
 
             // Act
             void TestAction() =>
@@ -118,12 +118,12 @@ namespace Poseidon.Test
 
             await using (var context = new PoseidonContext(options))
             {
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 repositoryWrapper.BidListRepository.CreateBidList(testEntity);
 
-                await repositoryWrapper.SaveAsync();
+                await repositoryWrapper.CommitAsync();
             }
 
             await using (var context = new PoseidonContext(options))
@@ -147,7 +147,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
                 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 exists = repositoryWrapper.BidListRepository.Exists(1);
@@ -171,7 +171,7 @@ namespace Poseidon.Test
             {
                 TestUtilities.SeedTestDbBidList(context);
                 
-                var repositoryWrapper = new RepositoryWrapper(context);
+                var repositoryWrapper = new UnitOfWork(context);
 
                 // Act
                 exists = repositoryWrapper.BidListRepository.Exists(100);
