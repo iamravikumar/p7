@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Models;
 
 namespace Poseidon.API.Data
@@ -21,14 +19,14 @@ namespace Poseidon.API.Data
         public virtual DbSet<Rating> Rating { get; set; }
         public virtual DbSet<RuleName> RuleName { get; set; }
         public virtual DbSet<Trade> Trade { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=Poseidon;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer(
+                    "Server=.\\SQLEXPRESS;Database=Poseidon;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -234,7 +232,7 @@ namespace Poseidon.API.Data
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .HasName("Users_pk")

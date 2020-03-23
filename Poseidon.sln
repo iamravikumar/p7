@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.Client", "Poseidon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.AuthServer", "Poseidon.AuthServer\Poseidon.AuthServer.csproj", "{5ADBC2E5-863A-4803-981F-A64DB968A64D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API.Test.Unit", "Poseidon.API.Test.Unit\Poseidon.API.Test.Unit.csproj", "{534F0055-7D0F-408D-B4A2-FB92BEB488C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API.Test.Integration", "Poseidon.API.Test.Integration\Poseidon.API.Test.Integration.csproj", "{5E6153E0-F78E-4D43-97CA-D5386CDBE797}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.API.Test.Shared", "Poseidon.API.Test.Shared\Poseidon.API.Test.Shared.csproj", "{4428905B-342E-4A05-BDF0-5E1CC48C484F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ADBC2E5-863A-4803-981F-A64DB968A64D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{534F0055-7D0F-408D-B4A2-FB92BEB488C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{534F0055-7D0F-408D-B4A2-FB92BEB488C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{534F0055-7D0F-408D-B4A2-FB92BEB488C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{534F0055-7D0F-408D-B4A2-FB92BEB488C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6153E0-F78E-4D43-97CA-D5386CDBE797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6153E0-F78E-4D43-97CA-D5386CDBE797}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6153E0-F78E-4D43-97CA-D5386CDBE797}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6153E0-F78E-4D43-97CA-D5386CDBE797}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4428905B-342E-4A05-BDF0-5E1CC48C484F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4428905B-342E-4A05-BDF0-5E1CC48C484F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4428905B-342E-4A05-BDF0-5E1CC48C484F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4428905B-342E-4A05-BDF0-5E1CC48C484F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

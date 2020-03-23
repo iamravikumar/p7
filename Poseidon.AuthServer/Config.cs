@@ -24,42 +24,37 @@ namespace Poseidon.AuthServer
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // M2M client
+                // Postman M2M client
                 new Client
                 {
-                    ClientId = "poseidon_client",
+                    ClientId = "postman_test_client",
                     ClientSecrets =
                     {
-                        new Secret("7c3c1e25-f013-4651-901c-443927a6a90e".Sha256()) 
+                        new Secret("7c3c1e25-f013-4651-901c-443927a6a90e".Sha256())
                     },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-//                    RequireConsent = false,
+                    RedirectUris = {"http://getpostman.com/oauth2/callback"},
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
                     AllowedScopes =
                     {
-//                        IdentityServerConstants.StandardScopes.OpenId,
-//                        IdentityServerConstants.StandardScopes.Profile,
                         "poseidon_api"
                     },
-//                    RequirePkce = true,
-//                    RedirectUris = { "http://localhost:5002/signin-oidc"},
-//                    PostLogoutRedirectUris = {"http://localhost:5002/signout-callback-oidc"},
-//                    AllowOfflineAccess = true
                 },
                 // interactive ASP.NET Razor Pages client
                 new Client
                 {
-                    ClientId = "poseidon_razor",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    ClientId = "poseidon_razor", 
+                    ClientSecrets = {new Secret("secret".Sha256())},
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequireConsent = false,
                     RequirePkce = true,
 
                     // where to redirect to after login
-                    RedirectUris = { "http://localhost:5002/signin-oidc" },
+                    RedirectUris = {"http://localhost:5002/signin-oidc"},
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+                    PostLogoutRedirectUris = {"http://localhost:5002/signout-callback-oidc"},
 
                     AllowedScopes = new List<string>
                     {
@@ -67,8 +62,22 @@ namespace Poseidon.AuthServer
                         IdentityServerConstants.StandardScopes.Profile,
                         "poseidon_api"
                     },
-                    
+
                     AllowOfflineAccess = true
+                },
+                // Swagger UI
+                new Client
+                {
+                    ClientId = "swagger_ui",
+                    ClientName = "Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris =
+                    {
+                        "http://localhost:5001/oauth2-redirect.html"
+                    },
+                    AllowedCorsOrigins = {"http://localhost:5001"},
+                    AllowedScopes = {"poseidon_api"}
                 }
             };
     }

@@ -13,10 +13,5 @@ namespace Poseidon.Client.Pages
         {
             _logger = logger;
         }
-
-        public void OnGet()
-        {
-
-        }
     }
 }
