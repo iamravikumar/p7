@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Poseidon.AuthServer.Areas.Identity.Data;
+using Poseidon.AuthServer.Extensions;
 using Serilog;
 
 namespace Poseidon.AuthServer
@@ -31,6 +32,80 @@ namespace Poseidon.AuthServer
             Configuration = configuration;
         }
 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews();
+            services.AddMvc();
+
+            services.AddLogging();
+
+            services.ConfigureIISOptions();
+
+            services.ConfigureIISServerOptions();
+
+            services.ConfigureIdentityServer(Configuration);
+
+            services.ConfigureAuthentication();
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseRouting();
+
+            if (Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+
+            InitializeDatabase(app);
+
+            CreateIdentityRoles(app, new[] { "Admin", "User" }).Wait();
+
+            CreateTestUsers(app, new[]
+            {
+                new UserSeed
+                {
+                    Email = "admin@poseidon.test",
+                    Username = "admin@poseidon.test",
+                    Password = "Pass123$",
+                    Role = "Admin"
+                },
+                new UserSeed
+                {
+                    Email = "user@poseidon.test",
+                    Username = "user@poseidon.test",
+                    Password = "Pass123$",
+                    Role = "User"
+                }
+            }).Wait();
+
+            app.UseStaticFiles();
+
+            app.UseRouting();
+            app.UseIdentityServer();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
+        }
+
+        /**
+         * Internal helper methods.
+         * 
+         */
+        
+        private class UserSeed
+        {
+            public string Email { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string Role { get; set; }
+        }
+        
         private static void InitializeDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -71,14 +146,6 @@ namespace Poseidon.AuthServer
             }
         }
 
-        private class UserSeed
-        {
-            public string Email { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string Role { get; set; }
-        }
-
         private static async Task CreateIdentityRoles(IApplicationBuilder app, IEnumerable<string> roles)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -95,17 +162,23 @@ namespace Poseidon.AuthServer
 
                         if (result.Succeeded)
                         {
-                            Log.Debug($"Role [{role}] successfully created");
+                            Log.Debug("Role {@role} successfully created", role);
                         }
                         else
                         {
-                            Log.Debug($"There was a problem creating role [{role}]");
+                            Log.Debug("There was a problem creating role {@role}", role);
                         }
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         private static async Task CreateTestUsers(IApplicationBuilder app, IEnumerable<UserSeed> users)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -130,138 +203,23 @@ namespace Poseidon.AuthServer
                         var password = new PasswordHasher<PoseidonAuthServerUser>();
                         var hashed = password.HashPassword(newUser, userSeed.Password);
                         newUser.PasswordHash = hashed;
-                        
+
                         var result = await userManager.CreateAsync(newUser, userSeed.Password);
 
                         await userManager.AddToRoleAsync(newUser, userSeed.Role);
 
                         if (result.Succeeded)
                         {
-                            Log.Debug($"User [{userSeed.Username}] with role [{userSeed.Role}] successfully created");
+                            Log.Debug("User [{@user}] successfully created", userSeed);
                         }
                         else
                         {
                             Log.Debug(
-                                $"There was a problem creating the user [{userSeed.Username}] with role [{userSeed.Role}]");
+                                "There was a problem user {@user}", userSeed);
                         }
                     }
                 }
             }
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllersWithViews();
-            services.AddMvc();
-
-            services.AddLogging();
-
-            // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
-            // configures IIS in-proc settings
-            services.Configure<IISServerOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
-            services.AddDbContext<PoseidonAuthServerContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("PoseidonAuthServerContextConnection")));
-
-            services.AddDefaultIdentity<PoseidonAuthServerUser>(
-                    options => options.SignIn.RequireConfirmedAccount = false)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<PoseidonAuthServerContext>()
-                .AddDefaultTokenProviders();
-
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
-            var builder = services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                })
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = b =>
-                        b.UseSqlServer(
-                            Configuration.GetConnectionString("PoseidonAuthServerIdentityConfigurationConnection"),
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = b =>
-                        b.UseSqlServer(
-                            Configuration.GetConnectionString("PoseidonAuthServerIdentityOperationalConnection"),
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddAspNetIdentity<PoseidonAuthServerUser>();
-
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
-
-            services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to http://localhost:5000/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
-        }
-
-        public void Configure(IApplicationBuilder app)
-        {
-            app.UseRouting();
-
-            if (Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-
-            InitializeDatabase(app);
-            
-            CreateIdentityRoles(app, new[] {"Admin", "User"}).Wait();
-            
-            CreateTestUsers(app, new[]
-            {
-                new UserSeed
-                {
-                    Email = "admin@poseidon.test",
-                    Username = "admin@poseidon.test",
-                    Password = "Pass123$",
-                    Role = "Admin"
-                },
-                new UserSeed
-                {
-                    Email = "user@poseidon.test",
-                    Username = "user@poseidon.test",
-                    Password = "Pass123$",
-                    Role = "User"
-                }
-            }).Wait();
-
-            app.UseStaticFiles();
-
-            app.UseRouting();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapRazorPages();
-            });
         }
     }
 }
