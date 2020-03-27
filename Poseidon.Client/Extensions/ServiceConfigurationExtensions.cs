@@ -98,6 +98,13 @@ namespace Poseidon.Client.Extensions
          * Internal helper methods.
          * 
          */
+        private static void ConfigureAuthServerContext(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<PoseidonAuthServerContext>(options =>
+                options.UseSqlServer(
+                    configuration.GetConnectionString("PoseidonAuthServerContextConnection")));
+        }
+
         private static void ConfigureDefaultIdentity(IServiceCollection services)
         {
             services.AddDefaultIdentity<PoseidonAuthServerUser>(
@@ -105,13 +112,6 @@ namespace Poseidon.Client.Extensions
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<PoseidonAuthServerContext>()
                 .AddDefaultTokenProviders();
-        }
-
-        private static void ConfigureAuthServerContext(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<PoseidonAuthServerContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("PoseidonAuthServerContextConnection")));
         }
     }
 }

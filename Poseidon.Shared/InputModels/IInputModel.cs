@@ -1,4 +1,4 @@
-﻿namespace Poseidon.API.Models
+﻿namespace Poseidon.Shared.InputModels
 {
     /// <summary>
     /// Provides null-check capability in the ValidateModelAttribute

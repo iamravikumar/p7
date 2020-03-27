@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poseidon.Client.Data;
 using Poseidon.Client.Areas.Identity.Data;
+using PoseidonAuthServerContext = Poseidon.Client.Areas.Identity.Data.PoseidonAuthServerContext;
 
 namespace Poseidon.Client.Migrations
 {

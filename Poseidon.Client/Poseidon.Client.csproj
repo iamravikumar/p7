@@ -22,4 +22,8 @@
 
         <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Poseidon.Shared\Poseidon.Shared.csproj" />
+    </ItemGroup>
 </Project>

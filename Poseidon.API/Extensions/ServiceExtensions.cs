@@ -30,7 +30,7 @@ namespace Poseidon.API.Extensions
                 .AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:5000";
+                    options.Authority = "https://localhost:5000";
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "poseidon_api";
                 });
@@ -109,12 +109,12 @@ namespace Poseidon.API.Extensions
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri("http://localhost:5000/connect/authorize", UriKind.Absolute),
+                            AuthorizationUrl = new Uri("https://localhost:5000/connect/authorize", UriKind.Absolute),
                             Scopes = new Dictionary<string, string>
                             {
                                 {"poseidon_api", "Poseidon API"},
                             },
-                            TokenUrl = new Uri("http://localhost:5000/connect/token")
+                            TokenUrl = new Uri("https://localhost:5000/connect/token")
                         }
                     }
                 });

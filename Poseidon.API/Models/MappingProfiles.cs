@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Models
 {

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Models;
 using Poseidon.API.Repositories;
 using Poseidon.API.Services.Interfaces;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Services
 {

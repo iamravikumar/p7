@@ -33,4 +33,8 @@
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.1.0" />
     </ItemGroup>
     
+    <ItemGroup>
+      <ProjectReference Include="..\Poseidon.Shared\Poseidon.Shared.csproj" />
+    </ItemGroup>
+    
 </Project>

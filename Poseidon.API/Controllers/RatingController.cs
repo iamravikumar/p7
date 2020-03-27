@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Poseidon.API.ActionFilters;
 using Poseidon.API.Models;
 using Poseidon.API.Services.Interfaces;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Controllers
 {

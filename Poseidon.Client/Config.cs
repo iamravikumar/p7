@@ -19,7 +19,7 @@ namespace Poseidon.Client
 
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
-                {new ApiResource("poseidon_api", "Poseidon API"),};
+                { new ApiResource("poseidon_api", "Poseidon API"), };
 
         public static IEnumerable<IdentityServer4.Models.Client> Clients =>
             new IdentityServer4.Models.Client[]
@@ -32,7 +32,7 @@ namespace Poseidon.Client
                     {
                         new Secret("7c3c1e25-f013-4651-901c-443927a6a90e".Sha256())
                     },
-                    RedirectUris = {"http://getpostman.com/oauth2/callback"},
+                    RedirectUris = { "http://getpostman.com/oauth2/callback" },
                     AllowAccessTokensViaBrowser = true,
                     AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
                     AllowedScopes =
@@ -43,18 +43,18 @@ namespace Poseidon.Client
                 // interactive ASP.NET Razor Pages client
                 new IdentityServer4.Models.Client
                 {
-                    ClientId = "poseidon_razor", 
-                    ClientSecrets = {new Secret("secret".Sha256())},
+                    ClientId = "poseidon_razor",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     RequireConsent = false,
                     RequirePkce = true,
 
                     // where to redirect to after login
-                    RedirectUris = {"http://localhost:5002/signin-oidc"},
+                    RedirectUris = { "http://localhost:5002/signin-oidc" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = {"http://localhost:5002/signout-callback-oidc"},
+                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
@@ -74,10 +74,10 @@ namespace Poseidon.Client
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris =
                     {
-                        "http://localhost:5001/oauth2-redirect.html"
+                        "https://localhost:5001/oauth2-redirect.html"
                     },
-                    AllowedCorsOrigins = {"http://localhost:5001"},
-                    AllowedScopes = {"poseidon_api"}
+                    AllowedCorsOrigins = { "https://localhost:5001" },
+                    AllowedScopes = { "poseidon_api" }
                 }
             };
     }

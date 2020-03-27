@@ -14,7 +14,7 @@ namespace Poseidon.API.Extensions
                 c.OAuthClientId("swagger_ui");
                 c.OAuthAppName("Swagger UI");
                 c.OAuthClientSecret("secret");
-                c.OAuth2RedirectUrl("http://localhost:5001/oauth2-redirect.html");
+                c.OAuth2RedirectUrl("https://localhost:5001/oauth2-redirect.html");
             });
         }
     }

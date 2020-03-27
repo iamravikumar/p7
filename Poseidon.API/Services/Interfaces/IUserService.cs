@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Poseidon.API.Models;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Services
 {
