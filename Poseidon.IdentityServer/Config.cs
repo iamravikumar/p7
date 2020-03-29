@@ -40,31 +40,6 @@ namespace Poseidon.Client
                         "poseidon_api"
                     },
                 },
-                // interactive ASP.NET Razor Pages client
-                new IdentityServer4.Models.Client
-                {
-                    ClientId = "poseidon_razor",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    RequireConsent = false,
-                    RequirePkce = true,
-
-                    // where to redirect to after login
-                    RedirectUris = { "http://localhost:5002/signin-oidc" },
-
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "poseidon_api"
-                    },
-
-                    AllowOfflineAccess = true
-                },
                 // Swagger UI
                 new IdentityServer4.Models.Client
                 {
@@ -78,6 +53,24 @@ namespace Poseidon.Client
                     },
                     AllowedCorsOrigins = { "https://localhost:5001" },
                     AllowedScopes = { "poseidon_api" }
+                },
+                // Blazor/WASM client
+                new IdentityServer4.Models.Client
+                {
+                    ClientId = "poseidon_client",
+                    ClientName = "Poseidon Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+                    RedirectUris = { "https://localhost:5002/authentication/login-callback" },
+                    PostLogoutRedirectUris = { "https://localhost:5002/" },
+                    AllowedCorsOrigins = { "https://localhost:5002" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "poseidon_api"
+                    }
                 }
             };
     }

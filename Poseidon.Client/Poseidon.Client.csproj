@@ -1,29 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <RazorLangVersion>3.0</RazorLangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.1.0" />
-        <PackageReference Include="IdentityServer4.EntityFramework" Version="4.0.0-preview.2" />
-
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.0" />
-
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
-
-        <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-
-        <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Poseidon.Shared\Poseidon.Shared.csproj" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview2.20160.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-preview2.20160.5" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview2.20160.5" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview2.20160.5"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="3.2.0-preview2.20160.5"/>
     </ItemGroup>
 </Project>

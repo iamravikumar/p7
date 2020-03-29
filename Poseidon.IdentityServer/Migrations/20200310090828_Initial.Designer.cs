@@ -158,7 +158,7 @@ namespace Poseidon.Client.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Poseidon.Client.Areas.Identity.Data.PoseidonAuthServerUser", b =>
+            modelBuilder.Entity("Poseidon.IdentityServer.Areas.Identity.Data.PoseidonAuthServerUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -234,7 +234,7 @@ namespace Poseidon.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Poseidon.Client.Areas.Identity.Data.PoseidonAuthServerUser", null)
+                    b.HasOne("Poseidon.IdentityServer.Areas.Identity.Data.PoseidonAuthServerUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -243,7 +243,7 @@ namespace Poseidon.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Poseidon.Client.Areas.Identity.Data.PoseidonAuthServerUser", null)
+                    b.HasOne("Poseidon.IdentityServer.Areas.Identity.Data.PoseidonAuthServerUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -258,7 +258,7 @@ namespace Poseidon.Client.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Poseidon.Client.Areas.Identity.Data.PoseidonAuthServerUser", null)
+                    b.HasOne("Poseidon.IdentityServer.Areas.Identity.Data.PoseidonAuthServerUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -267,7 +267,7 @@ namespace Poseidon.Client.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Poseidon.Client.Areas.Identity.Data.PoseidonAuthServerUser", null)
+                    b.HasOne("Poseidon.IdentityServer.Areas.Identity.Data.PoseidonAuthServerUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

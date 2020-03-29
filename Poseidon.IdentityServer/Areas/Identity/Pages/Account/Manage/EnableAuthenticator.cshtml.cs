@@ -146,7 +146,7 @@ namespace Poseidon.Client.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("Poseidon.Client"),
+                _urlEncoder.Encode("Poseidon.IdentityServer"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }
