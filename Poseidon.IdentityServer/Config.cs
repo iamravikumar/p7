@@ -5,6 +5,7 @@
 using IdentityServer4.Models;
 using System.Collections.Generic;
 using IdentityServer4;
+using IdentityModel;
 
 namespace Poseidon.Client
 {
@@ -15,11 +16,12 @@ namespace Poseidon.Client
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource("role", new[] { "role" })
             };
 
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
-                { new ApiResource("poseidon_api", "Poseidon API"), };
+                { new ApiResource("poseidon_api", "Poseidon API", new List<string> { "role" }), };
 
         public static IEnumerable<IdentityServer4.Models.Client> Clients =>
             new IdentityServer4.Models.Client[]
@@ -62,15 +64,22 @@ namespace Poseidon.Client
                     AllowedGrantTypes = GrantTypes.Implicit,
                     RequirePkce = true,
                     RequireClientSecret = false,
+
                     RedirectUris = { "https://localhost:5002/authentication/login-callback" },
                     PostLogoutRedirectUris = { "https://localhost:5002/" },
                     AllowedCorsOrigins = { "https://localhost:5002" },
+
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "poseidon_api"
-                    }
+                        "poseidon_api",
+                        "roles",
+                        "role"
+                    },
+                    AllowAccessTokensViaBrowser = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    //AlwaysSendClientClaims = true
                 }
             };
     }

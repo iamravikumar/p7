@@ -11,7 +11,7 @@ using System;
 
 namespace Poseidon.Client.Data.Migrations
 {
-    [DbContext(typeof(PoseidonAuthServerContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20180109192453_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

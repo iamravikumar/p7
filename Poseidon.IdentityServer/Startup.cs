@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
@@ -47,6 +48,8 @@ namespace Poseidon.Client
             services.ConfigureIdentityServer(Configuration);
 
             services.ConfigureAuthentication();
+
+            services.AddScoped<IdentityServer4.Services.IProfileService, Services.ProfileService>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -165,11 +168,11 @@ namespace Poseidon.Client
 
                         if (result.Succeeded)
                         {
-                            Log.Debug("Role {@role} successfully created", role);
+                            Log.Information("Role {@role} successfully created", role);
                         }
                         else
                         {
-                            Log.Debug("There was a problem creating role {@role}", role);
+                            Log.Information("There was a problem creating role {@role}", role);
                         }
                     }
                 }
@@ -200,7 +203,8 @@ namespace Poseidon.Client
                             Email = userSeed.Email,
                             UserName = userSeed.Username,
                             EmailConfirmed = true,
-                            PhoneNumberConfirmed = true
+                            PhoneNumberConfirmed = true,
+                            Role = userSeed.Role
                         };
 
                         var password = new PasswordHasher<PoseidonAuthServerUser>();
@@ -209,15 +213,17 @@ namespace Poseidon.Client
 
                         var result = await userManager.CreateAsync(newUser, userSeed.Password);
 
-                        await userManager.AddToRoleAsync(newUser, userSeed.Role);
+                        var createdUser = await userManager.FindByEmailAsync(userSeed.Email);
+
+                        await userManager.AddClaimAsync(createdUser, new Claim("role", userSeed.Role));
 
                         if (result.Succeeded)
                         {
-                            Log.Debug("User [{@user}] successfully created", userSeed);
+                            Log.Information("User [{@user}] successfully created", userSeed);
                         }
                         else
                         {
-                            Log.Debug(
+                            Log.Information(
                                 "There was a problem user {@user}", userSeed);
                         }
                     }

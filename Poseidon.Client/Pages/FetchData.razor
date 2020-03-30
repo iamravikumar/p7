@@ -1,55 +1,50 @@
 ﻿@page "/fetchdata"
-@inject HttpClient Http
+@attribute [Authorize]
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IAccessTokenProvider AuthenticationService
+@inject NavigationManager Navigation
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (claims == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @foreach (var claim in claims)
+    {
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
+    }
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+
+    private System.Security.Claims.Claim[] claims;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-    }
 
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
+        var httpClient = new HttpClient();
+        //httpClient.BaseAddress = new Uri(Navigation.BaseUri);
 
-        public int TemperatureC { get; set; }
+        var tokenResult = await AuthenticationService.RequestAccessToken();
 
-        public string Summary { get; set; }
+        if (tokenResult.TryGetToken(out var token))
+        {
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Value}");
+            claims = await httpClient.GetJsonAsync<System.Security.Claims.Claim[]>("https://localhost:5000/connect/userinfo");
 
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        }
+        else
+        {
+            Navigation.NavigateTo(tokenResult.RedirectUrl);
+        }
+
     }
 }

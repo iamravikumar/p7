@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poseidon.Client.Areas.Identity.Data;
 
 namespace Poseidon.Client.Migrations
 {
     [DbContext(typeof(PoseidonAuthServerContext))]
-    partial class PoseidonAuthServerContextModelSnapshot : ModelSnapshot
+    [Migration("20200330134548_UserRole")]
+    partial class UserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -4,9 +4,9 @@ using Poseidon.Client.Models;
 
 namespace Poseidon.Client.Data
 {
-    public class PoseidonAuthServerContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public PoseidonAuthServerContext(DbContextOptions<PoseidonAuthServerContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
