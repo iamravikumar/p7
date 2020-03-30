@@ -1,0 +1,18 @@
+@inherits BidListBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/bidlist"
+@attribute [Authorize]
+
+@if (BidLists == null)
+{
+    <p>Loading...</p>
+}
+else {
+    <ul>
+    @foreach (var item in BidLists)
+    {
+        <li>@item.Account</li>
+    }
+    </ul>
+}

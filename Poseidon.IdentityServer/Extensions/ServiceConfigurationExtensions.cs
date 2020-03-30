@@ -56,6 +56,8 @@ namespace Poseidon.Client.Extensions
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
+
+                    options.IssuerUri = "https://localhost:5000";
                 })
                 .AddConfigurationStore(options =>
                 {

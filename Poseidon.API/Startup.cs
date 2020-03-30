@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Poseidon.API.Extensions;
 
 namespace Poseidon.API
@@ -62,6 +63,14 @@ namespace Poseidon.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(options =>
+                options
+                    .WithOrigins("https://localhost:5002")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithHeaders(HeaderNames.AccessControlAllowOrigin, "*")
+            );
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
