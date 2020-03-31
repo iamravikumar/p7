@@ -16,6 +16,6 @@ namespace Poseidon.Shared.InputModels
         public string FitchRating { get; set; }
         
         [Range(0, short.MaxValue)]
-        public short? OrderNumber { get; set; }
+        public int? OrderNumber { get; set; }
     }
 }
