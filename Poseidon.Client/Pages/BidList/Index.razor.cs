@@ -29,7 +29,7 @@ namespace Poseidon.Client.Pages.BidList
 
                 try
                 {
-                    BidListModels = await httpClient.GetJsonAsync<List<BidListInputModel>>("https://localhost:5001/api/curvepoint");
+                    BidListModels = await httpClient.GetJsonAsync<List<BidListInputModel>>("https://localhost:5001/api/bidlist");
                 }
                 catch (Exception)
                 {
