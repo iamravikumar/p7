@@ -1,18 +1,18 @@
-@inherits BidListBase
+@inherits CurvePointBase
 @using Microsoft.AspNetCore.Authorization
 
-@page "/bidlist"
+@page "/CurvePoint"
 @attribute [Authorize]
 
-<h1>BidLists</h1>
+<h1>CurvePoints</h1>
 
 
-<a href="/bidlist/create" role="button" class="btn btn-success">
+<a href="/curvepoint/create" role="button" class="btn btn-success">
     Create
 </a>
 
 
-@if (BidListModels == null)
+@if (CurvePointModels == null)
 {
     <p>Loading...</p>
 }
@@ -22,22 +22,22 @@ else
         <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Account</th>
-                <th scope="col">Type</th>
-                <th scope="col">Bid Quantity</th>
+                <th scope="col">Curve Id</th>
+                <th scope="col">Term</th>
+                <th scope="col">Value</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in BidListModels)
+            @foreach (var item in CurvePointModels)
             {
                 var id = item.Id;
 
                 <tr>
                     <th scope="row">@item.Id</th>
-                    <td>@item.Account</td>
-                    <td>@item.Type</td>
-                    <td>@item.BidQuantity</td>
+                    <td>@item.CurveId</td>
+                    <td>@item.Term</td>
+                    <td>@item.Value</td>
                     <td>
                         <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Edit(id))">Edit</NavLink>
                         <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Delete(id))">Delete</NavLink>

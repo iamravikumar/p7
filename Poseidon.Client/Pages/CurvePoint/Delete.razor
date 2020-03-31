@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inherits DeleteBase
+@page "/curvepoint/delete/{Id:int}"
+@attribute [Authorize]
+
+<h1>Delete</h1>
+
+@if (CurvePointModel == null)
+{
+    <p>Loading...</p>
+}
+else if (!OperationSuccess)
+{
+    <p>This action cannot be undone. Are you sure you wish to delete the following item?</p>
+
+
+    <ul>
+        <li><em>Id:</em>@CurvePointModel.Id</li>
+    </ul>
+
+    <button class="btn btn-danger" @onclick="@(() => Delete(Id))">Delete</button>
+    <button class="btn btn-info" @onclick="CancelDelete">Cancel</button>
+}
+else
+{
+    <p>The item was successfully deleted.</p>
+
+    <button class="btn btn-info" @onclick="ReturnHome">Home</button>
+}

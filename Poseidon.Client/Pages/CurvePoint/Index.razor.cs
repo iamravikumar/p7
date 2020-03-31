@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Poseidon.Shared.InputModels;
 
 
-namespace Poseidon.Client.Pages.BidList
+namespace Poseidon.Client.Pages.CurvePoint
 {
-    public class BidListBase : ComponentBase
+    public class CurvePointBase : ComponentBase
     {
         [Inject] public IAccessTokenProvider AuthenticationService { get; set; }
         [Inject] public NavigationManager Navigation { get; set; }
 
-        protected List<BidListInputModel> BidListModels { get; set; }
+        protected List<CurvePointInputModel> CurvePointModels { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -29,11 +29,11 @@ namespace Poseidon.Client.Pages.BidList
 
                 try
                 {
-                    BidListModels = await httpClient.GetJsonAsync<List<BidListInputModel>>("https://localhost:5001/api/curvepoint");
+                    CurvePointModels = await httpClient.GetJsonAsync<List<CurvePointInputModel>>("https://localhost:5001/api/curvepoint");
                 }
                 catch (Exception)
                 {
-                    BidListModels = new List<BidListInputModel>();
+                    CurvePointModels = new List<CurvePointInputModel>();
                 }
             }
             else
@@ -44,12 +44,12 @@ namespace Poseidon.Client.Pages.BidList
 
         protected void Edit(int id)
         {
-            Navigation.NavigateTo($"/bidlist/edit/{id}");
+            Navigation.NavigateTo($"/CurvePoint/edit/{id}");
         }
 
         protected void Delete(int id)
         {
-            Navigation.NavigateTo($"/bidlist/delete/{id}");
+            Navigation.NavigateTo($"/CurvePoint/delete/{id}");
         }
     }
 }

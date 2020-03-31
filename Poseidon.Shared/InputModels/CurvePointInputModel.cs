@@ -8,7 +8,7 @@ namespace Poseidon.Shared.InputModels
         public int Id { get; set; }
         
         [Range(0, short.MaxValue)]
-        public short? CurveId { get; set; }
+        public int? CurveId { get; set; }
         
         [DataType(DataType.Date)]
         public DateTime? AsOfDate { get; set; }
