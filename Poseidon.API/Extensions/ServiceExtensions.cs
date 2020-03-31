@@ -55,21 +55,18 @@ namespace Poseidon.API.Extensions
             if (environment.IsTest())
             {
                 services.AddControllers(config =>
-                    {
-                        config.Filters.Add(new LogAttribute());
-                        config.Filters.Add(new AllowAnonymousFilter());
-                    })
-                    .AddFluentValidation(fv =>
-                        fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                {
+                    config.Filters.Add(new LogAttribute());
+                    config.Filters.Add(new AllowAnonymousFilter());
+                });
+                // .AddFluentValidation(fv =>
+                //     fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             }
             else
             {
-                services.AddControllers(config =>
-                    {
-                        config.Filters.Add(new LogAttribute());
-                    })
-                    .AddFluentValidation(fv =>
-                        fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                services.AddControllers(config => { config.Filters.Add(new LogAttribute()); });
+                // .AddFluentValidation(fv =>
+                //     fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             }
         }
 

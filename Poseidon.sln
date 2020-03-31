@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.API.Test.Integrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.API.Test.Shared", "Poseidon.API.Test.Shared\Poseidon.API.Test.Shared.csproj", "{4428905B-342E-4A05-BDF0-5E1CC48C484F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.Shared", "Poseidon.Shared\Poseidon.Shared.csproj", "{927FC75C-9571-4927-AF81-C2E15BD35157}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.Shared", "Poseidon.Shared\Poseidon.Shared.csproj", "{927FC75C-9571-4927-AF81-C2E15BD35157}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poseidon.Client", "Poseidon.Client\Poseidon.Client.csproj", "{2321A8DA-EA44-47F7-9E8A-7CC9EF83DC40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poseidon.Client", "Poseidon.Client\Poseidon.Client.csproj", "{2321A8DA-EA44-47F7-9E8A-7CC9EF83DC40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

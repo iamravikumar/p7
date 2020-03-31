@@ -7,16 +7,6 @@
 <AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity.Name!
-        You are a:
-        @if (context.User.IsInRole("Admin") || context.User.IsInRole("admin"))
-        {
-            <span>admin</span>
-        }
-
-        @if (context.User.IsInRole("user") || context.User.IsInRole("user"))
-        {
-            <span>user</span>
-        }
         <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
     </Authorized>
     <NotAuthorized>

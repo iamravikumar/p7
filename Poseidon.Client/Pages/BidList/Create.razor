@@ -1,0 +1,35 @@
+﻿@inherits CreateBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/bidlist/create"
+@attribute [Authorize]
+
+<h1>Create</h1>
+
+<EditForm Model="BidListModel" OnValidSubmit="@HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary Model="@BidListModel" />
+
+    <div class="form-row">
+        <label>Account</label>
+        <InputText @bind-Value="@BidListModel.Account" id="account" placeholder="Account" class="form-control" />
+        <ValidationMessage For="@(() => BidListModel.Account)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Type</label>
+        <InputText @bind-Value="@BidListModel.Type" id="type" placeholder="Type" class="form-control" />
+        <ValidationMessage For="@(() => BidListModel.Type)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Bid Quantity</label>
+        <InputNumber @bind-Value="@BidListModel.BidQuantity" id="bidquantity" placeholder="Bid Quantity" class="form-control" />
+        <ValidationMessage For="@(() => BidListModel.BidQuantity)" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg mt-4">Update</button>
+    <button @onclick="@CancelCreate" class="btn btn-danger btn-lg mt-4">Cancel</button>
+
+</EditForm>

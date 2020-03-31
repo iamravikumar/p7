@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Poseidon.Shared.InputModels;
 
-namespace Poseidon.Client
+
+namespace Poseidon.Client.Pages.BidList
 {
     public class BidListBase : ComponentBase
     {
@@ -30,6 +31,16 @@ namespace Poseidon.Client
             {
                 Navigation.NavigateTo(tokenResult.RedirectUrl);
             }
+        }
+
+        protected void Edit(int id)
+        {
+            Navigation.NavigateTo($"/bidlist/edit/{id}");
+        }
+
+        protected void Delete(int id)
+        {
+            Navigation.NavigateTo($"/bidlist/delete/{id}");
         }
     }
 }
