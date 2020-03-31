@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,13 @@ namespace Poseidon.API
             services.ConfigureActionFilterAttributes();
 
             services.ConfigureAuthentication();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, AdminHandler>();
 
             services.ConfigureSwagger();
 
