@@ -9,6 +9,7 @@ using Poseidon.API.ActionFilters;
 using Poseidon.API.Data;
 using Poseidon.API.Models;
 using Poseidon.API.Services.Interfaces;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Controllers
 {
@@ -146,7 +147,9 @@ namespace Poseidon.API.Controllers
         /// <returns>Null.</returns>
         /// <response code="204">The entity was successfully created.</response>
         /// <response code="401">The user is not authorized to access this resource.</response>
+        /// <response code="403">The user lacks privileges to access resource.</response>
         /// <response code="404">The specified entity was not found.</response>
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

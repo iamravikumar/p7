@@ -28,12 +28,25 @@ namespace Poseidon.API.Extensions
         {
             services
                 .AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "http://localhost:5000";
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "poseidon_api";
-                });
+                 .AddJwtBearer(options =>
+                 {
+                     options.Authority = "https://localhost:5000";
+                     options.Audience = "https://localhost:5001";
+                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                     {
+                         ValidateIssuerSigningKey = false,
+                         ValidateIssuer = true,
+                         ValidateAudience = false
+                     };
+                 });
+            //.AddIdentityServerAuthentication("Bearer", options =>
+            //{
+            //    options.Authority = "https://localhost:5000";
+            //    options.RequireHttpsMetadata = false;
+
+            //    options.ApiName = "poseidon_api";
+            //    options.ApiSecret = "apisecret";
+            //});
         }
 
         /// <summary>
@@ -46,21 +59,18 @@ namespace Poseidon.API.Extensions
             if (environment.IsTest())
             {
                 services.AddControllers(config =>
-                    {
-                        config.Filters.Add(new LogAttribute());
-                        config.Filters.Add(new AllowAnonymousFilter());
-                    })
-                    .AddFluentValidation(fv =>
-                        fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                {
+                    config.Filters.Add(new LogAttribute());
+                    config.Filters.Add(new AllowAnonymousFilter());
+                });
+                // .AddFluentValidation(fv =>
+                //     fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             }
             else
             {
-                services.AddControllers(config =>
-                    {
-                        config.Filters.Add(new LogAttribute());
-                    })
-                    .AddFluentValidation(fv =>
-                        fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                services.AddControllers(config => { config.Filters.Add(new LogAttribute()); });
+                // .AddFluentValidation(fv =>
+                //     fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             }
         }
 
@@ -98,7 +108,7 @@ namespace Poseidon.API.Extensions
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 config.IncludeXmlComments(xmlPath);
-                
+
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -109,12 +119,12 @@ namespace Poseidon.API.Extensions
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri("http://localhost:5000/connect/authorize", UriKind.Absolute),
+                            AuthorizationUrl = new Uri("https://localhost:5000/connect/authorize", UriKind.Absolute),
                             Scopes = new Dictionary<string, string>
                             {
                                 {"poseidon_api", "Poseidon API"},
                             },
-                            TokenUrl = new Uri("http://localhost:5000/connect/token")
+                            TokenUrl = new Uri("https://localhost:5000/connect/token")
                         }
                     }
                 });
@@ -166,6 +176,7 @@ namespace Poseidon.API.Extensions
             services.AddTransient<IRatingService, RatingService>();
             services.AddTransient<IRuleNameService, RuleNameService>();
             services.AddTransient<ITradeService, TradeService>();
+            services.AddTransient<IUserService, UserService>();
         }
     }
 }

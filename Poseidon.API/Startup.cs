@@ -1,10 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Poseidon.API.Extensions;
 
 namespace Poseidon.API
@@ -31,6 +33,13 @@ namespace Poseidon.API
             services.ConfigureActionFilterAttributes();
 
             services.ConfigureAuthentication();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, AdminHandler>();
 
             services.ConfigureSwagger();
 
@@ -62,6 +71,14 @@ namespace Poseidon.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(options =>
+                options
+                    .WithOrigins("https://localhost:5002")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithHeaders(HeaderNames.AccessControlAllowOrigin, "*")
+            );
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

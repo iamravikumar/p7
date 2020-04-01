@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentValidation;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Models.Validators
 {

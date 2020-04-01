@@ -5,10 +5,11 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Poseidon.API.Models;
 using Poseidon.API.Repositories;
+using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

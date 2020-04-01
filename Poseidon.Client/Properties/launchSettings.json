@@ -1,10 +1,10 @@
-﻿{
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5356",
-      "sslPort": 44306
+      "applicationUrl": "http://localhost:32619",
+      "sslPort": 44348
     }
   },
   "profiles": {
@@ -18,7 +18,7 @@
     "Poseidon.Client": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:5002",
+      "applicationUrl": "https://localhost:5002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

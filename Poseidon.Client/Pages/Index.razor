@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@page "/"
+
+<h1>Poseidon</h1>
+
+<AuthorizeView>
+    @foreach (var claim in context.User.Claims)
+    {
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
+
+        @*<p>@context.User.</p>*@
+    }
+</AuthorizeView>
