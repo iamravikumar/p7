@@ -55,10 +55,10 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllBidListsAsViewModelsAsync()
+        public async Task TestGetAllBidListsAsInputModelsAsync()
         {
             // Arrange
-            IEnumerable<BidListViewModel> result;
+            IEnumerable<BidListInputModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -71,14 +71,14 @@ namespace Poseidon.Test
                 var service = new BidListService(repositoryWrapper, _mapper);
 
                 // Act
-                result = await service.GetAllBidListsAsViewModelsAsync();
+                result = await service.GetAllBidListsAsInputModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<BidListViewModel>(result.First());
+            Assert.IsAssignableFrom<BidListInputModel>(result.First());
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetBidListByIdAsViewModelAsyncIdValid()
+        public async Task TestGetBidListByIdAsInputModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -122,11 +122,11 @@ namespace Poseidon.Test
                 var service = new BidListService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetBidListByIdAsViewModelASync(1);
+                var result = await service.GetBidListByIdAsInputModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<BidListViewModel>(result);
+                Assert.IsAssignableFrom<BidListInputModel>(result);
                 Assert.Equal("one account", result.Account);
 
                 context.Database.EnsureDeleted();
@@ -159,7 +159,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetBidListByIdAsViewModelAsyncIdInvalid()
+        public async Task TestGetBidListByIdAsInputModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -173,7 +173,7 @@ namespace Poseidon.Test
                 var service = new BidListService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetBidListByIdAsViewModelASync(100);
+                var result = await service.GetBidListByIdAsInputModelASync(100);
 
                 // Assert
                 Assert.Null(result);

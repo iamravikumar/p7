@@ -37,14 +37,6 @@ namespace Poseidon.API.Extensions
                          ValidateAudience = false
                      };
                  });
-            //.AddIdentityServerAuthentication("Bearer", options =>
-            //{
-            //    options.Authority = "https://localhost:5000";
-            //    options.RequireHttpsMetadata = false;
-
-            //    options.ApiName = "poseidon_api";
-            //    options.ApiSecret = "apisecret";
-            //});
         }
 
         /// <summary>
@@ -61,14 +53,10 @@ namespace Poseidon.API.Extensions
                     config.Filters.Add(new LogAttribute());
                     config.Filters.Add(new AllowAnonymousFilter());
                 });
-                // .AddFluentValidation(fv =>
-                //     fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             }
             else
             {
                 services.AddControllers(config => { config.Filters.Add(new LogAttribute()); });
-                // .AddFluentValidation(fv =>
-                //     fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             }
         }
 

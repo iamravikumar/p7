@@ -34,7 +34,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<BidListViewModel>> result;
+            ActionResult<IEnumerable<BidListInputModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -54,7 +54,7 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<IEnumerable<BidListViewModel>>(actionResult.Value);
+            var objectResult = Assert.IsAssignableFrom<IEnumerable<BidListInputModel>>(actionResult.Value);
             Assert.Equal(3, objectResult.Count());
         }
 
@@ -64,7 +64,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<BidListViewModel>> result;
+            ActionResult<IEnumerable<BidListInputModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -90,7 +90,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListViewModel> result;
+            ActionResult<BidListInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -116,7 +116,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListViewModel> result;
+            ActionResult<BidListInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -144,7 +144,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<BidListViewModel> result;
+            ActionResult<BidListInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -164,7 +164,7 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<BidListViewModel>(actionResult.Value);
+            var objectResult = Assert.IsAssignableFrom<BidListInputModel>(actionResult.Value);
             Assert.Equal("one account", objectResult.Account);
         }
 
