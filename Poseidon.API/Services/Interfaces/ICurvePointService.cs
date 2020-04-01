@@ -8,9 +8,9 @@ namespace Poseidon.API.Services.Interfaces
     public interface ICurvePointService
     {
         Task<IEnumerable<CurvePoint>> GetAllCurvePointsAsync();
-        Task<IEnumerable<CurvePointViewModel>> GetAllCurvePointsAsViewModelsAsync();
+        Task<IEnumerable<CurvePointInputModel>> GetAllCurvePointsAsInputModelsAsync();
         Task<CurvePoint> GetCurvePointByIdAsync(int id);
-        Task<CurvePointViewModel> GetCurvePointByIdAsViewModelASync(int id);
+        Task<CurvePointInputModel> GetCurvePointByIdAsInputModelASync(int id);
         Task<int> CreateCurvePoint(CurvePointInputModel model);
         Task UpdateCurvePoint(int id, CurvePointInputModel model);
         Task DeleteCurvePoint(int id);

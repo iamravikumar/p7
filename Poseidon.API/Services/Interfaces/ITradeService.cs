@@ -8,9 +8,9 @@ namespace Poseidon.API.Services.Interfaces
     public interface ITradeService
     {
         Task<IEnumerable<Trade>> GetAllTradesAsync();
-        Task<IEnumerable<TradeViewModel>> GetAllTradesAsViewModelsAsync();
+        Task<IEnumerable<TradeInputModel>> GetAllTradesAsInputModelsAsync();
         Task<Trade> GetTradeByIdAsync(int id);
-        Task<TradeViewModel> GetTradeByIdAsViewModelASync(int id);
+        Task<TradeInputModel> GetTradeByIdAsInputModelASync(int id);
         Task<int> CreateTrade(TradeInputModel inputModel);
         Task UpdateTrade(int id, TradeInputModel inputModel);
         Task DeleteTrade(int id);

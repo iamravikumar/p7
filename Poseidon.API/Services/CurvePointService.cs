@@ -28,13 +28,13 @@ namespace Poseidon.API.Services
         public async Task<IEnumerable<CurvePoint>> GetAllCurvePointsAsync() =>
             await _unitOfWork.CurvePointRepository.GetAllAsync();
 
-        public async Task<IEnumerable<CurvePointViewModel>> GetAllCurvePointsAsViewModelsAsync()
+        public async Task<IEnumerable<CurvePointInputModel>> GetAllCurvePointsAsInputModelsAsync()
         {
             var entities = await _unitOfWork.CurvePointRepository.GetAllAsync();
 
-            var viewModels = _mapper.Map<IEnumerable<CurvePoint>, IEnumerable<CurvePointViewModel>>(entities);
+            var inputModels = _mapper.Map<IEnumerable<CurvePoint>, IEnumerable<CurvePointInputModel>>(entities);
 
-            return viewModels;
+            return inputModels;
         }
 
         /// <summary>
@@ -48,17 +48,17 @@ namespace Poseidon.API.Services
                 .FirstOrDefaultAsync();
 
         /// <summary>
-        /// Asynchronously finds a CurvePoint entity by id, and returns it as a CurvePointViewModel.
+        /// Asynchronously finds a CurvePoint entity by id, and returns it as a CurvePointInputModel.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<CurvePointViewModel> GetCurvePointByIdAsViewModelASync(int id)
+        public async Task<CurvePointInputModel> GetCurvePointByIdAsInputModelASync(int id)
         {
             var entity = await _unitOfWork.CurvePointRepository.GetByIdAsync(id);
 
-            var viewModel = _mapper.Map<CurvePointViewModel>(entity);
+            var inputModel = _mapper.Map<CurvePointInputModel>(entity);
 
-            return viewModel;
+            return inputModel;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Poseidon.API.Services
                 await _unitOfWork.CommitAsync();
                 return entity.Id;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
@@ -120,7 +120,7 @@ namespace Poseidon.API.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
@@ -150,7 +150,7 @@ namespace Poseidon.API.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
