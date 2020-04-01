@@ -35,13 +35,13 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RatingViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<RatingInputModel>>> Get()
         {
             var results =
-                await _ratingService.GetAllRatingsAsViewModelsAsync();
+                await _ratingService.GetAllRatingsAsInputModelsAsync();
 
             var entityList =
-                results as RatingViewModel[] ?? results.ToArray();
+                results as RatingInputModel[] ?? results.ToArray();
 
             if (!entityList.Any())
             {
@@ -66,7 +66,7 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RatingViewModel>> Get(int id)
+        public async Task<ActionResult<RatingInputModel>> Get(int id)
         {
             if (id <= 0)
             {
@@ -78,7 +78,7 @@ namespace Poseidon.API.Controllers
                 return NotFound();
             }
 
-            var result = await _ratingService.GetRatingByIdAsViewModelASync(id);
+            var result = await _ratingService.GetRatingByIdAsInputModelASync(id);
 
             return Ok(result);
         }
@@ -128,8 +128,7 @@ namespace Poseidon.API.Controllers
         {
             if (!_ratingService.RatingExists(id))
             {
-                return NotFound($"No Rating enti" +
-                                $"ty matching the id [{id}] was found.");
+                return NotFound($"No Rating entity matching the id [{id}] was found.");
             }
 
             await _ratingService.UpdateRating(id, inputModel);

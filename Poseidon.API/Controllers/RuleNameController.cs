@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Poseidon.API.ActionFilters;
-using Poseidon.API.Data;
 using Poseidon.API.Models;
 using Poseidon.API.Services.Interfaces;
 using Poseidon.Shared.InputModels;
@@ -18,11 +16,11 @@ namespace Poseidon.API.Controllers
     [Authorize]
     public class RuleNameController : ControllerBase
     {
-        private readonly IRuleNameService _RuleNameService;
+        private readonly IRuleNameService _ruleNameService;
 
-        public RuleNameController(IRuleNameService RuleNameService)
+        public RuleNameController(IRuleNameService ruleNameService)
         {
-            _RuleNameService = RuleNameService;
+            _ruleNameService = ruleNameService;
         }
 
         // GET: api/RuleNames
@@ -37,13 +35,13 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RuleNameViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<RuleNameInputModel>>> Get()
         {
             var results =
-                await _RuleNameService.GetAllRuleNamesAsViewModelsAsync();
+                await _ruleNameService.GetAllRuleNamesAsInputModelsAsync();
 
             var entityList =
-                results as RuleNameViewModel[] ?? results.ToArray();
+                results as RuleNameInputModel[] ?? results.ToArray();
 
             if (!entityList.Any())
             {
@@ -68,19 +66,19 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RuleNameViewModel>> Get(int id)
+        public async Task<ActionResult<RuleNameInputModel>> Get(int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            if (!_RuleNameService.RuleNameExists(id))
+            if (!_ruleNameService.RuleNameExists(id))
             {
                 return NotFound();
             }
 
-            var result = await _RuleNameService.GetRuleNameByIdAsViewModelASync(id);
+            var result = await _ruleNameService.GetRuleNameByIdAsInputModelASync(id);
 
             return Ok(result);
         }
@@ -106,7 +104,7 @@ namespace Poseidon.API.Controllers
                 return BadRequest();
             }
 
-            var resultId = await _RuleNameService.CreateRuleName(inputModel);
+            var resultId = await _ruleNameService.CreateRuleName(inputModel);
 
             return CreatedAtAction("Get", new { id = resultId }, inputModel);
         }
@@ -128,13 +126,12 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Put(int id, RuleNameInputModel inputModel)
         {
-            if (!_RuleNameService.RuleNameExists(id))
+            if (!_ruleNameService.RuleNameExists(id))
             {
-                return NotFound($"No RuleName enti" +
-                                $"ty matching the id [{id}] was found.");
+                return NotFound($"No RuleName entity matching the id [{id}] was found.");
             }
 
-            await _RuleNameService.UpdateRuleName(id, inputModel);
+            await _ruleNameService.UpdateRuleName(id, inputModel);
 
             return NoContent();
         }
@@ -162,12 +159,12 @@ namespace Poseidon.API.Controllers
                     $"The '{nameof(id)}' argument must a non-zero, positive integer value. The passed-in value was {id}");
             }
 
-            if (!_RuleNameService.RuleNameExists(id))
+            if (!_ruleNameService.RuleNameExists(id))
             {
                 return NotFound($"No {typeof(RuleName)} entity matching the id [{id}] was found.");
             }
 
-            await _RuleNameService.DeleteRuleName(id);
+            await _ruleNameService.DeleteRuleName(id);
 
             return NoContent();
         }
