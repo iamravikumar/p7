@@ -27,11 +27,7 @@ namespace Poseidon.Client
 
                 options.UserOptions.NameClaim = "name";
                 options.UserOptions.RoleClaim = "role";
-
                 options.UserOptions.ScopeClaim = "poseidon_api";
-
-                //options.Map
-                
             });
 
             await builder.Build().RunAsync();
