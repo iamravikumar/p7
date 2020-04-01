@@ -142,7 +142,9 @@ namespace Poseidon.Client
 
                 if (!context.ApiResources.Any())
                 {
-                    foreach (var resource in Config.Apis)
+                    var resources = Config.Apis();
+
+                    foreach (var resource in resources)
                     {
                         context.ApiResources.Add(resource.ToEntity());
                     }

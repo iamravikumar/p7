@@ -28,21 +28,25 @@ namespace Poseidon.API.Extensions
         {
             services
                 .AddAuthentication("Bearer")
-                .AddJwtBearer(options => {
-                    options.Authority = "https://localhost:5000";
-                    options.Audience = "https://localhost:5001";
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
-                        ValidateIssuerSigningKey = false,
-                        ValidateIssuer = true,
-                        ValidateAudience = false
-                    };
-                });
-                // .AddIdentityServerAuthentication("Bearer", options =>
-                // {
-                //     options.Authority = "https://localhost:5000";
-                //     options.RequireHttpsMetadata = false;
-                //     options.ApiName = "poseidon_api";
-                // });
+                 .AddJwtBearer(options =>
+                 {
+                     options.Authority = "https://localhost:5000";
+                     options.Audience = "https://localhost:5001";
+                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                     {
+                         ValidateIssuerSigningKey = false,
+                         ValidateIssuer = true,
+                         ValidateAudience = false
+                     };
+                 });
+            //.AddIdentityServerAuthentication("Bearer", options =>
+            //{
+            //    options.Authority = "https://localhost:5000";
+            //    options.RequireHttpsMetadata = false;
+
+            //    options.ApiName = "poseidon_api";
+            //    options.ApiSecret = "apisecret";
+            //});
         }
 
         /// <summary>
@@ -104,7 +108,7 @@ namespace Poseidon.API.Extensions
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 config.IncludeXmlComments(xmlPath);
-                
+
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

@@ -19,9 +19,24 @@ namespace Poseidon.Client
                 new IdentityResource("role", new[] { "role" })
             };
 
-        public static IEnumerable<ApiResource> Apis =>
-            new ApiResource[]
-                { new ApiResource("poseidon_api", "Poseidon API", new List<string> { "role" }), };
+
+        public static IEnumerable<ApiResource> Apis()
+        {
+            var apiResources = new ApiResource[1];
+
+            var resource = new ApiResource
+            {
+                Name = "poseidon_api",
+                DisplayName = "Poseidon API",
+                UserClaims = new List<string> { "role" },
+                ApiSecrets = new List<Secret> { new Secret("apisecret".Sha256()) }
+            };
+
+
+            return apiResources;
+            //{ new ApiResource("poseidon_api", "Poseidon API", new List<string> { "role" }), };
+
+        }
 
         public static IEnumerable<IdentityServer4.Models.Client> Clients =>
             new IdentityServer4.Models.Client[]
@@ -59,6 +74,7 @@ namespace Poseidon.Client
                 // Blazor/WASM client
                 new IdentityServer4.Models.Client
                 {
+                    AccessTokenType = AccessTokenType.Reference,
                     ClientId = "poseidon_client",
                     ClientName = "Poseidon Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
@@ -66,7 +82,7 @@ namespace Poseidon.Client
                     RequireClientSecret = false,
 
                     RedirectUris = { "https://localhost:5002/authentication/login-callback" },
-                    PostLogoutRedirectUris = { "https://localhost:5002/" },
+                    PostLogoutRedirectUris = { "https://localhost:5002/authentication/logged-out" },
                     AllowedCorsOrigins = { "https://localhost:5002" },
 
                     AllowedScopes =
@@ -80,6 +96,7 @@ namespace Poseidon.Client
                     AllowAccessTokensViaBrowser = true,
                     AlwaysIncludeUserClaimsInIdToken = true,
                     //AlwaysSendClientClaims = true
+                    AllowOfflineAccess = false
                 }
             };
     }

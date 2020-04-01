@@ -48,6 +48,7 @@ namespace Poseidon.Client.Areas.Identity.Pages.Account
             [Display(Name = "Remember me?")] public bool RememberMe { get; set; }
         }
 
+        // https://stackoverflow.com/a/53240640/7041984
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
