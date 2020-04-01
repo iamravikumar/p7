@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Authorization
+
+@page "/Trade/edit/{Id:int}"
+@attribute [Authorize]
+@inherits TradeUpdateBase
+
+<h1>Update Rule</h1>
+
+@if (TradeModel == null)
+{
+    <p>Loading...</p>
+}
+else if (!OperationSuccess)
+{
+<EditForm Model="TradeModel" OnValidSubmit="@HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary Model="@TradeModel" />
+
+    <div class="form-row">
+        <label>Account</label>
+        <InputText @bind-Value="@TradeModel.Account" id="Account" placeholder="Account" class="form-control" />
+        <ValidationMessage For="@(() => TradeModel.Account)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Type</label>
+        <InputText @bind-Value="@TradeModel.Type" id="Type" placeholder="Type" class="form-control" />
+        <ValidationMessage For="@(() => TradeModel.Type)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Buy Quantity</label>
+        <InputNumber @bind-Value="@TradeModel.BuyQuantity" id="BuyQuantity" placeholder="Buy Quantity" class="form-control" />
+        <ValidationMessage For="@(() => TradeModel.BuyQuantity)" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg mt-4">Update</button>
+    <button @onclick="@CancelEdit" class="btn btn-danger btn-lg mt-4">Cancel</button>
+
+</EditForm>
+}
+else
+{
+<p>The item was successfully updated.</p>
+
+<button class="btn btn-info" @onclick="ReturnHome">Home</button>
+}
