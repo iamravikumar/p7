@@ -9,7 +9,7 @@ using Poseidon.Shared.InputModels;
 
 namespace Poseidon.API.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

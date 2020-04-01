@@ -1,0 +1,41 @@
+﻿@inherits CreateBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/user/create"
+@attribute [Authorize]
+
+<h1>Create</h1>
+
+<EditForm Model="UserModel" OnValidSubmit="@HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary Model="@UserModel" />
+
+    <div class="form-row">
+        <label>Username</label>
+        <InputText @bind-Value="@UserModel.Username" id="Username" placeholder="Username" class="form-control" />
+        <ValidationMessage For="@(() => UserModel.Username)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Password</label>
+        <InputText @bind-Value="@UserModel.Password" id="Password" placeholder="Password" class="form-control" />
+        <ValidationMessage For="@(() => UserModel.Password)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Full Name</label>
+        <InputText @bind-Value="@UserModel.FullName" id="FullName" placeholder="Full Name" class="form-control" />
+        <ValidationMessage For="@(() => UserModel.FullName)" class="text-danger" />
+    </div>
+
+    <div class="form-row">
+        <label>Role</label>
+        <InputText @bind-Value="@UserModel.Role" id="Role" placeholder="Role" class="form-control" />
+        <ValidationMessage For="@(() => UserModel.Role)" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg mt-4">Update</button>
+    <button @onclick="@CancelCreate" class="btn btn-danger btn-lg mt-4">Cancel</button>
+
+</EditForm>
