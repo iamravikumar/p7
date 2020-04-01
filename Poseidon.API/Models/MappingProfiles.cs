@@ -11,37 +11,37 @@ namespace Poseidon.API.Models
             CreateMap<BidListInputModel, BidList>()
                 .ForMember(entity => entity.Id, action => action.Ignore());
             
-            CreateMap<BidList, BidListViewModel>();
+            CreateMap<BidList, BidListInputModel>();
             
             // CurvePoint
             CreateMap<CurvePointInputModel, CurvePoint>()
                 .ForMember(entity => entity.Id, action => action.Ignore());
 
-            CreateMap<CurvePoint, CurvePointViewModel>();
+            CreateMap<CurvePoint, CurvePointInputModel>();
             
             // Rating
             CreateMap<RatingInputModel, Rating>()
                 .ForMember(entity => entity.Id, action => action.Ignore());
 
-            CreateMap<Rating, RatingViewModel>();
+            CreateMap<Rating, RatingInputModel>();
             
             // RuleName
             CreateMap<RuleNameInputModel, RuleName>()
                 .ForMember(entity => entity.Id, action => action.Ignore());
 
-            CreateMap<RuleName, RuleNameViewModel>();
+            CreateMap<RuleName, RuleNameInputModel>();
             
             // Trade
             CreateMap<TradeInputModel, Trade>()
                 .ForMember(entity => entity.Id, action => action.Ignore());
 
-            CreateMap<Trade, TradeViewModel>();
+            CreateMap<Trade, TradeInputModel>();
             
             // User
             CreateMap<UserInputModel, User>()
                 .ForMember(entity => entity.Id, action => action.Ignore());
 
-            CreateMap<User, UserViewModel>();
+            CreateMap<User, UserInputModel>();
         }
     }
 }

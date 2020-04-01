@@ -52,10 +52,10 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllCurvePointsAsViewModelsAsync()
+        public async Task TestGetAllCurvePointsAsInputModelsAsync()
         {
             // Arrange
-            IEnumerable<CurvePointViewModel> result;
+            IEnumerable<CurvePointInputModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -68,14 +68,14 @@ namespace Poseidon.Test
                 var service = new CurvePointService(unitOfWork, _mapper);
 
                 // Act
-                result = await service.GetAllCurvePointsAsViewModelsAsync();
+                result = await service.GetAllCurvePointsAsInputModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<CurvePointViewModel>(result.First());
+            Assert.IsAssignableFrom<CurvePointInputModel>(result.First());
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetCurvePointByIdAsViewModelAsyncIdValid()
+        public async Task TestGetCurvePointByIdAsInputModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -119,11 +119,11 @@ namespace Poseidon.Test
                 var service = new CurvePointService(unitOfWork, _mapper);
 
                 // Act
-                var result = await service.GetCurvePointByIdAsViewModelASync(1);
+                var result = await service.GetCurvePointByIdAsInputModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<CurvePointViewModel>(result);
+                Assert.IsAssignableFrom<CurvePointInputModel>(result);
                 Assert.Equal(10D, result.Value);
 
                 context.Database.EnsureDeleted();
@@ -156,7 +156,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetCurvePointByIdAsViewModelAsyncIdInvalid()
+        public async Task TestGetCurvePointByIdAsInputModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -170,7 +170,7 @@ namespace Poseidon.Test
                 var service = new CurvePointService(unitOfWork, _mapper);
 
                 // Act
-                var result = await service.GetCurvePointByIdAsViewModelASync(100);
+                var result = await service.GetCurvePointByIdAsInputModelASync(100);
 
                 // Assert
                 Assert.Null(result);

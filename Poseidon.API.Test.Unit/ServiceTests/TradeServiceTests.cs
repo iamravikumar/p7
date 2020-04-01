@@ -52,10 +52,10 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllTradesAsViewModelsAsync()
+        public async Task TestGetAllTradesAsInputModelsAsync()
         {
             // Arrange
-            IEnumerable<TradeViewModel> result;
+            IEnumerable<TradeInputModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -68,14 +68,14 @@ namespace Poseidon.Test
                 var service = new TradeService(repositoryWrapper, _mapper);
 
                 // Act
-                result = await service.GetAllTradesAsViewModelsAsync();
+                result = await service.GetAllTradesAsInputModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<TradeViewModel>(result.First());
+            Assert.IsAssignableFrom<TradeInputModel>(result.First());
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetTradeByIdAsViewModelAsyncIdValid()
+        public async Task TestGetTradeByIdAsInputModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -119,11 +119,11 @@ namespace Poseidon.Test
                 var service = new TradeService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetTradeByIdAsViewModelASync(1);
+                var result = await service.GetTradeByIdAsInputModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<TradeViewModel>(result);
+                Assert.IsAssignableFrom<TradeInputModel>(result);
                 Assert.Equal("one account", result.Account);
 
                 context.Database.EnsureDeleted();
@@ -156,7 +156,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetTradeByIdAsViewModelAsyncIdInvalid()
+        public async Task TestGetTradeByIdAsInputModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -170,7 +170,7 @@ namespace Poseidon.Test
                 var service = new TradeService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetTradeByIdAsViewModelASync(100);
+                var result = await service.GetTradeByIdAsInputModelASync(100);
 
                 // Assert
                 Assert.Null(result);

@@ -32,7 +32,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<TradeViewModel>> result;
+            ActionResult<IEnumerable<TradeInputModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -52,7 +52,7 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<IEnumerable<TradeViewModel>>(actionResult.Value);
+            var objectResult = Assert.IsAssignableFrom<IEnumerable<TradeInputModel>>(actionResult.Value);
             Assert.Equal(3, objectResult.Count());
         }
 
@@ -62,7 +62,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<TradeViewModel>> result;
+            ActionResult<IEnumerable<TradeInputModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -88,7 +88,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<TradeViewModel> result;
+            ActionResult<TradeInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -114,7 +114,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<TradeViewModel> result;
+            ActionResult<TradeInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -142,7 +142,7 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<TradeViewModel> result;
+            ActionResult<TradeInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
@@ -162,7 +162,7 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<TradeViewModel>(actionResult.Value);
+            var objectResult = Assert.IsAssignableFrom<TradeInputModel>(actionResult.Value);
             Assert.Equal("one account", objectResult.Account);
         }
 

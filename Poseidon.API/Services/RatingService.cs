@@ -28,13 +28,13 @@ namespace Poseidon.API.Services
         public async Task<IEnumerable<Rating>> GetAllRatingsAsync() =>
             await _unitOfWork.RatingRepository.GetAllAsync();
 
-        public async Task<IEnumerable<RatingViewModel>> GetAllRatingsAsViewModelsAsync()
+        public async Task<IEnumerable<RatingInputModel>> GetAllRatingsAsInputModelsAsync()
         {
             var entities = await _unitOfWork.RatingRepository.GetAllAsync();
 
-            var viewModels = _mapper.Map<IEnumerable<Rating>, IEnumerable<RatingViewModel>>(entities);
+            var inputModels = _mapper.Map<IEnumerable<Rating>, IEnumerable<RatingInputModel>>(entities);
 
-            return viewModels;
+            return inputModels;
         }
 
         /// <summary>
@@ -48,17 +48,17 @@ namespace Poseidon.API.Services
                 .FirstOrDefaultAsync();
 
         /// <summary>
-        /// Asynchronously finds a Rating entity by id, and returns it as a RatingViewModel.
+        /// Asynchronously finds a Rating entity by id, and returns it as a RatingInputModel.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<RatingViewModel> GetRatingByIdAsViewModelASync(int id)
+        public async Task<RatingInputModel> GetRatingByIdAsInputModelASync(int id)
         {
             var entity = await _unitOfWork.RatingRepository.GetByIdAsync(id);
 
-            var viewModel = _mapper.Map<RatingViewModel>(entity);
+            var inputModel = _mapper.Map<RatingInputModel>(entity);
 
-            return viewModel;
+            return inputModel;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Poseidon.API.Services
                 await _unitOfWork.CommitAsync();
                 return entity.Id;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
@@ -120,7 +120,7 @@ namespace Poseidon.API.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
@@ -150,7 +150,7 @@ namespace Poseidon.API.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;

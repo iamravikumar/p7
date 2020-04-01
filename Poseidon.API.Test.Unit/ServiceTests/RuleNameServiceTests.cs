@@ -52,10 +52,10 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllRuleNamesAsViewModelsAsync()
+        public async Task TestGetAllRuleNamesAsInputModelsAsync()
         {
             // Arrange
-            IEnumerable<RuleNameViewModel> result;
+            IEnumerable<RuleNameInputModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -68,14 +68,14 @@ namespace Poseidon.Test
                 var service = new RuleNameService(repositoryWrapper, _mapper);
 
                 // Act
-                result = await service.GetAllRuleNamesAsViewModelsAsync();
+                result = await service.GetAllRuleNamesAsInputModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<RuleNameViewModel>(result.First());
+            Assert.IsAssignableFrom<RuleNameInputModel>(result.First());
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetRuleNameByIdAsViewModelAsyncIdValid()
+        public async Task TestGetRuleNameByIdAsInputModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -119,11 +119,11 @@ namespace Poseidon.Test
                 var service = new RuleNameService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetRuleNameByIdAsViewModelASync(1);
+                var result = await service.GetRuleNameByIdAsInputModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<RuleNameViewModel>(result);
+                Assert.IsAssignableFrom<RuleNameInputModel>(result);
                 Assert.Equal("one description", result.Description);
 
                 context.Database.EnsureDeleted();
@@ -156,7 +156,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetRuleNameByIdAsViewModelAsyncIdInvalid()
+        public async Task TestGetRuleNameByIdAsInputModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -170,7 +170,7 @@ namespace Poseidon.Test
                 var service = new RuleNameService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetRuleNameByIdAsViewModelASync(100);
+                var result = await service.GetRuleNameByIdAsInputModelASync(100);
 
                 // Assert
                 Assert.Null(result);

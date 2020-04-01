@@ -8,9 +8,9 @@ namespace Poseidon.API.Services
     public interface IUserService
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<IEnumerable<UserViewModel>> GetAllUsersAsViewModelsAsync();
+        Task<IEnumerable<UserInputModel>> GetAllUsersAsInputModelsAsync();
         Task<User> GetUserByIdAsync(int id);
-        Task<UserViewModel> GetUserByIdAsViewModelASync(int id);
+        Task<UserInputModel> GetUserByIdAsInputModelASync(int id);
         Task<int> CreateUser(UserInputModel inputModel);
         Task UpdateUser(int id, UserInputModel inputModel);
         Task DeleteUser(int id);

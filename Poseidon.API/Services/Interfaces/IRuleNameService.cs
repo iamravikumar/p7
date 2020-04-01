@@ -8,9 +8,9 @@ namespace Poseidon.API.Services.Interfaces
     public interface IRuleNameService
     {
         Task<IEnumerable<RuleName>> GetAllRuleNamesAsync();
-        Task<IEnumerable<RuleNameViewModel>> GetAllRuleNamesAsViewModelsAsync();
+        Task<IEnumerable<RuleNameInputModel>> GetAllRuleNamesAsInputModelsAsync();
         Task<RuleName> GetRuleNameByIdAsync(int id);
-        Task<RuleNameViewModel> GetRuleNameByIdAsViewModelASync(int id);
+        Task<RuleNameInputModel> GetRuleNameByIdAsInputModelASync(int id);
         Task<int> CreateRuleName(RuleNameInputModel inputModel);
         Task UpdateRuleName(int id, RuleNameInputModel inputModel);
         Task DeleteRuleName(int id);

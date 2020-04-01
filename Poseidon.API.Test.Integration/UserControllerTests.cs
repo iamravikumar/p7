@@ -14,11 +14,11 @@ using Xunit;
 
 namespace Poseidon.API.Test.Integration
 {
-    public class RuleNameControllerTests
+    public class UserControllerTests
     {
         private readonly IMapper _mapper;
 
-        public RuleNameControllerTests()
+        public UserControllerTests()
         {
             var config =
                 new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
@@ -27,22 +27,22 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestGetAllRuleNamePopulated()
+        public async Task TestGetAllUserPopulated()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<RuleNameInputModel>> result;
+            ActionResult<IEnumerable<UserInputModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Get();
@@ -52,25 +52,25 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<IEnumerable<RuleNameInputModel>>(actionResult.Value);
+            var objectResult = Assert.IsAssignableFrom<IEnumerable<UserInputModel>>(actionResult.Value);
             Assert.Equal(3, objectResult.Count());
         }
 
         [Fact]
-        public async Task TestGetAllRuleNameNotPopulated()
+        public async Task TestGetAllUserNotPopulated()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<IEnumerable<RuleNameInputModel>> result;
+            ActionResult<IEnumerable<UserInputModel>> result;
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Get();
@@ -88,15 +88,15 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<RuleNameInputModel> result;
+            ActionResult<UserInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Get(0);
@@ -109,22 +109,22 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestGetRuleNameNotPopulated()
+        public async Task TestGetUserNotPopulated()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<RuleNameInputModel> result;
+            ActionResult<UserInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Get(100);
@@ -142,17 +142,17 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<RuleNameInputModel> result;
+            ActionResult<UserInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Get(1);
@@ -162,8 +162,8 @@ namespace Poseidon.API.Test.Integration
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-            var objectResult = Assert.IsAssignableFrom<RuleNameInputModel>(actionResult.Value);
-            Assert.Equal("one description", objectResult.Description);
+            var objectResult = Assert.IsAssignableFrom<UserInputModel>(actionResult.Value);
+            Assert.Equal("one username", objectResult.Username);
         }
 
         [Fact]
@@ -172,22 +172,22 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<RuleNameInputModel> result;
+            ActionResult<UserInputModel> result;
 
-            var testEntity = new RuleNameInputModel
+            var testEntity = new UserInputModel
             {
-                Description = "test description"
+                Username = "test username"
             };
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
-                Assert.Empty(context.RuleName);
+                Assert.Empty(context.User);
 
                 // Act
                 result = await controller.Post(testEntity);
@@ -196,11 +196,11 @@ namespace Poseidon.API.Test.Integration
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.Single(context.RuleName);
+                Assert.Single(context.User);
 
                 var actionResult = Assert.IsAssignableFrom<CreatedAtActionResult>(result.Result);
-                var objectResult = Assert.IsAssignableFrom<RuleNameInputModel>(actionResult.Value);
-                Assert.Equal("test description", objectResult.Description);
+                var objectResult = Assert.IsAssignableFrom<UserInputModel>(actionResult.Value);
+                Assert.Equal("test username", objectResult.Username);
 
                 context.Database.EnsureDeleted();
             }
@@ -212,17 +212,17 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            ActionResult<RuleNameInputModel> result;
+            ActionResult<UserInputModel> result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Post(null);
@@ -236,29 +236,29 @@ namespace Poseidon.API.Test.Integration
 
 
         [Fact]
-        public async Task TestPutRuleNameDoesNotExist()
+        public async Task TestPutUserDoesNotExist()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            var testModel = new RuleNameInputModel();
+            var testModel = new UserInputModel();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 var result = await controller.Put(10, testModel);
 
                 // Assert
                 var objectResult = Assert.IsAssignableFrom<NotFoundObjectResult>(result);
-                Assert.Equal("No RuleName entity matching the id [10] was found.", objectResult.Value);
+                Assert.Equal("No User entity matching the id [10] was found.", objectResult.Value);
 
                 context.Database.EnsureDeleted();
             }
@@ -270,25 +270,25 @@ namespace Poseidon.API.Test.Integration
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
-            var testModel = new RuleNameInputModel
+            var testModel = new UserInputModel
             {
-                Description = "updated description"
+                Username = "updated username"
             };
 
             ActionResult result;
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 result = await controller.Put(1, testModel);
@@ -299,7 +299,7 @@ namespace Poseidon.API.Test.Integration
                 // Assert
                 Assert.IsAssignableFrom<NoContentResult>(result);
 
-                Assert.Equal("updated description", context.RuleName.First(x => x.Id == 1).Description);
+                Assert.Equal("updated username", context.User.First(x => x.Id == 1).Username);
 
                 context.Database.EnsureDeleted();
             }
@@ -315,9 +315,9 @@ namespace Poseidon.API.Test.Integration
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 var result = await controller.Delete(0);
@@ -330,20 +330,20 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestDeleteRuleNameDoesNotExist()
+        public async Task TestDeleteUserDoesNotExist()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 var result = await controller.Delete(10);
@@ -356,31 +356,31 @@ namespace Poseidon.API.Test.Integration
         }
 
         [Fact]
-        public async Task TestDeleteRuleNameExists()
+        public async Task TestDeleteUserExists()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbRuleName(context);
+                TestUtilities.SeedTestDbUser(context);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new RuleNameService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var controller = new RuleNameController(service);
+                var controller = new UserController(service);
 
                 // Act
                 var result = await controller.Delete(1);
 
                 // Assert
                 Assert.IsAssignableFrom<NoContentResult>(result.Result);
-                Assert.Equal(2, context.RuleName.Count());
-                Assert.DoesNotContain(context.RuleName, x => x.Id == 1);
+                Assert.Equal(2, context.User.Count());
+                Assert.DoesNotContain(context.User, x => x.Id == 1);
 
                 context.Database.EnsureDeleted();
             }

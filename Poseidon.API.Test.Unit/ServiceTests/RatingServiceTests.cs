@@ -52,10 +52,10 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllRatingsAsViewModelsAsync()
+        public async Task TestGetAllRatingsAsInputModelsAsync()
         {
             // Arrange
-            IEnumerable<RatingViewModel> result;
+            IEnumerable<RatingInputModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -68,14 +68,14 @@ namespace Poseidon.Test
                 var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                result = await service.GetAllRatingsAsViewModelsAsync();
+                result = await service.GetAllRatingsAsInputModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<RatingViewModel>(result.First());
+            Assert.IsAssignableFrom<RatingInputModel>(result.First());
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetRatingByIdAsViewModelAsyncIdValid()
+        public async Task TestGetRatingByIdAsInputModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -119,11 +119,11 @@ namespace Poseidon.Test
                 var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                var result = await service.GetRatingByIdAsViewModelASync(1);
+                var result = await service.GetRatingByIdAsInputModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<RatingViewModel>(result);
+                Assert.IsAssignableFrom<RatingInputModel>(result);
                 Assert.Equal("one rating", result.FitchRating);
 
                 context.Database.EnsureDeleted();
@@ -156,7 +156,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetRatingByIdAsViewModelAsyncIdInvalid()
+        public async Task TestGetRatingByIdAsInputModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -170,7 +170,7 @@ namespace Poseidon.Test
                 var service = new RatingService(unitOfWork, _mapper);
 
                 // Act
-                var result = await service.GetRatingByIdAsViewModelASync(100);
+                var result = await service.GetRatingByIdAsInputModelASync(100);
 
                 // Assert
                 Assert.Null(result);

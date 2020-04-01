@@ -35,13 +35,13 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<BidListViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<BidListInputModel>>> Get()
         {
             var results =
-                await _bidListService.GetAllBidListsAsViewModelsAsync();
+                await _bidListService.GetAllBidListsAsInputModelsAsync();
 
             var entityList =
-                results as BidListViewModel[] ?? results.ToArray();
+                results as BidListInputModel[] ?? results.ToArray();
 
             if (!entityList.Any())
             {
@@ -66,7 +66,7 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<BidListViewModel>> Get(int id)
+        public async Task<ActionResult<BidListInputModel>> Get(int id)
         {
             if (id <= 0)
             {
@@ -78,7 +78,7 @@ namespace Poseidon.API.Controllers
                 return NotFound();
             }
 
-            var result = await _bidListService.GetBidListByIdAsViewModelASync(id);
+            var result = await _bidListService.GetBidListByIdAsInputModelASync(id);
 
             return Ok(result);
         }
@@ -128,8 +128,7 @@ namespace Poseidon.API.Controllers
         {
             if (!_bidListService.BidListExists(id))
             {
-                return NotFound($"No BidList enti" +
-                                $"ty matching the id [{id}] was found.");
+                return NotFound($"No BidList entity matching the id [{id}] was found.");
             }
 
             await _bidListService.UpdateBidList(id, inputModel);

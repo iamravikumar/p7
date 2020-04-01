@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Poseidon.API.ActionFilters;
-using Poseidon.API.Data;
 using Poseidon.API.Models;
 using Poseidon.API.Services.Interfaces;
 using Poseidon.Shared.InputModels;
@@ -37,13 +35,13 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<TradeViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<TradeInputModel>>> Get()
         {
             var results =
-                await _tradeService.GetAllTradesAsViewModelsAsync();
+                await _tradeService.GetAllTradesAsInputModelsAsync();
 
             var entityList =
-                results as TradeViewModel[] ?? results.ToArray();
+                results as TradeInputModel[] ?? results.ToArray();
 
             if (!entityList.Any())
             {
@@ -68,7 +66,7 @@ namespace Poseidon.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TradeViewModel>> Get(int id)
+        public async Task<ActionResult<TradeInputModel>> Get(int id)
         {
             if (id <= 0)
             {
@@ -80,7 +78,7 @@ namespace Poseidon.API.Controllers
                 return NotFound();
             }
 
-            var result = await _tradeService.GetTradeByIdAsViewModelASync(id);
+            var result = await _tradeService.GetTradeByIdAsInputModelASync(id);
 
             return Ok(result);
         }
@@ -130,8 +128,7 @@ namespace Poseidon.API.Controllers
         {
             if (!_tradeService.TradeExists(id))
             {
-                return NotFound($"No Trade enti" +
-                                $"ty matching the id [{id}] was found.");
+                return NotFound($"No Trade entity matching the id [{id}] was found.");
             }
 
             await _tradeService.UpdateTrade(id, inputModel);

@@ -28,13 +28,13 @@ namespace Poseidon.API.Services
         public async Task<IEnumerable<BidList>> GetAllBidListsAsync() =>
             await _unitOfWork.BidListRepository.GetAllAsync();
 
-        public async Task<IEnumerable<BidListViewModel>> GetAllBidListsAsViewModelsAsync()
+        public async Task<IEnumerable<BidListInputModel>> GetAllBidListsAsInputModelsAsync()
         {
             var entities = await _unitOfWork.BidListRepository.GetAllAsync();
 
-            var viewModels = _mapper.Map<IEnumerable<BidList>, IEnumerable<BidListViewModel>>(entities);
+            var inputModels = _mapper.Map<IEnumerable<BidList>, IEnumerable<BidListInputModel>>(entities);
 
-            return viewModels;
+            return inputModels;
         }
 
         /// <summary>
@@ -48,17 +48,17 @@ namespace Poseidon.API.Services
                 .FirstOrDefaultAsync();
 
         /// <summary>
-        /// Asynchronously finds a BidList entity by id, and returns it as a BidListViewModel.
+        /// Asynchronously finds a BidList entity by id, and returns it as a BidListInputModel.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<BidListViewModel> GetBidListByIdAsViewModelASync(int id)
+        public async Task<BidListInputModel> GetBidListByIdAsInputModelASync(int id)
         {
             var entity = await _unitOfWork.BidListRepository.GetByIdAsync(id);
 
-            var viewModel = _mapper.Map<BidListViewModel>(entity);
+            var inputModel = _mapper.Map<BidListInputModel>(entity);
 
-            return viewModel;
+            return inputModel;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Poseidon.API.Services
                 await _unitOfWork.CommitAsync();
                 return entity.Id;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
@@ -120,7 +120,7 @@ namespace Poseidon.API.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
@@ -150,7 +150,7 @@ namespace Poseidon.API.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;

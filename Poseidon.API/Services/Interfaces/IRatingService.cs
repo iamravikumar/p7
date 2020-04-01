@@ -8,9 +8,9 @@ namespace Poseidon.API.Services.Interfaces
     public interface IRatingService
     {
         Task<IEnumerable<Rating>> GetAllRatingsAsync();
-        Task<IEnumerable<RatingViewModel>> GetAllRatingsAsViewModelsAsync();
+        Task<IEnumerable<RatingInputModel>> GetAllRatingsAsInputModelsAsync();
         Task<Rating> GetRatingByIdAsync(int id);
-        Task<RatingViewModel> GetRatingByIdAsViewModelASync(int id);
+        Task<RatingInputModel> GetRatingByIdAsInputModelASync(int id);
         Task<int> CreateRating(RatingInputModel inputModel);
         Task UpdateRating(int id, RatingInputModel inputModel);
         Task DeleteRating(int id);
