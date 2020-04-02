@@ -1,0 +1,49 @@
+@inherits RuleNameBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/RuleName"
+@attribute [Authorize]
+
+<h1>Rules</h1>
+
+
+<a href="/rulename/create" role="button" class="btn btn-success mb-3">
+    Create
+</a>
+
+
+@if (RuleNameModels == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Json</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in RuleNameModels)
+            {
+                var id = item.Id;
+
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Json</td>
+                <td>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Edit(id))">Edit</NavLink>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Delete(id))">Delete</NavLink>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

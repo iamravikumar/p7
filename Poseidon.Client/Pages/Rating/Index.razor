@@ -1,0 +1,51 @@
+@inherits RatingBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/Rating"
+@attribute [Authorize]
+
+<h1>Ratings</h1>
+
+
+<a href="/rating/create" role="button" class="btn btn-success mb-3">
+    Create
+</a>
+
+
+@if (RatingModels == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Moodys</th>
+                <th scope="col">Sand P</th>
+                <th scope="col">Fitch</th>
+                <th scope="col">Order No.</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in RatingModels)
+            {
+                var id = item.Id;
+
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.MoodysRating</td>
+                <td>@item.SandPrating</td>
+                <td>@item.FitchRating</td>
+                <td>@item.OrderNumber</td>
+                <td>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Edit(id))">Edit</NavLink>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Delete(id))">Delete</NavLink>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

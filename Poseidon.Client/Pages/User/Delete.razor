@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inherits DeleteBase
+@page "/User/delete/{Id:int}"
+@attribute [Authorize]
+
+<h1>Delete</h1>
+
+<AuthorizeView>
+
+    @if (@context.User.IsInRole("Admin"))
+    {
+        @if (UserModel == null)
+        {
+            <p>Loading...</p>
+        }
+        else if (!OperationSuccess)
+        {
+            <p>This action cannot be undone. Are you sure you wish to delete the following item?</p>
+
+
+            <ul>
+                <li><em>Id:</em>@UserModel.Id</li>
+            </ul>
+
+            <button class="btn btn-danger" @onclick="@(() => Delete(Id))">Delete</button>
+            <button class="btn btn-info" @onclick="CancelDelete">Cancel</button>
+        }
+        else
+        {
+            <p>The item was successfully deleted.</p>
+
+            <button class="btn btn-info" @onclick="ReturnHome">Home</button>
+        }
+
+    }
+    else
+    {
+        <p class="text-danger">
+            You lack sufficient user privilege to access this resource.
+        </p>
+    }
+
+
+</AuthorizeView>

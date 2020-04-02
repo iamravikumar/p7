@@ -1,0 +1,49 @@
+@inherits TradeBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/Trade"
+@attribute [Authorize]
+
+<h1>Trades</h1>
+
+
+<a href="/trade/create" role="button" class="btn btn-success mb-3">
+    Create
+</a>
+
+
+@if (TradeModels == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Account</th>
+                <th scope="col">Type</th>
+                <th scope="col">Buy Quantity</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in TradeModels)
+            {
+                var id = item.Id;
+
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.Account</td>
+                <td>@item.Type</td>
+                <td>@item.BuyQuantity</td>
+                <td>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Edit(id))">Edit</NavLink>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Delete(id))">Delete</NavLink>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

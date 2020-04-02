@@ -1,0 +1,46 @@
+﻿@inherits CreateBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/rulename/create"
+@attribute [Authorize]
+
+<h1>Create</h1>
+
+@if (!OperationSuccess)
+{
+
+    <EditForm Model="RuleNameModel" OnValidSubmit="@HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary Model="@RuleNameModel" />
+
+        <div class="form-row">
+            <label>Name</label>
+            <InputText @bind-Value="@RuleNameModel.Name" id="Name" placeholder="Name" class="form-control" />
+            <ValidationMessage For="@(() => RuleNameModel.Name)" class="text-danger" />
+        </div>
+
+        <div class="form-row">
+            <label>Description</label>
+            <InputText @bind-Value="@RuleNameModel.Description" id="Description" placeholder="Description" class="form-control" />
+            <ValidationMessage For="@(() => RuleNameModel.Description)" class="text-danger" />
+        </div>
+
+        <div class="form-row">
+            <label>Json</label>
+            <InputText @bind-Value="@RuleNameModel.Json" id="Json" placeholder="Json" class="form-control" />
+            <ValidationMessage For="@(() => RuleNameModel.Json)" class="text-danger" />
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg mt-4">Update</button>
+        <button @onclick="@CancelCreate" class="btn btn-danger btn-lg mt-4">Cancel</button>
+
+    </EditForm>
+
+}
+else
+{
+    <p>The item was successfully updated.</p>
+
+    <button class="btn btn-info" @onclick="ReturnHome">Home</button>
+}

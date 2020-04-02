@@ -1,0 +1,45 @@
+﻿@inherits CreateBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/curvepoint/create"
+@attribute [Authorize]
+
+<h1>Create</h1>
+
+@if (!OperationSuccess)
+{
+    <EditForm Model="CurvePointModel" OnValidSubmit="@HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary Model="@CurvePointModel" />
+
+        <div class="form-row">
+            <label>Curve ID</label>
+            <InputNumber @bind-Value="@CurvePointModel.CurveId" id="account" placeholder="Account" class="form-control" />
+            <ValidationMessage For="@(() => CurvePointModel.CurveId)" class="text-danger" />
+        </div>
+
+        <div class="form-row">
+            <label>Term</label>
+            <InputNumber @bind-Value="@CurvePointModel.Term" id="type" placeholder="Type" class="form-control" />
+            <ValidationMessage For="@(() => CurvePointModel.Term)" class="text-danger" />
+        </div>
+
+        <div class="form-row">
+            <label>Value</label>
+            <InputNumber @bind-Value="@CurvePointModel.Value" id="bidquantity" placeholder="Bid Quantity" class="form-control" />
+            <ValidationMessage For="@(() => CurvePointModel.Value)" class="text-danger" />
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg mt-4">Update</button>
+        <button @onclick="@CancelCreate" class="btn btn-danger btn-lg mt-4">Cancel</button>
+
+    </EditForm>
+
+}
+else
+{
+    <p>The item was successfully updated.</p>
+
+    <button class="btn btn-info" @onclick="ReturnHome">Home</button>
+}

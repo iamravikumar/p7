@@ -1,0 +1,49 @@
+@inherits CurvePointBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/CurvePoint"
+@attribute [Authorize]
+
+<h1>CurvePoints</h1>
+
+
+<a href="/curvepoint/create" role="button" class="btn btn-success mb-3">
+    Create
+</a>
+
+
+@if (CurvePointModels == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Curve Id</th>
+                <th scope="col">Term</th>
+                <th scope="col">Value</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in CurvePointModels)
+            {
+                var id = item.Id;
+
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.CurveId</td>
+                    <td>@item.Term</td>
+                    <td>@item.Value</td>
+                    <td>
+                        <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Edit(id))">Edit</NavLink>
+                        <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Delete(id))">Delete</NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

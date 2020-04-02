@@ -1,0 +1,51 @@
+@inherits UserBase
+@using Microsoft.AspNetCore.Authorization
+
+@page "/User"
+@attribute [Authorize]
+
+<h1>Users</h1>
+
+
+<a href="/user/create" role="button" class="btn btn-success mb-3">
+    Create
+</a>
+
+
+@if (UserModels == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in UserModels)
+            {
+                var id = item.Id;
+
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.Username</td>
+                <td>@item.Password</td>
+                <td>@item.FullName</td>
+                <td>@item.Role</td>
+                <td>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Edit(id))">Edit</NavLink>
+                    <NavLink class="nav-link" href="javascript: void(0)" @onclick="@(() => Delete(id))">Delete</NavLink>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

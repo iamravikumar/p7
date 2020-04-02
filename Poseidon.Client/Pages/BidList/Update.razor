@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Authorization
+
+@page "/bidlist/edit/{Id:int}"
+@attribute [Authorize]
+@inherits BidListSingleBase
+
+<h1>Update Bid</h1>
+
+@if (BidListModel == null)
+{
+    <p>Loading...</p>
+}
+else if (!OperationSuccess)
+{
+    <EditForm Model="BidListModel" OnValidSubmit="@HandleValidSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary Model="@BidListModel" />
+
+        <div class="form-row">
+            <label>Account</label>
+            <InputText @bind-Value="@BidListModel.Account" id="account" placeholder="Account" class="form-control" />
+            <ValidationMessage For="@(() => BidListModel.Account)" class="text-danger" />
+        </div>
+
+        <div class="form-row">
+            <label>Type</label>
+            <InputText @bind-Value="@BidListModel.Type" id="type" placeholder="Type" class="form-control" />
+            <ValidationMessage For="@(() => BidListModel.Type)" class="text-danger" />
+        </div>
+
+        <div class="form-row">
+            <label>Bid Quantity</label>
+            <InputNumber @bind-Value="@BidListModel.BidQuantity" id="bidquantity" placeholder="Bid Quantity" class="form-control" />
+            <ValidationMessage For="@(() => BidListModel.BidQuantity)" class="text-danger" />
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg mt-4">Update</button>
+        <button @onclick="@CancelEdit" class="btn btn-danger btn-lg mt-4">Cancel</button>
+
+    </EditForm>
+}
+else
+{
+    <p>The item was successfully updated.</p>
+
+    <button class="btn btn-info" @onclick="ReturnHome">Home</button>
+}
