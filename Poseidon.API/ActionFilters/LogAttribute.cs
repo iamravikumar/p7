@@ -9,8 +9,8 @@ namespace Poseidon.API.ActionFilters
     public class LogAttribute : IAsyncActionFilter
     {
         /// <summary>
-        /// On every action invocation, log the user's Id, the controller name,
-        /// and the action name.
+        /// On every action invocation, log the user's Id, the HTTP action
+        /// the controller name, and the action name.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="next"></param>
@@ -26,10 +26,7 @@ namespace Poseidon.API.ActionFilters
             
             var actionName = context.ActionDescriptor.DisplayName.Split(' ')[0].Split('.');
             
-            var split = 
-                actionName[actionName.Length-2] 
-                + '.' 
-                + actionName[actionName.Length-1];
+            var split = actionName[^2] + '.' + actionName[^1];
             
             Log.Information($"User [{userId}] {context.HttpContext.Request.Method} [{split}]");
             

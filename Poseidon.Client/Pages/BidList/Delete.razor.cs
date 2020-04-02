@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Poseidon.Shared.InputModels;
 using System;
@@ -17,8 +17,10 @@ namespace Poseidon.Client.Pages.BidList
 
         protected override async Task OnInitializedAsync()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -45,15 +47,17 @@ namespace Poseidon.Client.Pages.BidList
 
         protected async Task Delete(int id)
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
             if (tokenResult.TryGetToken(out var token))
             {
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Value}");
-                BidListModel = await httpClient.GetJsonAsync<BidListInputModel>($"https://localhost:5001/api/bidlist/{Id}");
+                BidListModel = await httpClient.GetJsonAsync<BidListInputModel>($"https://localhost:5001/api/BidList/{Id}");
             }
             else
             {
@@ -62,7 +66,7 @@ namespace Poseidon.Client.Pages.BidList
 
             try
             {
-                var response = await httpClient.DeleteAsync($"https://localhost:5001/api/bidlist/{id}");
+                var response = await httpClient.DeleteAsync($"https://localhost:5001/api/BidList/{id}");
 
                 if (response.IsSuccessStatusCode)
                 {

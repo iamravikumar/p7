@@ -14,11 +14,14 @@ namespace Poseidon.Client
         [Parameter] public int Id { get; set; }
         protected BidListInputModel BidListModel { get; set; }
         protected bool OperationSuccess { get; set; } = false;
+        protected bool OperationError { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -35,8 +38,10 @@ namespace Poseidon.Client
 
         protected async Task HandleValidSubmit()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -50,8 +55,10 @@ namespace Poseidon.Client
 
                     OperationSuccess = true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
+                    OperationError = true;
+
                     StateHasChanged();
                 }
             }
