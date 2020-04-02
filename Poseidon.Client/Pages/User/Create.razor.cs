@@ -13,6 +13,7 @@ namespace Poseidon.Client.Pages.User
         [Inject] public NavigationManager Navigation { get; set; }
         [Parameter] public int Id { get; set; }
         protected UserInputModel UserModel { get; set; }
+        protected bool OperationSuccess { get; set; } = false;
 
         protected override void OnInitialized()
         {
@@ -21,8 +22,10 @@ namespace Poseidon.Client.Pages.User
 
         protected async Task HandleValidSubmit()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -34,9 +37,11 @@ namespace Poseidon.Client.Pages.User
                 {
                     await httpClient.PostJsonAsync("https://localhost:5001/api/User", UserModel);
 
-                    Navigation.NavigateTo("/User");
+                    OperationSuccess = true;
+
+                    StateHasChanged();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     StateHasChanged();
                 }
@@ -44,6 +49,11 @@ namespace Poseidon.Client.Pages.User
         }
 
         protected void CancelCreate()
+        {
+            Navigation.NavigateTo("/User");
+        }
+
+        protected void ReturnHome()
         {
             Navigation.NavigateTo("/User");
         }

@@ -13,6 +13,7 @@ namespace Poseidon.Client.Pages.Rating
         [Inject] public NavigationManager Navigation { get; set; }
         [Parameter] public int Id { get; set; }
         protected RatingInputModel RatingModel { get; set; }
+        protected bool OperationSuccess { get; set; } = false;
 
         protected override void OnInitialized()
         {
@@ -21,8 +22,10 @@ namespace Poseidon.Client.Pages.Rating
 
         protected async Task HandleValidSubmit()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -34,9 +37,11 @@ namespace Poseidon.Client.Pages.Rating
                 {
                     await httpClient.PostJsonAsync("https://localhost:5001/api/rating", RatingModel);
 
-                    Navigation.NavigateTo("/Rating");
+                    OperationSuccess = true;
+
+                    StateHasChanged();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     StateHasChanged();
                 }
@@ -44,6 +49,11 @@ namespace Poseidon.Client.Pages.Rating
         }
 
         protected void CancelCreate()
+        {
+            Navigation.NavigateTo("/Rating");
+        }
+
+        protected void ReturnHome()
         {
             Navigation.NavigateTo("/Rating");
         }

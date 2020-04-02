@@ -13,6 +13,7 @@ namespace Poseidon.Client.Pages.CurvePoint
         [Inject] public NavigationManager Navigation { get; set; }
         [Parameter] public int Id { get; set; }
         protected CurvePointInputModel CurvePointModel { get; set; }
+        protected bool OperationSuccess { get; set; } = false;
 
         protected override void OnInitialized()
         {
@@ -34,16 +35,23 @@ namespace Poseidon.Client.Pages.CurvePoint
                 {
                     await httpClient.PostJsonAsync("https://localhost:5001/api/curvepoint", CurvePointModel);
 
-                    Navigation.NavigateTo("/curvepoint");
-                }
-                catch (Exception e)
-                {
+                    OperationSuccess = true;
+
                     StateHasChanged();
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
             }
         }
 
         protected void CancelCreate()
+        {
+            Navigation.NavigateTo("/curvepoint");
+        }
+
+        protected void ReturnHome()
         {
             Navigation.NavigateTo("/curvepoint");
         }

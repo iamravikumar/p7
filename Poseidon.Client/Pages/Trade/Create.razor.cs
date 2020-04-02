@@ -13,6 +13,7 @@ namespace Poseidon.Client.Pages.Trade
         [Inject] public NavigationManager Navigation { get; set; }
         [Parameter] public int Id { get; set; }
         protected TradeInputModel TradeModel { get; set; }
+        protected bool OperationSuccess { get; set; } = false;
 
         protected override void OnInitialized()
         {
@@ -21,8 +22,10 @@ namespace Poseidon.Client.Pages.Trade
 
         protected async Task HandleValidSubmit()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -34,9 +37,11 @@ namespace Poseidon.Client.Pages.Trade
                 {
                     await httpClient.PostJsonAsync("https://localhost:5001/api/Trade", TradeModel);
 
-                    Navigation.NavigateTo("/Trade");
+                    OperationSuccess = true;
+
+                    StateHasChanged();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     StateHasChanged();
                 }
@@ -46,6 +51,11 @@ namespace Poseidon.Client.Pages.Trade
         protected void CancelCreate()
         {
             Navigation.NavigateTo("/Trade");
+        }
+
+        protected void ReturnHome()
+        {
+            Navigation.NavigateTo("/curvepoint");
         }
     }
 }

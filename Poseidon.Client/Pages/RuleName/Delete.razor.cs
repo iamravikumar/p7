@@ -14,11 +14,14 @@ namespace Poseidon.Client.Pages.RuleName
         [Inject] public NavigationManager Navigation { get; set; }
         protected RuleNameInputModel RuleNameModel { get; set; }
         protected bool OperationSuccess { get; set; } = false;
+        protected bool OperationError { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -45,8 +48,10 @@ namespace Poseidon.Client.Pages.RuleName
 
         protected async Task Delete(int id)
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -73,8 +78,9 @@ namespace Poseidon.Client.Pages.RuleName
             }
             catch (Exception)
             {
+                OperationError = true;
+
                 StateHasChanged();
-                throw;
             }
         }
     }

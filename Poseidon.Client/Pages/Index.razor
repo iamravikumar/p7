@@ -1,13 +1,5 @@
-﻿@page "/"
+@page "/"
 
 <h1>Poseidon</h1>
 
-<AuthorizeView>
-    @foreach (var claim in context.User.Claims)
-    {
-        <dt>@claim.Type</dt>
-        <dd>@claim.Value</dd>
-
-        @*<p>@context.User.</p>*@
-    }
-</AuthorizeView>
+<p>Welcome to the app! Please choose an item in the menu to begin.</p>

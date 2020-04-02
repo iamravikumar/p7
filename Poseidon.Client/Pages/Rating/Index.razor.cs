@@ -18,8 +18,10 @@ namespace Poseidon.Client.Pages.Rating
 
         protected override async Task OnInitializedAsync()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 

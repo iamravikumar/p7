@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Poseidon.Shared.InputModels;
 using System;
@@ -13,6 +13,7 @@ namespace Poseidon.Client.Pages.BidList
         [Inject] public NavigationManager Navigation { get; set; }
         [Parameter] public int Id { get; set; }
         protected BidListInputModel BidListModel { get; set; }
+        protected bool OperationSuccess { get; set; } = false;
 
         protected override void OnInitialized()
         {
@@ -21,8 +22,10 @@ namespace Poseidon.Client.Pages.BidList
 
         protected async Task HandleValidSubmit()
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Navigation.BaseUri);
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(Navigation.BaseUri)
+            };
 
             var tokenResult = await AuthenticationService.RequestAccessToken();
 
@@ -34,9 +37,11 @@ namespace Poseidon.Client.Pages.BidList
                 {
                     await httpClient.PostJsonAsync("https://localhost:5001/api/bidlist", BidListModel);
 
-                    Navigation.NavigateTo("/bidlist");
+                    OperationSuccess = true;
+
+                    StateHasChanged();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     StateHasChanged();
                 }
@@ -45,7 +50,12 @@ namespace Poseidon.Client.Pages.BidList
 
         protected void CancelCreate()
         {
-            Navigation.NavigateTo("/bidlist");
+            Navigation.NavigateTo("/BidList");
+        }
+
+        protected void ReturnHome()
+        {
+            Navigation.NavigateTo("/BidList");
         }
     }
 }

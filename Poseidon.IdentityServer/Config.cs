@@ -33,8 +33,6 @@ namespace Poseidon.Client
 
 
             return apiResources;
-            //{ new ApiResource("poseidon_api", "Poseidon API", new List<string> { "role" }), };
-
         }
 
         public static IEnumerable<IdentityServer4.Models.Client> Clients =>
@@ -94,7 +92,6 @@ namespace Poseidon.Client
                     },
                     AllowAccessTokensViaBrowser = true,
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    //AlwaysSendClientClaims = true
                     AllowOfflineAccess = false
                 }
             };

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 
 namespace Poseidon.Client
 {
@@ -15,8 +16,6 @@ namespace Poseidon.Client
 
             builder.Services.AddOidcAuthentication(options =>
             {
-                // Configure your authentication provider options here.
-                // For more information, see https://aka.ms/blazor-standalone-auth
                 options.ProviderOptions.Authority = "https://localhost:5000";
                 options.ProviderOptions.ClientId = "poseidon_client";
                 options.ProviderOptions.ResponseType = "id_token token";

@@ -18,4 +18,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Poseidon.Shared\Poseidon.Shared.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\CurvePoint" />
+    </ItemGroup>
 </Project>
