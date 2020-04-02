@@ -71,7 +71,6 @@ namespace Poseidon.Client
                 // Blazor/WASM client
                 new IdentityServer4.Models.Client
                 {
-                    // AccessTokenType = AccessTokenType.Reference,
                     ClientId = "poseidon_client",
                     ClientName = "Poseidon Client",
                     AllowedGrantTypes = GrantTypes.Implicit,

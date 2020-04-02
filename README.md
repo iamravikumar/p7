@@ -34,7 +34,9 @@ Correct functionality can not be guaranteed for other versions.
 
 ### To use:
 1. Clone or download this repo
-2. Open the solution in Visual Studio, and hit `Ctrl+F5` to run
+2. Either:
+    - Load the solution in Visual Studio and run using `Ctrl+F5` (the API, client, and IdentityServer together are configured as the default project)
+    - Run the projects using the `dotnet` CLI 
 3. In a web browser, navigate to
     - `https://localhost:5001` to view/test the API using Swagger UI
     - `https://localhost:5002` to view/test the API using the Blazor client
@@ -42,6 +44,8 @@ Correct functionality can not be guaranteed for other versions.
 Upon running the ``Poseidon.IdentityServer`` project, the relevant database is seeded with two test users:
 - **Admin**: admin@poseidon.test / Pass123$
 - **User**: user@poseidon.test / Pass123$
+
+If using the Swagger UI, in order to log in with a different user it's required to both log out and clear the site cookies before logging in again ([see this comment](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/436#issuecomment-443745345)).
 
 You can also test the API using Postman. Request an access token by using the Client Credentials grant type, and fill in the relevant details as found in `Poseidon.IdentityServer/Config.cs`.
 
