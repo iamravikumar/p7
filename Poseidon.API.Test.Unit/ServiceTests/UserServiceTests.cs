@@ -10,14 +10,16 @@ using Poseidon.API.Services;
 using Poseidon.API.Test.Shared;
 using Poseidon.Shared.InputModels;
 using Xunit;
+// ReSharper disable PossibleMultipleEnumeration
+// ReSharper disable ConvertToUsingDeclaration
 
 namespace Poseidon.Test
 {
-    public class TradeServiceTests
+    public class UserServiceTests
     {
         private readonly IMapper _mapper;
 
-        public TradeServiceTests()
+        public UserServiceTests()
         {
             var config = 
                     new MapperConfiguration(cfg =>
@@ -29,106 +31,106 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetAllTradesAsync()
+        public async Task TestGetAllUsersAsync()
         {
             // Arrange
-            IEnumerable<Trade> result;
+            IEnumerable<User> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, null);
+                var service = new UserService(repositoryWrapper, null);
 
                 // Act
-                result = await service.GetAllTradesAsync();
+                result = await service.GetAllUsersAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<Trade>(result.First());
+            Assert.IsAssignableFrom<User>(result.First());
         }
 
         [Fact]
-        public async Task TestGetAllTradesAsInputModelsAsync()
+        public async Task TestGetAllUsersAsInputModelsAsync()
         {
             // Arrange
-            IEnumerable<TradeInputModel> result;
+            IEnumerable<UserInputModel> result;
 
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
                 // Act
-                result = await service.GetAllTradesAsInputModelsAsync();
+                result = await service.GetAllUsersAsInputModelsAsync();
 
                 context.Database.EnsureDeleted();
             }
 
             // Assert
             Assert.Equal(3, result.Count());
-            Assert.IsAssignableFrom<TradeInputModel>(result.First());
+            Assert.IsAssignableFrom<UserInputModel>(result.First());
         }
 
         [Fact]
-        public async Task TestGetTradeByIdAsyncIdValid()
+        public async Task TestGetUserByIdAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, null);
+                var service = new UserService(repositoryWrapper, null);
 
                 // Act
-                var result = await service.GetTradeByIdAsync(1);
+                var result = await service.GetUserByIdAsync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<Trade>(result);
-                Assert.Equal("one account", result.Account);
+                Assert.IsAssignableFrom<User>(result);
+                Assert.Equal("one username", result.Username);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestGetTradeByIdAsInputModelAsyncIdValid()
+        public async Task TestGetUserByIdAsInputModelAsyncIdValid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetTradeByIdAsInputModelASync(1);
+                var result = await service.GetUserByIdAsInputModelASync(1);
 
                 // Assert
                 Assert.NotNull(result);
-                Assert.IsAssignableFrom<TradeInputModel>(result);
-                Assert.Equal("one account", result.Account);
+                Assert.IsAssignableFrom<UserInputModel>(result);
+                Assert.Equal("one username", result.Username);
 
                 context.Database.EnsureDeleted();
             }
@@ -136,21 +138,21 @@ namespace Poseidon.Test
 
 
         [Fact]
-        public async Task TestGetTradeByIdAsyncIdInvalid()
+        public async Task TestGetUserByIdAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, null);
+                var service = new UserService(repositoryWrapper, null);
 
                 // Act
-                var result = await service.GetTradeByIdAsync(100);
+                var result = await service.GetUserByIdAsync(100);
 
                 // Assert
                 Assert.Null(result);
@@ -160,21 +162,21 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestGetTradeByIdAsInputModelAsyncIdInvalid()
+        public async Task TestGetUserByIdAsInputModelAsyncIdInvalid()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
                 // Act
-                var result = await service.GetTradeByIdAsInputModelASync(100);
+                var result = await service.GetUserByIdAsInputModelASync(100);
 
                 // Assert
                 Assert.Null(result);
@@ -185,10 +187,10 @@ namespace Poseidon.Test
 
 
         [Fact]
-        public async Task TestCreateTradeEntityNotNull()
+        public async Task TestCreateUserEntityNotNull()
         {
             // Arrange
-            var testEntity = new TradeInputModel { Account = "test account" };
+            var testEntity = new UserInputModel { Username = "test username" };
 
             var options = TestUtilities.BuildTestDbOptions();
 
@@ -196,32 +198,32 @@ namespace Poseidon.Test
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                Assert.Empty(context.Trade);
+                Assert.Empty(context.User);
 
                 // Act
-                await service.CreateTrade(testEntity);
+                await service.CreateUser(testEntity);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.Single(context.Trade);
-                Assert.Equal("test account", context.Trade.First().Account);
+                Assert.Single(context.User);
+                Assert.Equal("test username", context.User.First().Username);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestCreateTradeEntityNull()
+        public async Task TestCreateUserEntityNull()
         {
             // Arrange
-            var service = new TradeService(null, null);
+            var service = new UserService(null, null);
 
             // Act
-            async Task TestAction() => await service.CreateTrade(null);
+            async Task TestAction() => await service.CreateUser(null);
 
             // Assert
             await Assert.ThrowsAsync<ArgumentNullException>(TestAction);
@@ -229,7 +231,7 @@ namespace Poseidon.Test
 
 
         [Fact]
-        public async Task TestUpdateTradeEntityNull()
+        public async Task TestUpdateUserEntityNull()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
@@ -238,12 +240,12 @@ namespace Poseidon.Test
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
-                var inputModel = new TradeInputModel();
+                var inputModel = new UserInputModel();
 
                 // Act
-                async Task TestAction() => await service.UpdateTrade(100, inputModel);
+                async Task TestAction() => await service.UpdateUser(100, inputModel);
 
                 // Assert
                 await Assert.ThrowsAsync<Exception>(TestAction);
@@ -251,52 +253,52 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public async Task TestDeleteTradeEntityNotNull()
+        public async Task TestDeleteUserEntityNotNull()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
                 // Act
-                await service.DeleteTrade(1);
+                await service.DeleteUser(1);
             }
 
             await using (var context = new PoseidonContext(options))
             {
                 // Assert
-                Assert.Equal(2, context.Trade.Count());
-                Assert.DoesNotContain(context.Trade, bl => bl.Id == 1);
+                Assert.Equal(2, context.User.Count());
+                Assert.DoesNotContain(context.User, bl => bl.Id == 1);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestDeleteTradeEntityNull()
+        public async Task TestDeleteUserEntityNull()
         {
             // Arrange
             var options = TestUtilities.BuildTestDbOptions();
 
             await using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, _mapper);
+                var service = new UserService(repositoryWrapper, _mapper);
 
                 // Act
-                async Task TestAction() => await service.DeleteTrade(100);
+                async Task TestAction() => await service.DeleteUser(100);
 
                 // Assert
                 await Assert.ThrowsAsync<Exception>(TestAction);
@@ -306,7 +308,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public void TestTradeExistsIdValid()
+        public void TestUserExistsIdValid()
         {
             // Arrange
             bool exists;
@@ -315,14 +317,14 @@ namespace Poseidon.Test
 
             using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, null);
+                var service = new UserService(repositoryWrapper, null);
 
                 // Act
-                exists = service.TradeExists(1);
+                exists = service.UserExists(1);
 
                 context.Database.EnsureDeleted();
             }
@@ -332,7 +334,7 @@ namespace Poseidon.Test
         }
 
         [Fact]
-        public void TestTradeExistsIdInvalid()
+        public void TestUserExistsIdInvalid()
         {
             // Arrange
             bool exists;
@@ -341,14 +343,14 @@ namespace Poseidon.Test
 
             using (var context = new PoseidonContext(options))
             {
-                TestUtilities.SeedTestDbTrade(context);
+                TestUtilities.SeedTestDbUser(context);
 
                 var repositoryWrapper = new UnitOfWork(context);
 
-                var service = new TradeService(repositoryWrapper, null);
+                var service = new UserService(repositoryWrapper, null);
 
                 // Act
-                exists = service.TradeExists(100);
+                exists = service.UserExists(100);
 
                 context.Database.EnsureDeleted();
             }
