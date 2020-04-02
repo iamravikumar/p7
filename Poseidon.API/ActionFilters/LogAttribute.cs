@@ -24,10 +24,14 @@ namespace Poseidon.API.ActionFilters
             
             var userId = context.HttpContext.User.SubjectId();
             
-            var actionName = context.ActionDescriptor.DisplayName;
-            var split = actionName.Split(' ')[0];
+            var actionName = context.ActionDescriptor.DisplayName.Split(' ')[0].Split('.');
             
-            Log.Information($"User: [{userId}] {context.HttpContext.Request.Method} [{split}]");
+            var split = 
+                actionName[actionName.Length-2] 
+                + '.' 
+                + actionName[actionName.Length-1];
+            
+            Log.Information($"User [{userId}] {context.HttpContext.Request.Method} [{split}]");
             
             var result = await next();
         }
