@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Poseidon.API
+namespace Poseidon.API.Authorization
 {
     public class Admin : IAuthorizationRequirement
     {
-        public string Role { get; }
+        private string Role { get; }
 
         public Admin(string role)
         {

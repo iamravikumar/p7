@@ -18,7 +18,6 @@ namespace Poseidon.Client
                 new IdentityResource("role", new[] { "role" })
             };
 
-
         public static IEnumerable<ApiResource> Apis()
         {
             var apiResources = new ApiResource[1];
@@ -71,7 +70,6 @@ namespace Poseidon.Client
                 // Blazor/WASM client
                 new IdentityServer4.Models.Client
                 {
-                    // AccessTokenType = AccessTokenType.Reference,
                     ClientId = "poseidon_client",
                     ClientName = "Poseidon Client",
                     AllowedGrantTypes = GrantTypes.Implicit,
