@@ -18,7 +18,6 @@ namespace Poseidon.Client
                 new IdentityResource("role", new[] { "role" })
             };
 
-
         public static IEnumerable<ApiResource> Apis()
         {
             var apiResources = new ApiResource[1];

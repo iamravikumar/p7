@@ -9,6 +9,11 @@ namespace Poseidon.API.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
+        /// <summary>
+        /// Top-level application exception handler.
+        /// When an exception is thrown, log it, then return a 500 response to the client. 
+        /// </summary>
+        /// <param name="app"></param>
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(appError =>
