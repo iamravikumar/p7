@@ -7,14 +7,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
+using Poseidon.API.Authorization;
 using Poseidon.API.Extensions;
 
 namespace Poseidon.API
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; }
+        private IConfiguration Configuration { get; }
+        private IWebHostEnvironment Environment { get; }
 
         public Startup(IConfiguration configuration, 
             IWebHostEnvironment environment)
@@ -32,7 +33,7 @@ namespace Poseidon.API
 
             services.ConfigureActionFilterAttributes();
 
-            services.ConfigureAuthentication();
+            services.ConfigureAuthentication(Configuration);
 
             services.AddAuthorization(options =>
             {
@@ -41,7 +42,7 @@ namespace Poseidon.API
 
             services.AddSingleton<IAuthorizationHandler, AdminHandler>();
 
-            services.ConfigureSwagger();
+            services.ConfigureSwagger(Configuration);
 
             services.ConfigureUnitOfWork();
 
@@ -53,6 +54,8 @@ namespace Poseidon.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.RunDbMigrations();
+            
             app.UseSwagger();
 
             app.UseSwaggerUi();
@@ -72,13 +75,7 @@ namespace Poseidon.API
 
             app.UseRouting();
 
-            app.UseCors(options =>
-                options
-                    .WithOrigins("https://localhost:5002")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .WithHeaders(HeaderNames.AccessControlAllowOrigin, "*")
-            );
+            app.ConfigureCors();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

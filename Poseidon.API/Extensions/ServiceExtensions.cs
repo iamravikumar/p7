@@ -22,14 +22,15 @@ namespace Poseidon.API.Extensions
         /// Adds authentication to the service collection.
         /// </summary>
         /// <param name="services"></param>
-        public static void ConfigureAuthentication(this IServiceCollection services)
+        /// <param name="configuration"></param>
+        public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services
                 .AddAuthentication("Bearer")
                  .AddJwtBearer(options =>
                  {
-                     options.Authority = "https://localhost:5000";
-                     options.Audience = "https://localhost:5001";
+                     options.Authority = configuration["IdentityServer"];
+                     options.Audience = configuration["API"];
                      options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                      {
                          ValidateIssuerSigningKey = false,
@@ -60,6 +61,10 @@ namespace Poseidon.API.Extensions
             }
         }
 
+        /// <summary>
+        /// Adds action filter attributes to the application's service collection.
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureActionFilterAttributes(this IServiceCollection services)
         {
             services.AddScoped<ValidateModelAttribute>();
@@ -69,7 +74,7 @@ namespace Poseidon.API.Extensions
         /// Adds Swagger to the service collection.
         /// </summary>
         /// <param name="services"></param>
-        public static void ConfigureSwagger(this IServiceCollection services)
+        public static void ConfigureSwagger(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(config =>
             {
@@ -105,12 +110,12 @@ namespace Poseidon.API.Extensions
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri("https://localhost:5000/connect/authorize", UriKind.Absolute),
+                            AuthorizationUrl = new Uri(configuration["IdentityServer"] + "/connect/authorize", UriKind.Absolute),
                             Scopes = new Dictionary<string, string>
                             {
                                 {"poseidon_api", "Poseidon API"},
                             },
-                            TokenUrl = new Uri("https://localhost:5000/connect/token")
+                            TokenUrl = new Uri(configuration["IdentityServer"] + "connect/token")
                         }
                     }
                 });
@@ -155,6 +160,10 @@ namespace Poseidon.API.Extensions
             });
         }
 
+        /// <summary>
+        /// Adds local services to the application's service collection.
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureLocalServices(this IServiceCollection services)
         {
             services.AddTransient<IBidListService, BidListService>();
