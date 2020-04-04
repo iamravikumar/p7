@@ -115,7 +115,7 @@ namespace Poseidon.API.Extensions
                             {
                                 {"poseidon_api", "Poseidon API"},
                             },
-                            TokenUrl = new Uri(configuration["IdentityServer"] + "connect/token")
+                            TokenUrl = new Uri(configuration["IdentityServer"] + "/connect/token")
                         }
                     }
                 });
