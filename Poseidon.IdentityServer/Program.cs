@@ -16,7 +16,7 @@ namespace Poseidon.Client
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -30,39 +30,7 @@ namespace Poseidon.Client
                     theme: AnsiConsoleTheme.Literate)
                 .CreateLogger();
 
-            try
-            {
-                var seed = args.Contains("/seed");
-                if (seed)
-                {
-                    args = args.Except(new[] {"/seed"}).ToArray();
-                }
-
-                var host = CreateHostBuilder(args).Build();
-
-                if (seed)
-                {
-                    Log.Information("Seeding database...");
-                    var config = host.Services.GetRequiredService<IConfiguration>();
-                    var connectionString = config.GetConnectionString("PoseidonAuthServerContextConnection");
-                    SeedData.EnsureSeedData(connectionString);
-                    Log.Information("Done seeding database.");
-                    return 0;
-                }
-
-                Log.Information("Starting host...");
-                host.Run();
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly.");
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
