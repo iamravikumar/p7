@@ -20,16 +20,15 @@ namespace Poseidon.Client
 
         public static IEnumerable<ApiResource> Apis()
         {
-            var apiResources = new ApiResource[1];
+            var apiResources = new List<ApiResource>();
 
-            var resource = new ApiResource
+            apiResources.Add(new ApiResource
             {
                 Name = "poseidon_api",
                 DisplayName = "Poseidon API",
                 UserClaims = new List<string> { "role" },
                 ApiSecrets = new List<Secret> { new Secret("apisecret".Sha256()) }
-            };
-
+            });
 
             return apiResources;
         }
